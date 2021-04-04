@@ -39,7 +39,7 @@ function BRItemArmor:ApplyDamage(p_Damage)
     end
 
     -- calculate damage
-    local s_DamageToArmor = p_Damage * self.m_Type.DamageReduction
+    local s_DamageToArmor = p_Damage * self.m_Definition.DamageReduction
     local s_DamagePassed = p_Damage - s_DamageToArmor
 
     -- update armor durability
@@ -54,9 +54,9 @@ end
 
 -- Returns the current percentage of the armor
 function BRItemArmor:GetPercentage()
-    if self.m_Type.Durability <= 0 then
+    if self.m_Definition.Durability <= 0 then
         return 0
     end
 
-    return math.floor((self.m_CurrentDurability / self.m_Type.Durability) * 100)
+    return math.floor((self.m_CurrentDurability / self.m_Definition.Durability) * 100)
 end
