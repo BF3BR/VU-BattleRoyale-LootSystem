@@ -25,4 +25,3 @@ return {
     NoArmor = BRItemArmorDefinition("NoArmor", 0, 0),
     BasicArmor = BRItemArmorDefinition("BasicArmor", 100, 1)
 }
-

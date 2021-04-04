@@ -1,6 +1,6 @@
 require "__shared/Items/BRItem"
 
-m_ArmorDefinitions = require "__shared/Items/Definitions/BRItemArmorDefinition"
+local m_ArmorDefinitions = require "__shared/Items/Definitions/BRItemArmorDefinition"
 
 class("BRItemArmor", BRItem)
 
@@ -19,17 +19,44 @@ function BRItemArmor:AsTable()
 end
 
 function BRItemArmor:UpdateFromTable()
+    -- TODO
 end
 
 function BRItemArmor:CreateFromTable(p_Table)
     return BRItemArmor(p_Table.Uid, m_ArmorDefinitions[p_Table.Name], p_Table.CurrentDurability)
 end
 
-
 --==============================
 -- Armor related functions
 --==============================
 
-function BRItemArmor:OnDamage()
-    -- TODO
+-- Applies damage to the armor. Returns the damage passed through.
+-- @param p_Damage number
+function BRItemArmor:ApplyDamage(p_Damage)
+    -- check if armor is fully damaged
+    if self.m_CurrentDurability <= 0 then
+        return p_Damage
+    end
+
+    -- calculate damage
+    local s_DamageToArmor = p_Damage * self.m_Type.DamageReduction
+    local s_DamagePassed = p_Damage - s_DamageToArmor
+
+    -- update armor durability
+    self.m_CurrentDurability = self.m_CurrentDurability - s_DamageToArmor
+    if self.m_CurrentDurability < 0 then
+        s_DamagePassed = s_DamagePassed + math.abs(self.m_CurrentDurability)
+        self.m_CurrentDurability = 0
+    end
+
+    return s_DamagePassed
+end
+
+-- Returns the current percentage of the armor
+function BRItemArmor:GetPercentage()
+    if self.m_Type.Durability <= 0 then
+        return 0
+    end
+
+    return math.floor((self.m_CurrentDurability / self.m_Type.Durability) * 100)
 end
