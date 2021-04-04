@@ -1,0 +1,12 @@
+{
+    "Name": "VU-BattleRoyale-LootSystem",
+    "Description": "LootSystem - Battle Royale gamemode for VU.",
+    "Authors": [ "KVN", "Flash_Hit", "breaknix", "Janssent", "kiwidog" ],
+    "Version": "1.0.0",
+    "HasVeniceEXT": true,
+    "HasWebUI": false,
+    "Dependencies": {
+        "veniceext": "^1.0.8"
+    },
+    "RequiredXPacks": [5]
+}
