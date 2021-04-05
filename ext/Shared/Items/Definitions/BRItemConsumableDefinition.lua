@@ -38,7 +38,7 @@ end
 return {
     SmallMedkit = BRItemConsumableDefinition(
         "Small Medkit", 
-        "A small medkit, it's gonna refill 25% of your health."
+        "A small medkit, it's gonna refill 25% of your health.",
         15,
         "UI/Art/Persistence/KitItem/Fancy/medkit",
         true,
@@ -48,7 +48,7 @@ return {
     ),
     LargeMedkit = BRItemConsumableDefinition(
         "Large Medkit", 
-        "A large medkit, it's gonna refill 50% of your health."
+        "A large medkit, it's gonna refill 50% of your health.",
         25,
         "UI/Art/Persistence/KitItem/Fancy/medkit",
         true,

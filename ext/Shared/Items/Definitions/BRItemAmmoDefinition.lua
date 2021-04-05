@@ -29,14 +29,14 @@ end
 return {
     ["556mm"] = BRItemAmmoDefinition(
         "5.56mm", 
-        "The 5.56mm ammo is used for ARs."
+        "The 5.56mm ammo is used for ARs.",
         0.25,
         "UI/Art/Persistence/KitItem/Fancy/ammobag",
         60
     ),
     ["9mm"] = BRItemAmmoDefinition(
         "9mm", 
-        "The 9mm ammo is used for SMGs and Pistols."
+        "The 9mm ammo is used for SMGs and Pistols.",
         0.1,
         "UI/Art/Persistence/KitItem/Fancy/ammobag",
         120

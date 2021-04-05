@@ -34,7 +34,7 @@ end
 return {
     ["AK-74M"] = BRItemWeaponDefinition(
         "AK-74M", 
-        "The AK-74M is the latest modernized version of the classic AK-47."
+        "The AK-74M is the latest modernized version of the classic AK-47.",
         "UI/Art/Persistence/Weapons/Fancy/ak74m",
         {
             Partition = Guid("F365F081-D11B-B278-F6E3-062116758181"),
@@ -49,7 +49,7 @@ return {
     ),
     ["PP-2000"] = BRItemWeaponDefinition(
         "PP-2000", 
-        "The PP-2000 is a Russian machine pistol designed by the KBP Instrument Design Bureau and is classified as a Personal Defense Weapon (PDW)."
+        "The PP-2000 is a Russian machine pistol designed by the KBP Instrument Design Bureau and is classified as a Personal Defense Weapon (PDW).",
         "UI/Art/Persistence/Weapons/Fancy/pp2000",
         {
             Partition = Guid("BCAF822E-48AA-055F-E617-ECDD89799E22"),
