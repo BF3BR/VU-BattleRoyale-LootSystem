@@ -1,4 +1,9 @@
 require "__shared/Enums/ItemEnums"
+require "__shared/Items/BRItemArmor"
+require "__shared/Items/BRItemConsumable"
+require "__shared/Items/BRItemAmmo"
+require "__shared/Items/BRItemAttachment"
+require "__shared/Items/BRItemWeapon"
 
 class "BRItem"
 
@@ -22,12 +27,16 @@ function BRItem:AsTable()
     }
 end
 
--- p_Table.Uid
--- p_Table.Type
--- p_Table.Name
--- p_Table.Durability
 function BRItem:CreateFromTable(p_Table)
     if self.m_Definition.m_Type == ItemType.Armor then
         return BRItemArmor:CreateFromTable(p_Table)
+    elseif self.m_Definition.m_Type == ItemType.Consumable then
+        return BRItemConsumable:CreateFromTable(p_Table)
+    elseif self.m_Definition.m_Type == ItemType.Ammo then
+        return BRItemAmmo:CreateFromTable(p_Table)
+    elseif self.m_Definition.m_Type == ItemType.Attachment then
+        return BRItemAttachment:CreateFromTable(p_Table)
+    elseif self.m_Definition.m_Type == ItemType.Weapon then
+        return BRItemWeapon:CreateFromTable(p_Table)
     end
 end
