@@ -12,10 +12,6 @@ function BRItemConsumable:AsTable()
     return BRItem.AsTable(self)
 end
 
-function BRItemConsumable:UpdateFromTable()
-    -- Do we need this?
-end
-
 function BRItemConsumable:CreateFromTable(p_Table)
     return BRItemConsumable(p_Table.Uid, m_ConsumableDefinitions[p_Table.Name])
 end

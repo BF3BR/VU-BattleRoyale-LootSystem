@@ -12,10 +12,6 @@ function BRItemWeapon:AsTable()
     return BRItem.AsTable(self)
 end
 
-function BRItemWeapon:UpdateFromTable()
-    -- Do we need this?
-end
-
 function BRItemWeapon:CreateFromTable(p_Table)
     return BRItemWeapon(p_Table.Uid, m_WeaponDefinitions[p_Table.Name])
 end

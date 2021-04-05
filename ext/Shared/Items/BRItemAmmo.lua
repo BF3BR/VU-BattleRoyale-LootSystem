@@ -12,10 +12,6 @@ function BRItemAmmo:AsTable()
     return BRItem.AsTable(self)
 end
 
-function BRItemAmmo:UpdateFromTable()
-    -- Do we need this?
-end
-
 function BRItemAmmo:CreateFromTable(p_Table)
     return BRItemAmmo(p_Table.Uid, m_AmmoDefinitions[p_Table.Name])
 end

@@ -12,10 +12,6 @@ function BRItemAttachment:AsTable()
     return BRItem.AsTable(self)
 end
 
-function BRItemAttachment:UpdateFromTable()
-    -- Do we need this?
-end
-
 function BRItemAttachment:CreateFromTable(p_Table)
     return BRItemAttachment(p_Table.Uid, m_AttachmentDefinitions[p_Table.Name])
 end

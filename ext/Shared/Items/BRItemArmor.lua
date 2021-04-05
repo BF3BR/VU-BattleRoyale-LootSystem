@@ -18,10 +18,6 @@ function BRItemArmor:AsTable()
     return s_Table
 end
 
-function BRItemArmor:UpdateFromTable()
-    -- TODO
-end
-
 function BRItemArmor:CreateFromTable(p_Table)
     return BRItemArmor(p_Table.Uid, m_ArmorDefinitions[p_Table.Name], p_Table.CurrentDurability)
 end
