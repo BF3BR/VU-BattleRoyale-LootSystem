@@ -1,5 +1,7 @@
 class "BRLootPickup"
 
+-- local m_BRPickups = require "__shared/Types/BRPickups"
+
 function BRLootPickup:__init(p_Guid, p_Type, p_Transform, p_Items)
     self.m_Guid = p_Guid
 
@@ -26,20 +28,46 @@ function BRLootPickup:GetMesh()
     return nil
 end
 
-function BRLootPickup.static:BasicPickup(p_Transform, p_Items)
-    return BRLootPickup(
-        MathUtils:RandomGuid(),
-        LootPickupType.Basic,
-        p_Transform,
-        p_Items
-    )
+function BRLootPickup:AsTable()
+    return {
+        Guid = self.m_Guid,
+        Items = self.m_Items:AsTable(),
+    }
 end
 
+-- TODO: Create subclasses for each pickup types
+function BRLootPickup.static:BasicPickup(p_Transform, p_Items)
+    --[[m_BRPickups:AddLootPickup(
+        BRLootPickup(
+            MathUtils:RandomGuid(),
+            LootPickupType.Basic,
+            p_Transform,
+            p_Items
+        )
+    )]]
+end
+
+-- TODO: Create subclasses for each pickup types
 function BRLootPickup.static:ChestPickup(p_Transform, p_Items)
-    return BRLootPickup(
-        MathUtils:RandomGuid(),
-        LootPickupType.Chest,
-        p_Transform,
-        p_Items
-    )
+    --[[m_BRPickups:AddLootPickup(
+            BRLootPickup(
+            MathUtils:RandomGuid(),
+            LootPickupType.Chest,
+            p_Transform,
+            p_Items
+        )
+    )]]
+end
+
+
+--==============================
+-- LootPickup related functions
+--==============================
+
+function BRLootPickup:SpawnMeshEntity()
+    -- TODO: Spawn the mesh set in this object
+end
+
+function BRLootPickup:Destory()
+    -- TODO: Destory this object
 end

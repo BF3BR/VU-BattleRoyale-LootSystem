@@ -4,8 +4,8 @@ local m_ConsumableDefinitions = require "__shared/Items/Definitions/BRItemConsum
 
 class("BRItemConsumable", BRItem)
 
-function BRItemConsumable:__init(p_Uid, p_Definition)
-    BRItem.__init(self, p_Uid, p_Definition)
+function BRItemConsumable:__init(p_Definition)
+    BRItem.__init(self, p_Definition)
 end
 
 function BRItemConsumable:AsTable()
@@ -13,7 +13,7 @@ function BRItemConsumable:AsTable()
 end
 
 function BRItemConsumable:CreateFromTable(p_Table)
-    return BRItemConsumable(p_Table.Uid, m_ConsumableDefinitions[p_Table.Name])
+    return BRItemConsumable(p_Table.Id, m_ConsumableDefinitions[p_Table.Name])
 end
 
 --==============================

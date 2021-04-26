@@ -4,8 +4,8 @@ local m_AmmoDefinitions = require "__shared/Items/Definitions/BRItemAmmoDefiniti
 
 class("BRItemAmmo", BRItem)
 
-function BRItemAmmo:__init(p_Uid, p_Definition)
-    BRItem.__init(self, p_Uid, p_Definition)
+function BRItemAmmo:__init(p_Definition)
+    BRItem.__init(self, p_Definition)
 end
 
 function BRItemAmmo:AsTable()
@@ -13,7 +13,7 @@ function BRItemAmmo:AsTable()
 end
 
 function BRItemAmmo:CreateFromTable(p_Table)
-    return BRItemAmmo(p_Table.Uid, m_AmmoDefinitions[p_Table.Name])
+    return BRItemAmmo(p_Table.Id, m_AmmoDefinitions[p_Table.Name])
 end
 
 --==============================

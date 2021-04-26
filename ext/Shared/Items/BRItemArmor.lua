@@ -4,8 +4,8 @@ local m_ArmorDefinitions = require "__shared/Items/Definitions/BRItemArmorDefini
 
 class("BRItemArmor", BRItem)
 
-function BRItemArmor:__init(p_Uid, p_Definition, p_CurrentDurability)
-    BRItem.__init(self, p_Uid, p_Definition)
+function BRItemArmor:__init(p_Definition, p_CurrentDurability)
+    BRItem.__init(self, p_Definition)
 
     self.m_CurrentDurability = p_CurrentDurability or p_Definition.m_Durability
 end
@@ -19,7 +19,7 @@ function BRItemArmor:AsTable()
 end
 
 function BRItemArmor:CreateFromTable(p_Table)
-    return BRItemArmor(p_Table.Uid, m_ArmorDefinitions[p_Table.Name], p_Table.CurrentDurability)
+    return BRItemArmor(p_Table.Id, m_ArmorDefinitions[p_Table.Name], p_Table.CurrentDurability)
 end
 
 --==============================

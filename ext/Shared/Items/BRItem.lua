@@ -7,9 +7,10 @@ require "__shared/Enums/ItemEnums"
 
 class "BRItem"
 
-function BRItem:__init(p_Uid, p_Definition)
+function BRItem:__init(p_Definition)
     -- Unique ID for each item
-    self.m_Uid = p_Uid
+    -- TODO: Find a better solution for generating unique id for each item
+    self.m_Id = MathUtils:RandomGuid()
 
     -- Item's definition
     self.m_Definition = p_Definition
@@ -21,7 +22,7 @@ end
 
 function BRItem:AsTable()
     return {
-        Uid = self.m_Uid,
+        Id = self.m_Id,
         Type = self.m_Definition.m_Type,
         Name = self.m_Definition.m_Name
     }
