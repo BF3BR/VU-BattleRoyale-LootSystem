@@ -1,7 +1,7 @@
 class "BRItemDatabase"
 
 function BRItemDatabase:__init()
-    -- A table of items
+    -- A table of items (id -> BRItem)
     self.m_Items = {}
 end
 
@@ -11,34 +11,22 @@ function BRItemDatabase:AddItem(p_Item)
         print("Item already exists.")
         return false
     end
-    
-    table.insert(self.m_Items, p_Item:AsTable())
+
+    self.m_Items[p_Item.Id] = p_Item
     return true
 end
 
 function BRItemDatabase:RemoveItem(p_Item)
-    if #self.m_Items == 0 then
-        return
-    end
+    -- remove reference
+    self.m_Items[p_Item.Id] = nil
 
-    for l_Index, l_Item in pairs(self.m_Items) do
-        if l_Item.Id == p_Item.Id then
-            table.remove(self.m_Items, l_Index)
-            return
-        end
-    end
+    -- TODO maybe need to call some kind of :Destroy() for item
 end
 
 function BRItemDatabase:FindById(p_Id)
-    if #self.m_Items == 0 then
-        return nil
-    end
+    return self.m_Items[p_Id]
+end
 
-    for l_Index, l_Item in pairs(self.m_Items) do
-        if l_Item.Id == p_Id then
-            return l_Item
-        end
-    end
-
-    return nil
+function BRItemDatabase:IsEmpty()
+    return next(self.m_Items) == nil
 end
