@@ -2,8 +2,10 @@ class "BRLootPickup"
 
 -- local m_BRPickups = require "__shared/Types/BRPickups"
 
-function BRLootPickup:__init(p_Guid, p_Type, p_Transform, p_Items)
-    self.m_Guid = p_Guid
+function BRLootPickup:__init(p_Type, p_Transform, p_Items)
+    -- Unique Id for each loot pickup
+    -- TODO: Find a better solution for generating unique id for each item
+    self.m_Id = MathUtils:RandomGuid()
 
     -- ItemEnums - LootPickupType
     self.m_Type = p_Type
@@ -30,7 +32,10 @@ end
 
 function BRLootPickup:AsTable()
     return {
-        Guid = self.m_Guid,
+        Id = self.m_Id,
+        Type = self.m_Type,
+        Mesh = self:GetMesh(),
+        Transform = self.m_Transform,
         Items = self.m_Items:AsTable(),
     }
 end

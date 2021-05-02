@@ -4,7 +4,30 @@ local m_ItemDatabase = require "__shared/Types/BRItemDatabase"
 
 function BRInventory:__init()
     -- A table of items
-    self.m_Items = {}
+    self.m_Items = {
+        "PrimaryWeapon" = {
+            "Weapon" = {},
+            "Optics" = {},
+            "Primary" = {},
+            "Secondary" = {},
+        },
+        "SecondaryWeapon" = {
+            "Weapon" = {},
+            "Optics" = {},
+            "Primary" = {},
+            "Secondary" = {},
+        },
+        "AmmoBuckets" = {
+            "SMG" = {},
+            "AR" = {},
+            "Sniper" = {},
+            "Shotgun" = {},
+        },
+        "Inventory" = {},
+        "Armor" = {},
+        "Helmet" = {},
+        "Gadget" = {},
+    }
 end
 
 function BRInventory:AddItem(p_ItemId)
@@ -12,6 +35,7 @@ function BRInventory:AddItem(p_ItemId)
     local s_Item = m_ItemDatabase:FindById(p_ItemId)
     if s_Item ~= nil then
         -- TODO: Check for available slot
+        -- TODO: Validate item
     
         -- Add item to players inventory
         table.insert(self.m_Items, s_Item:AsTable())

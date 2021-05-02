@@ -8,7 +8,7 @@ require "__shared/Enums/ItemEnums"
 class "BRItem"
 
 function BRItem:__init(p_Definition)
-    -- Unique ID for each item
+    -- Unique Id for each item
     -- TODO: Find a better solution for generating unique id for each item
     self.m_Id = MathUtils:RandomGuid()
 
