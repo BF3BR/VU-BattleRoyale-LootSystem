@@ -1,32 +1,37 @@
+require "__shared/Enums/InventoryEnums"
+
 class "BRInventory"
 
 local m_ItemDatabase = require "__shared/Types/BRItemDatabase"
 
-function BRInventory:__init()
+function BRInventory:__init(p_Owner)
+    -- BRPlayer (or Player for now)
+    self.m_Owner = p_Owner
+
     -- A table of items
     self.m_Items = {
-        "PrimaryWeapon" = {
+        [InventorySlot.PrimaryWeapon] = {
             "Weapon" = {},
             "Optics" = {},
             "Primary" = {},
             "Secondary" = {},
         },
-        "SecondaryWeapon" = {
+        [InventorySlot.SecondaryWeapon] = {
             "Weapon" = {},
             "Optics" = {},
             "Primary" = {},
             "Secondary" = {},
         },
-        "AmmoBuckets" = {
+        [InventorySlot.AmmoBuckets] = {
             "SMG" = {},
             "AR" = {},
             "Sniper" = {},
             "Shotgun" = {},
         },
-        "Inventory" = {},
-        "Armor" = {},
-        "Helmet" = {},
-        "Gadget" = {},
+        [InventorySlot.Inventory] = {},
+        [InventorySlot.Armor] = {},
+        [InventorySlot.Helmet] = {},
+        [InventorySlot.Gadget] = {},
     }
 end
 
