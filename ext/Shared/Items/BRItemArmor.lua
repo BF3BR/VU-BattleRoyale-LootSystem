@@ -4,8 +4,8 @@ local m_ArmorDefinitions = require "__shared/Items/Definitions/BRItemArmorDefini
 
 class("BRItemArmor", BRItem)
 
-function BRItemArmor:__init(p_Definition, p_CurrentDurability)
-    BRItem.__init(self, p_Definition)
+function BRItemArmor:__init(p_Id, p_Definition, p_CurrentDurability)
+    BRItem.__init(self, p_Id, p_Definition)
 
     self.m_CurrentDurability = p_CurrentDurability or p_Definition.m_Durability
 end

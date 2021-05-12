@@ -1,23 +1,13 @@
 require "__shared/Enums/ItemEnums"
--- require "__shared/Items/BRItemArmor"
--- require "__shared/Items/BRItemConsumable"
--- require "__shared/Items/BRItemAmmo"
--- require "__shared/Items/BRItemAttachment"
--- require "__shared/Items/BRItemWeapon"
 
 class "BRItem"
 
-function BRItem:__init(p_Definition)
+function BRItem:__init(p_Id, p_Definition)
     -- Unique Id for each item
-    -- TODO: Find a better solution for generating unique id for each item
-    self.m_Id = MathUtils:RandomGuid()
+    self.m_Id = p_Id ~= nil and p_Id or tostring(MathUtils:RandomGuid())
 
     -- Item's definition
     self.m_Definition = p_Definition
-end
-
-function BRItem:FromTable(p_Table)
-    return BRItem()
 end
 
 function BRItem:AsTable()
@@ -33,15 +23,15 @@ function BRItem:UpdateFromTable()
 end
 
 function BRItem:CreateFromTable(p_Table)
-    if self.m_Definition.m_Type == ItemType.Armor then
+    if p_Table.Type == ItemType.Armor then
         return BRItemArmor:CreateFromTable(p_Table)
-    elseif self.m_Definition.m_Type == ItemType.Consumable then
+    elseif p_Table.Type == ItemType.Consumable then
         return BRItemConsumable:CreateFromTable(p_Table)
-    elseif self.m_Definition.m_Type == ItemType.Ammo then
+    elseif p_Table.Type == ItemType.Ammo then
         return BRItemAmmo:CreateFromTable(p_Table)
-    elseif self.m_Definition.m_Type == ItemType.Attachment then
+    elseif p_Table.Type == ItemType.Attachment then
         return BRItemAttachment:CreateFromTable(p_Table)
-    elseif self.m_Definition.m_Type == ItemType.Weapon then
+    elseif p_Table.Type == ItemType.Weapon then
         return BRItemWeapon:CreateFromTable(p_Table)
     end
 

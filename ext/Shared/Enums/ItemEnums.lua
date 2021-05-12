@@ -5,6 +5,8 @@ ItemType = {
     Ammo = 4,
     Consumable = 5,
     Armor = 6,
+    Helmet = 7,
+    Gadget = 8,
 }
 
 WeaponTier = {

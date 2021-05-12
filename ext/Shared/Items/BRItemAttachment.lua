@@ -4,8 +4,8 @@ local m_AttachmentDefinitions = require "__shared/Items/Definitions/BRItemAttach
 
 class("BRItemAttachment", BRItem)
 
-function BRItemAttachment:__init(p_Definition)
-    BRItem.__init(self, p_Definition)
+function BRItemAttachment:__init(p_Id, p_Definition)
+    BRItem.__init(self, p_Id, p_Definition)
 end
 
 function BRItemAttachment:AsTable()

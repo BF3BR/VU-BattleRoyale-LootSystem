@@ -4,8 +4,8 @@ local m_WeaponDefinitions = require "__shared/Items/Definitions/BRItemWeaponDefi
 
 class("BRItemWeapon", BRItem)
 
-function BRItemWeapon:__init(p_Definition)
-    BRItem.__init(self, p_Definition)
+function BRItemWeapon:__init(p_Id, p_Definition)
+    BRItem.__init(self, p_Id, p_Definition)
 end
 
 function BRItemWeapon:AsTable()

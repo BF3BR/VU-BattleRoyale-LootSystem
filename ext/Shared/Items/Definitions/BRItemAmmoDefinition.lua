@@ -27,7 +27,7 @@ function BRItemAmmoDefinition:__init(
 end
 
 return {
-    ["556mm"] = BRItemAmmoDefinition(
+    ["5.56mm"] = BRItemAmmoDefinition(
         "5.56mm", 
         "The 5.56mm ammo is used for ARs.",
         0.25,
