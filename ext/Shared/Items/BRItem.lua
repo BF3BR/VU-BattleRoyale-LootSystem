@@ -18,10 +18,6 @@ function BRItem:AsTable()
     }
 end
 
-function BRItem:UpdateFromTable()
-    -- TODO Do we need this?
-end
-
 function BRItem:CreateFromTable(p_Table)
     if p_Table.Type == ItemType.Armor then
         return BRItemArmor:CreateFromTable(p_Table)

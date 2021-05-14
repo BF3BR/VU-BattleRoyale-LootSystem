@@ -8,10 +8,6 @@ function BRItemAmmo:__init(p_Id, p_Definition)
     BRItem.__init(self, p_Id, p_Definition)
 end
 
-function BRItemAmmo:AsTable()
-    return BRItem.AsTable(self)
-end
-
 function BRItemAmmo:CreateFromTable(p_Table)
     return BRItemAmmo(p_Table.Id, m_AmmoDefinitions[p_Table.Name])
 end

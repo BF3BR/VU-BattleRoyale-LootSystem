@@ -34,7 +34,6 @@ function BRLootPickup:AsTable()
     return {
         Id = self.m_Id,
         Type = self.m_Type,
-        Mesh = self:GetMesh(),
         Transform = self.m_Transform,
         Items = self.m_Items:AsTable(),
     }

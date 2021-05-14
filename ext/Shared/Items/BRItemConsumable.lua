@@ -8,10 +8,6 @@ function BRItemConsumable:__init(p_Id, p_Definition)
     BRItem.__init(self, p_Id, p_Definition)
 end
 
-function BRItemConsumable:AsTable()
-    return BRItem.AsTable(self)
-end
-
 function BRItemConsumable:CreateFromTable(p_Table)
     return BRItemConsumable(p_Table.Id, m_ConsumableDefinitions[p_Table.Name])
 end

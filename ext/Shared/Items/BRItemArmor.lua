@@ -54,5 +54,5 @@ function BRItemArmor:GetPercentage()
         return 0
     end
 
-    return math.floor((self.m_CurrentDurability / self.m_Definition.Durability) * 100)
+    return math.ceil((self.m_CurrentDurability / self.m_Definition.Durability) * 100)
 end
