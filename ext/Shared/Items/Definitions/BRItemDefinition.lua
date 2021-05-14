@@ -1,4 +1,5 @@
 require "__shared/Enums/ItemEnums"
+local BRItemAmmoDefinition = require "ext.Shared.Items.Definitions.BRItemAmmoDefinition"
 
 class "BRItemDefinition"
 

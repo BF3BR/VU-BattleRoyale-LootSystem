@@ -24,3 +24,9 @@ InventorySlot = {
     Backpack8 = 19,
     Backpack9 = 20
 }
+
+AttachmentSlotType = {
+    Optics = 1,
+    Barrel = 2,
+    Other = 3
+}

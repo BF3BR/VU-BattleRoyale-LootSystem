@@ -66,7 +66,7 @@ function BRInventory:__init(p_Owner)
     }
 end
 
-function BRInventory:AddItem(p_ItemId)
+function BRInventory:AddItem(p_ItemId, p_SlotIndex)
     -- Check if item exists
     local s_Item = m_ItemDatabase:FindById(p_ItemId)
     if s_Item == nil then
@@ -74,21 +74,23 @@ function BRInventory:AddItem(p_ItemId)
         return
     end
 
-    local s_AvailableSlotIndex = self:GetAvailableSlot(s_Item)
+    if p_SlotIndex == nil then
+        p_SlotIndex = self:GetAvailableSlot(s_Item)
+    end
 
-    if s_AvailableSlot == false then
+    if p_SlotIndex == nil then
         print("No available slot.")
         return
     end
-    
-    -- If the slot is empty / nil then we can just put the item there
-    -- self.m_Slots[s_AvailableSlotIndex] = s_Item
 
-    if self.m_Slots[s_AvailableSlotIndex] == nil then
-        self.m_Slots[s_AvailableSlotIndex] = {}
+    -- If the slot is empty / nil then we can just put the item there
+    -- self.m_Slots[p_SlotIndex] = s_Item
+
+    if self.m_Slots[p_SlotIndex] == nil then
+        self.m_Slots[p_SlotIndex] = {}
     end
 
-    table.insert(self.m_Slots[s_AvailableSlotIndex], s_Item)
+    table.insert(self.m_Slots[p_SlotIndex], s_Item)
     print("Item added to inventory. (" .. s_Item.Name .. ")")
 end
 
@@ -140,5 +142,5 @@ function BRInventory:GetAvailableSlot(p_Item)
         end 
     end
 
-    return false
+    return nil
 end
