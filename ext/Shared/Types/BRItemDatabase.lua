@@ -7,19 +7,19 @@ end
 
 function BRItemDatabase:AddItem(p_Item)
     -- Check if item already exists
-    if self.m_Items[p_Item.Id] ~= nil then
+    if self.m_Items[p_Item.m_Id] ~= nil then
         print("Item already exists in database. (" .. p_Item.Name .. ")")
         return false
     end
 
-    self.m_Items[p_Item.Id] = p_Item
+    self.m_Items[p_Item.m_Id] = p_Item
     print("Item added to database. (" .. p_Item.Name .. ")")
     return true
 end
 
 function BRItemDatabase:RemoveItem(p_Item)
     -- remove reference
-    self.m_Items[p_Item.Id] = nil
+    self.m_Items[p_Item.m_Id] = nil
 
     -- TODO maybe need to call some kind of :Destroy() for item
 end
@@ -33,7 +33,7 @@ function BRItemDatabase:IsEmpty()
 end
 
 if g_BRItemDatabase == nil then
-	g_BRItemDatabase = BRItemDatabase()
+    g_BRItemDatabase = BRItemDatabase()
 end
 
 return g_BRItemDatabase
