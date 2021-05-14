@@ -10,7 +10,11 @@ function BRLootPickupDatabase:__init()
     self.m_SpawnedEntities = {}
 end
 
-function BRLootPickupDatabase:Add(p_LootPickup)
+function BRLootPickupDatabase:RegisterLootPickup(p_LootPickup)
+    if p_LootPickup == nil then
+        return
+    end
+
     -- Check if loot pickup already exists
     if self.m_LootPickups[p_LootPickup.Id] ~= nil then
         print("Loot pickup already spawned.")
@@ -22,8 +26,15 @@ function BRLootPickupDatabase:Add(p_LootPickup)
     self:Spawn(p_LootPickup)
 end
 
-function BRLootPickupDatabase:Remove(p_LootPickupId)
-    -- remove reference
+function BRLootPickupDatabase:UnregisterLootPickup(p_LootPickupId)
+    if p_LootPickupId == nil then
+        return
+    end
+
+    if self.m_LootPickups[p_LootPickupId] == nil then
+        return
+    end
+
     self.m_LootPickups[p_LootPickupId] = nil
 
     self:Destory(p_LootPickupId)

@@ -5,7 +5,12 @@ function BRItemDatabase:__init()
     self.m_Items = {}
 end
 
-function BRItemDatabase:AddItem(p_Item)
+function BRItemDatabase:RegisterItem(p_Item)
+    if p_Item == nil then
+        print("Cannot register nil item.")
+        return false
+    end
+
     -- Check if item already exists
     if self.m_Items[p_Item.m_Id] ~= nil then
         print("Item already exists in database. (" .. p_Item.Name .. ")")
@@ -17,19 +22,20 @@ function BRItemDatabase:AddItem(p_Item)
     return true
 end
 
-function BRItemDatabase:RemoveItem(p_Item)
-    -- remove reference
-    self.m_Items[p_Item.m_Id] = nil
+function BRItemDatabase:UnregisterItem(p_Id)
+    if p_Id == nil then
+        return
+    end
 
-    -- TODO maybe need to call some kind of :Destroy() for item
+    if self.m_Items[p_Id] == nil then
+        return
+    end
+
+    self.m_Items[p_Id] = nil
 end
 
-function BRItemDatabase:FindById(p_Id)
+function BRItemDatabase:GetItem(p_Id)
     return self.m_Items[p_Id]
-end
-
-function BRItemDatabase:IsEmpty()
-    return next(self.m_Items) == nil
 end
 
 if g_BRItemDatabase == nil then

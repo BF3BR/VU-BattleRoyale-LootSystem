@@ -2,10 +2,9 @@ class "BRLootPickup"
 
 -- local m_BRPickups = require "__shared/Types/BRPickups"
 
-function BRLootPickup:__init(p_Type, p_Transform, p_Items)
+function BRLootPickup:__init(p_Id, p_Type, p_Transform, p_Items)
     -- Unique Id for each loot pickup
-    -- TODO: Find a better solution for generating unique id for each item
-    self.m_Id = MathUtils:RandomGuid()
+    self.m_Id = p_Id ~= nil and p_Id or tostring(MathUtils:RandomGuid())
 
     -- ItemEnums - LootPickupType
     self.m_Type = p_Type
