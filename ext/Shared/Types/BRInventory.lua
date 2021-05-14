@@ -68,7 +68,7 @@ end
 
 function BRInventory:AddItem(p_ItemId, p_SlotIndex)
     -- Check if item exists
-    local s_Item = m_ItemDatabase:FindById(p_ItemId)
+    local s_Item = m_ItemDatabase:GetItem(p_ItemId)
     if s_Item == nil then
         print("Invalid item Id.")
         return
