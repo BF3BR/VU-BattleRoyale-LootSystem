@@ -2,19 +2,23 @@ require "__shared/Enums/ItemEnums"
 
 class "BRItem"
 
-function BRItem:__init(p_Id, p_Definition)
+function BRItem:__init(p_Id, p_Definition, p_Quantity)
     -- Unique Id for each item
     self.m_Id = p_Id ~= nil and p_Id or tostring(MathUtils:RandomGuid())
 
     -- Item's definition
     self.m_Definition = p_Definition
+
+    -- Item's quantity
+    self.m_Quantity = p_Quantity ~= nil and p_Quantity or 1
 end
 
 function BRItem:AsTable()
     return {
         Id = self.m_Id,
         Type = self.m_Definition.m_Type,
-        Name = self.m_Definition.m_Name
+        Name = self.m_Definition.m_Name,
+        Quantity = self.m_Quantity
     }
 end
 

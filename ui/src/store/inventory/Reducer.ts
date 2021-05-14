@@ -6,7 +6,7 @@ import {
 } from "./ActionTypes";
 
 const initialState: InventoryState = {
-    primaryWeapon: {
+    /*primaryWeapon: {
         weaponSlot: {
             id: "primary-weapon-slot",
             item: null,
@@ -79,7 +79,7 @@ const initialState: InventoryState = {
                 name: "Attachment test",
                 count: 1,
                 type: "attachment",
-            },*/
+            },
             accepts: ["attachment", "backpack"],
         },
     ],
@@ -104,7 +104,8 @@ const initialState: InventoryState = {
             item: null,
             accepts: ["attachment", "backpack"],
         },
-    ],
+    ],*/
+    Slots: [],
 };
 
 const InventoryReducer = (

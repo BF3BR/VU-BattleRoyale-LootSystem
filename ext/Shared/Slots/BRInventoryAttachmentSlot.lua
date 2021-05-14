@@ -3,11 +3,10 @@ require "__shared/Slots/BRInventorySlot"
 
 class("BRInventoryAttachmentSlot", BRInventorySlot)
 
-function BRInventoryAttachmentSlot:__init(p_WeaponSlot, p_SlotType)
-    BRInventorySlot.__init(self, {ItemType.Attachment})
+function BRInventoryAttachmentSlot:__init()
+    BRInventorySlot.__init(self, { ItemType.Attachment })
 
-    self.m_WeaponSlot = p_WeaponSlot
-    self.m_SlotType = p_SlotType
+    self.m_WeaponSlot = nil
 end
 
 function BRInventoryAttachmentSlot:IsAccepted(p_Item)
@@ -30,4 +29,8 @@ function BRInventoryAttachmentSlot:IsAccepted(p_Item)
     end
 
     return false
+end
+
+function BRInventoryAttachmentSlot:SetWeaponSlot(p_WeaponSlot)
+    self.m_WeaponSlot = p_WeaponSlot
 end

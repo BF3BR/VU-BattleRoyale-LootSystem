@@ -37,3 +37,10 @@ function BRInventorySlot:Drop()
 
     return {s_Item}
 end
+
+function BRInventorySlot:AsTable()
+    return {
+        Items = self.m_Item ~= nil and self.m_Item:AsTable() or nil,
+        AcceptedTypes = self.m_AcceptedTypes
+    }
+end

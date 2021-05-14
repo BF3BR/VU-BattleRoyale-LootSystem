@@ -7,6 +7,7 @@ function BRItemAmmoDefinition:__init(
     p_Name, 
     p_Description,
     p_Weight,
+    p_Mesh,
     p_UIIcon,
     p_MaxStack
 )
@@ -16,10 +17,7 @@ function BRItemAmmoDefinition:__init(
     self.m_Name = p_Name
     self.m_Description = p_Description
     self.m_Weight = p_Weight
-    self.m_Mesh = {
-        Partition = Guid("677A72F6-D21E-BBE0-053C-FA6716A78EA2"),
-        Instance = Guid("571C2D93-077A-166C-9C03-F6E592DC4BB2")
-    }
+    self.m_Mesh = p_Mesh
     self.m_UIIcon = p_UIIcon
     self.m_Stackable = true
     self.m_MaxStack = p_MaxStack
@@ -31,6 +29,7 @@ return {
         "5.56mm", 
         "The 5.56mm ammo is used for ARs.",
         0.25,
+        DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
         "UI/Art/Persistence/KitItem/Fancy/ammobag",
         60
     ),
@@ -38,6 +37,7 @@ return {
         "9mm", 
         "The 9mm ammo is used for SMGs and Pistols.",
         0.1,
+        DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
         "UI/Art/Persistence/KitItem/Fancy/ammobag",
         120
     ),

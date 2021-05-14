@@ -13,6 +13,15 @@ const App: React.FC = () => {
         }
     }
 
+    window.SyncInventory = (p_DataJson: any) => {
+        /*dispatch(updatePlayerPosition({
+            x: p_DataJson.x,
+            y: p_DataJson.y,
+            z: p_DataJson.z,
+        }));*/
+        console.log(p_DataJson);
+    }
+
     return (
         <>
             <Inventory />
@@ -24,6 +33,6 @@ export default App;
 
 declare global {
     interface Window {
-
+        SyncInventory: (p_DataJson: any) => void;
     }
 }

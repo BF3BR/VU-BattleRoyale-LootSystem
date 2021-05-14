@@ -13,12 +13,12 @@ function BRItemDatabase:RegisterItem(p_Item)
 
     -- Check if item already exists
     if self.m_Items[p_Item.m_Id] ~= nil then
-        print("Item already exists in database. (" .. p_Item.Name .. ")")
+        print("Item already exists in database. (" .. p_Item.m_Definition.m_Name .. ")")
         return false
     end
 
     self.m_Items[p_Item.m_Id] = p_Item
-    print("Item added to database. (" .. p_Item.Name .. ")")
+    print("Item added to database. (" .. p_Item.m_Definition.m_Name .. ")")
     return true
 end
 

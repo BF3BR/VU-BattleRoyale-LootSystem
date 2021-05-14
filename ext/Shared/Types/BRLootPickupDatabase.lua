@@ -16,12 +16,12 @@ function BRLootPickupDatabase:RegisterLootPickup(p_LootPickup)
     end
 
     -- Check if loot pickup already exists
-    if self.m_LootPickups[p_LootPickup.Id] ~= nil then
+    if self.m_LootPickups[p_LootPickup.m_Id] ~= nil then
         print("Loot pickup already spawned.")
         return
     end
 
-    self.m_LootPickups[p_LootPickup.Id] = p_LootPickup
+    self.m_LootPickups[p_LootPickup.m_Id] = p_LootPickup
 
     self:Spawn(p_LootPickup)
 end
@@ -41,26 +41,27 @@ function BRLootPickupDatabase:UnregisterLootPickup(p_LootPickupId)
 end
 
 function BRLootPickupDatabase:Spawn(p_LootPickup)
-    if self.m_SpawnedEntities[p_LootPickup.Id] ~= nil then
+    if self.m_SpawnedEntities[p_LootPickup.m_Id] ~= nil then
         return
     end
 
-	if p_LootPickup.Mesh == nil then
-		print("Couldn't find loot pickup blueprint.")
+    local s_LootPickupMesh = p_LootPickup:GetMesh()
+	if s_LootPickupMesh == nil then
+		print("Couldn't find loot pickup mesh.")
 		return
     end
     
 	local s_Params = EntityCreationParams()
-	s_Params.transform = p_LootPickup.Transform
+	s_Params.transform = p_LootPickup.m_Transform
 	s_Params.networked = false
 
-    local s_Bus = EntityManager:CreateEntitiesFromBlueprint(p_LootPickup.Mesh, s_Params)
+    local s_Bus = EntityManager:CreateEntitiesFromBlueprint(s_LootPickupMesh, s_Params)
     if s_Bus ~= nil then
         for _, l_Entity in pairs(s_Bus.entities) do
             l_Entity:Init(Realm.Realm_ClientAndServer, true)
         end
 
-        self.m_SpawnedEntities[p_LootPickup.Id] = s_Bus
+        self.m_SpawnedEntities[p_LootPickup.m_Id] = s_Bus
     else
 		print("Couldn't spawn loot pickup.")
 	end

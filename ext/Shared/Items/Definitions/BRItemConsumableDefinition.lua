@@ -19,10 +19,7 @@ function BRItemConsumableDefinition:__init(
     self.m_Name = p_Name
     self.m_Description = p_Description
     self.m_Weight = p_Weight
-    self.m_Mesh = {
-        Partition = Guid("2B73C280-C014-27BF-43FF-9C20ECF37D83"),
-        Instance = Guid("089E7BEC-7195-C842-FFE0-0FCB634822F9")
-    }
+    self.m_Mesh = nil--DC(Guid("6519E1BF-BB39-8B7F-47D9-1B4C365318D9"), Guid("BC6154A0-CDFC-D402-ECCA-444811062765")),
     self.m_UIIcon = p_UIIcon
     self.m_Stackable = p_Stackable
     self.m_MaxStack = p_MaxStack

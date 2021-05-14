@@ -4,12 +4,12 @@ local m_AttachmentDefinitions = require "__shared/Items/Definitions/BRItemAttach
 
 class("BRItemAttachment", BRItem)
 
-function BRItemAttachment:__init(p_Id, p_Definition)
-    BRItem.__init(self, p_Id, p_Definition)
+function BRItemAttachment:__init(p_Id, p_Definition, p_Quantity)
+    BRItem.__init(self, p_Id, p_Definition, p_Quantity)
 end
 
 function BRItemAttachment:CreateFromTable(p_Table)
-    return BRItemAttachment(p_Table.Id, m_AttachmentDefinitions[p_Table.Name])
+    return BRItemAttachment(p_Table.Id, m_AttachmentDefinitions[p_Table.Name], p_Table.Quantity)
 end
 
 --==============================

@@ -1,7 +1,7 @@
 import InventorySlot from "../../helpers/InventoryHelper";
 
 export interface InventoryState {
-    primaryWeapon: {
+    /*primaryWeapon: {
         weaponSlot: InventorySlot,
         attachmentSlot1: InventorySlot,
         attachmentSlot2: InventorySlot,
@@ -13,6 +13,6 @@ export interface InventoryState {
         attachmentSlot2: InventorySlot,
         attachmentSlot3: InventorySlot,
     },
-    backpack: Array<InventorySlot>,
-    ammo: Array<InventorySlot>,
+    backpack: Array<InventorySlot>,*/
+    Slots: Array<InventorySlot>,
 }

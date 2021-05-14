@@ -3,10 +3,14 @@ require "__shared/Slots/BRInventorySlot"
 
 class("BRInventoryWeaponSlot", BRInventorySlot)
 
-function BRInventoryWeaponSlot:__init(p_WeaponSlot, p_SlotType)
-    BRInventorySlot.__init(self, {ItemType.Attachment})
+function BRInventoryWeaponSlot:__init()
+    BRInventorySlot.__init(self, { ItemType.Weapon })
 
-    self.m_AttachmentSlots = {OpticsSlot = nil, BarrelSlot = nil, OtherSlot = nil}
+    self.m_AttachmentSlots = {
+        OpticsSlot = nil,
+        BarrelSlot = nil,
+        OtherSlot = nil
+    }
 end
 
 -- Drop all attachments too when dropping a weapon
@@ -17,8 +21,8 @@ function BRInventoryWeaponSlot:Drop()
     end
 
     local s_DroppedItems = {self.m_Item}
-    for _, l_Slot in pairs(self.m_AttachmentSlots) do
-        local s_Items = l_Slot:Drop()
+    for _, l_AttachmentSlot in pairs(self.m_AttachmentSlots) do
+        local s_Items = l_AttachmentSlot:Drop()
 
         -- attachments only drop one item
         if #s_Items == 1 then
@@ -31,8 +35,7 @@ function BRInventoryWeaponSlot:Drop()
     return s_DroppedItems
 end
 
-function BRInventoryWeaponSlot:SetAttachmentSlots(p_OpticsSlot, p_BarrelSlot,
-                                                  p_OtherSlot)
+function BRInventoryWeaponSlot:SetAttachmentSlots(p_OpticsSlot, p_BarrelSlot, p_OtherSlot)
     self.m_AttachmentSlots = {
         OpticsSlot = p_OpticsSlot,
         BarrelSlot = p_BarrelSlot,
