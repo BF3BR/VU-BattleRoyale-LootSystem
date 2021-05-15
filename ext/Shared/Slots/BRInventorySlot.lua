@@ -40,7 +40,6 @@ end
 
 function BRInventorySlot:AsTable()
     return {
-        Item = self.m_Item ~= nil and self.m_Item:AsTable() or nil,
-        AcceptedTypes = self.m_AcceptedTypes
+        Item = self.m_Item ~= nil and self.m_Item:AsTable() or nil
     }
 end

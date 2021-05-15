@@ -1,8 +1,16 @@
 class "VuBattleRoyaleLootSystemClient"
 
+require "__shared/Types/DataContainer"
+
 require "__shared/Enums/CustomEvents"
 
 require "__shared/Utils/Logger"
+
+require "__shared/Items/BRItemWeapon"
+require "__shared/Items/BRItemAmmo"
+require "__shared/Items/BRItemArmor"
+require "__shared/Items/BRItemHelmet"
+require "__shared/Items/BRItemAttachment"
 
 require "Types/BRInventory"
 
