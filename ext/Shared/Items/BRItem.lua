@@ -17,7 +17,7 @@ function BRItem:AsTable()
     return {
         Id = self.m_Id,
         Type = self.m_Definition.m_Type,
-        Name = self.m_Definition.m_Name,
+        UId = self.m_Definition.m_UId,
         Quantity = self.m_Quantity
     }
 end

@@ -25,6 +25,7 @@ function BRInventory:OnReceiveInventoryState(p_State)
             if l_GeneratedItem ~= nil and l_GeneratedItem.m_Definition ~= nil then
                 l_ReturnVal = {
                     Id = l_GeneratedItem.m_Id,
+                    UId = l_GeneratedItem.m_Definition.m_UId,
                     Name = l_GeneratedItem.m_Definition.m_Name,
                     Type = l_GeneratedItem.m_Definition.m_Type,
                     Description = l_GeneratedItem.m_Definition.m_Description,

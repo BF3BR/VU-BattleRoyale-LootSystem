@@ -3,6 +3,7 @@ require "__shared/Enums/ItemEnums"
 class "BRItemDefinition"
 
 function BRItemDefinition:__init()
+    self.m_UId = nil
     self.m_Name = "Unnamed item"
     self.m_Description = ""
     self.m_Type = ItemType.Default
@@ -16,7 +17,7 @@ function BRItemDefinition:__init()
 end
 
 function BRItemDefinition:GetDefinitionId()
-    return string.format("%s:%s", self.m_Type, self.m_Name)
+    return string.format("%s:%s", self.m_Type, self.m_UId)
 end
 
 function BRItemDefinition:Equals(p_Other)

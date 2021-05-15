@@ -4,18 +4,20 @@ require "__shared/Enums/ItemEnums"
 class("BRItemConsumableDefinition", BRItemDefinition)
 
 function BRItemConsumableDefinition:__init(
-    p_Name, 
+    p_UId,
+    p_Name,
     p_Description,
     p_Weight,
     p_UIIcon,
     p_Stackable,
     p_MaxStack,
-    p_HealthToRegen, 
+    p_HealthToRegen,
     p_TimeToApply
 )
     BRItemDefinition.__init(self)
 
     self.m_Type = ItemType.Consumable
+    self.m_UId = p_UId
     self.m_Name = p_Name
     self.m_Description = p_Description
     self.m_Weight = p_Weight
@@ -33,7 +35,8 @@ function BRItemConsumableDefinition:__init(
 end
 
 return {
-    SmallMedkit = BRItemConsumableDefinition(
+    ["consumable-small-medkit"] = BRItemConsumableDefinition(
+        "consumable-small-medkit",
         "Small Medkit", 
         "A small medkit, it's gonna refill 25% of your health.",
         15,
@@ -43,7 +46,8 @@ return {
         25, 
         3
     ),
-    LargeMedkit = BRItemConsumableDefinition(
+    ["consumable-large-medkit"] = BRItemConsumableDefinition(
+        "consumable-large-medkit",
         "Large Medkit", 
         "A large medkit, it's gonna refill 50% of your health.",
         25,

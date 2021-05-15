@@ -3,12 +3,17 @@ require "__shared/Enums/ItemEnums"
 
 class("BRItemHelmetDefinition", BRItemDefinition)
 
-function BRItemHelmetDefinition:__init(p_Name, p_Durability, p_DamageReduction)
+function BRItemHelmetDefinition:__init(
+    p_UId,
+    p_Name,
+    p_Durability,
+    p_DamageReduction
+)
     BRItemDefinition.__init(self)
 
     self.m_Type = ItemType.Helmet
+    self.m_UId = p_UId
     self.m_Name = p_Name
-
     self.m_Description = "" -- TODO
     self.m_Weight = 0.0 -- TODO
     self.m_Mesh = nil -- TODO
@@ -22,5 +27,10 @@ function BRItemHelmetDefinition:__init(p_Name, p_Durability, p_DamageReduction)
 end
 
 return {
-    BasicHelmet = BRItemHelmetDefinition("BasicHelmet", 100, 1)
+    ["helmet-basic"] = BRItemHelmetDefinition(
+        "helmet-basic",
+        "Basic Helmet",
+        100,
+        1
+    ),
 }

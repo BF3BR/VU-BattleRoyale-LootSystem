@@ -9,7 +9,7 @@ function BRItemWeapon:__init(p_Id, p_Definition)
 end
 
 function BRItemWeapon:CreateFromTable(p_Table)
-    return BRItemWeapon(p_Table.Id, m_WeaponDefinitions[p_Table.Name])
+    return BRItemWeapon(p_Table.Id, m_WeaponDefinitions[p_Table.UId])
 end
 
 --==============================

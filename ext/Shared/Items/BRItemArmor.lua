@@ -19,7 +19,7 @@ function BRItemArmor:AsTable()
 end
 
 function BRItemArmor:CreateFromTable(p_Table)
-    return BRItemArmor(p_Table.Id, m_ArmorDefinitions[p_Table.Name], p_Table.CurrentDurability)
+    return BRItemArmor(p_Table.Id, m_ArmorDefinitions[p_Table.UId], p_Table.CurrentDurability)
 end
 
 --==============================

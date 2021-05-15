@@ -9,7 +9,7 @@ function BRItemAmmo:__init(p_Id, p_Definition, p_Quantity)
 end
 
 function BRItemAmmo:CreateFromTable(p_Table)
-    return BRItemAmmo(p_Table.Id, m_AmmoDefinitions[p_Table.Name], p_Table.Quantity)
+    return BRItemAmmo(p_Table.Id, m_AmmoDefinitions[p_Table.UId], p_Table.Quantity)
 end
 
 --==============================

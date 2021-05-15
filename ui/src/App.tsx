@@ -1,9 +1,14 @@
 import React from "react";
+
+import { useDispatch } from "react-redux";
+import { updateInventory } from "./store/inventory/Actions";
+
 import Inventory from "./components/Inventory";
 
 import "./App.scss";
 
 const App: React.FC = () => {
+    const dispatch = useDispatch();
 
     /*
     * Debug
@@ -16,11 +21,7 @@ const App: React.FC = () => {
     }
 
     window.SyncInventory = (p_DataJson: any) => {
-        /*dispatch(updatePlayerPosition({
-            x: p_DataJson.x,
-            y: p_DataJson.y,
-            z: p_DataJson.z,
-        }));*/
+        dispatch(updateInventory(p_DataJson));
         console.log(p_DataJson);
     }
 

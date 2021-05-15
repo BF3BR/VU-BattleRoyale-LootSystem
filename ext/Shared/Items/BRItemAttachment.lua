@@ -9,7 +9,7 @@ function BRItemAttachment:__init(p_Id, p_Definition)
 end
 
 function BRItemAttachment:CreateFromTable(p_Table)
-    return BRItemAttachment(p_Table.Id, m_AttachmentDefinitions[p_Table.Name])
+    return BRItemAttachment(p_Table.Id, m_AttachmentDefinitions[p_Table.UId])
 end
 
 --==============================

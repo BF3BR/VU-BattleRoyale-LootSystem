@@ -30,15 +30,13 @@ interface StateFromReducer {
     },
     backpack: Array<InventorySlot>,
     ammo: Array<InventorySlot>,*/
+    slots: any
 }
 
 type Props = StateFromReducer;
 
 const Inventory: React.FC<Props> = ({
-    /*ammo,
-    backpack,
-    primaryWeapon,
-    secondaryWeapon*/
+    slots
 }) => {
     //const [parent, setParent] = useState(null);
 
@@ -55,6 +53,23 @@ const Inventory: React.FC<Props> = ({
         }
     }
 
+    const getSlotItem = (slot: any) => {
+        if (slot === undefined || slot === null || Object.keys(slot).length === 0) {
+            return <></>
+        }
+
+        return (
+            <Draggable id={slot.Id}>
+                {slot.UIIcon !== null &&
+                    <img src={"fb://" + slot.UIIcon} />
+                }
+                <span className="name">{slot.Name??""}</span>
+                <span className="count">{slot.Quantity??1}</span>
+                <span className="ammoType">{"TODO: 5.56mm"}</span>
+            </Draggable>
+        )
+    }
+
     return (
         <>
             <DndContext onDragEnd={handleDragEnd}>
@@ -67,19 +82,17 @@ const Inventory: React.FC<Props> = ({
                                 </h1>
                             </div>
                             <div className="card-content weapon-grid">
-                                <div className="weapon-holder tier3">
-                                    <img src={dummyweapon} />
-                                    <span className="name">Scar-H</span>
-                                    <span className="ammoType ammo556mm">5.56mm</span>
-                                </div>
-                                <Droppable id={"primary-attachment-slot-1"} accepts={["attachment"]}>
-                                    {/*parent === "attachment-holder" ? draggableMarkup : 'Empty'*/}
+                                <Droppable id={0} type="weapon-slot">
+                                    {getSlotItem(slots[0])}
                                 </Droppable>
-                                <Droppable id={"primary-attachment-slot-2"} accepts={["attachment"]}>
-                                    {/*parent === "attachment-holder" ? draggableMarkup : 'Empty'*/}
+                                <Droppable id={1}>
+                                    {getSlotItem(slots[1])}
                                 </Droppable>
-                                <Droppable id={"primary-attachment-slot-3"} accepts={["attachment"]}>
-                                    {/*parent === "attachment-holder" ? draggableMarkup : 'Empty'*/}
+                                <Droppable id={2}>
+                                    {getSlotItem(slots[2])}
+                                </Droppable>
+                                <Droppable id={3}>
+                                    {getSlotItem(slots[3])}
                                 </Droppable>
                             </div>
                         </div>
@@ -91,19 +104,17 @@ const Inventory: React.FC<Props> = ({
                                 </h1>
                             </div>
                             <div className="card-content weapon-grid">
-                                <div className="weapon-holder tier2">
-                                    <img src={dummyweapon} />
-                                    <span className="name">Scar-H</span>
-                                    <span className="ammoType ammo9mm">9mm</span>
-                                </div>
-                                <Droppable id={"secondary-attachment-slot-1"} accepts={["attachment"]}>
-                                    {/*parent === "attachment-holder" ? draggableMarkup : 'Empty'*/}
+                                <Droppable id={4} type="weapon-slot">
+                                    {getSlotItem(slots[4])}
                                 </Droppable>
-                                <Droppable id={"secondary-attachment-slot-2"} accepts={["attachment"]}>
-                                    {/*parent === "attachment-holder" ? draggableMarkup : 'Empty'*/}
+                                <Droppable id={5}>
+                                    {getSlotItem(slots[5])}
                                 </Droppable>
-                                <Droppable id={"secondary-attachment-slot-3"} accepts={["attachment"]}>
-                                    {/*parent === "attachment-holder" ? draggableMarkup : 'Empty'*/}
+                                <Droppable id={6}>
+                                    {getSlotItem(slots[6])}
+                                </Droppable>
+                                <Droppable id={7}>
+                                    {getSlotItem(slots[7])}
                                 </Droppable>
                             </div>
                         </div>
@@ -116,8 +127,8 @@ const Inventory: React.FC<Props> = ({
                                     </h1>
                                 </div>
                                 <div className="card-content">
-                                    <Droppable id={"helmet-holder"}>
-                                        {/*parent === "attachment-holder" ? draggableMarkup : 'Empty'*/}
+                                    <Droppable id={9}>
+                                        {getSlotItem(slots[9])}
                                     </Droppable>
                                 </div>
                             </div>
@@ -128,8 +139,8 @@ const Inventory: React.FC<Props> = ({
                                     </h1>
                                 </div>
                                 <div className="card-content">
-                                    <Droppable id={"armor-holder"}>
-                                        {/*parent === "attachment-holder" ? draggableMarkup : 'Empty'*/}
+                                    <Droppable id={8}>
+                                        {getSlotItem(slots[8])}
                                     </Droppable>
                                 </div>
                             </div>
@@ -140,8 +151,8 @@ const Inventory: React.FC<Props> = ({
                                     </h1>
                                 </div>
                                 <div className="card-content">
-                                    <Droppable id={"gadget-holder"}>
-                                        {/*parent === "attachment-holder" ? draggableMarkup : 'Empty'*/}
+                                    <Droppable id={10}>
+                                        {getSlotItem(slots[10])}
                                     </Droppable>
                                 </div>
                             </div>
@@ -154,6 +165,15 @@ const Inventory: React.FC<Props> = ({
                                 </h1>
                             </div>
                             <div className="card-content backpack-grid">
+                                {slots.map((slot: any, key: number) => (
+                                    <React.Fragment key={key}>
+                                        {key >= 11 &&
+                                            <Droppable key={key} id={key}>
+                                                {getSlotItem(slots[key])}
+                                            </Droppable>
+                                        }
+                                    </React.Fragment>
+                                ))}
                                 {/*<div className="item-holder">
                                     <img src={skull} />
                                     <span className="count">60</span>
@@ -197,29 +217,9 @@ const Inventory: React.FC<Props> = ({
                                 ))*/}
                             </div>
                         </div>
-
-                        <div className="card AmmoBox">
-                            <div className="card-header">
-                                <h1>
-                                    Ammo
-                                </h1>
-                            </div>
-                            <div className="card-content ammo-grid">
-                                {/*ammo.map((inventorySlot: InventorySlot) => (
-                                    <Droppable 
-                                        key={inventorySlot.id} 
-                                        id={inventorySlot.id}
-                                        accepts={inventorySlot.accepts}
-                                        item={inventorySlot.item}
-                                    >
-                                        
-                                    </Droppable>
-                                ))*/}
-                            </div>
-                        </div>
                     </div>
                     <div className="itemDrop">
-                        <Droppable id="item-drop" accepts={["weapon", "attachment", "backpack"]}></Droppable>
+                        <Droppable id="item-drop"></Droppable>
                     </div>
                 </div>
             </DndContext>
@@ -230,10 +230,7 @@ const Inventory: React.FC<Props> = ({
 const mapStateToProps = (state: RootState) => {
     return {
         // InventoryReducer
-        //backpack: state.InventoryReducer.backpack,
-        //primaryWeapon: state.InventoryReducer.primaryWeapon,
-        //secondaryWeapon: state.InventoryReducer.secondaryWeapon,
-        //ammo: state.InventoryReducer.ammo,
+        slots: state.InventoryReducer.slots,
     };
 }
 const mapDispatchToProps = (dispatch: any) => {

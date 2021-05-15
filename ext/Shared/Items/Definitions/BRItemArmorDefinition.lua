@@ -3,12 +3,17 @@ require "__shared/Enums/ItemEnums"
 
 class("BRItemArmorDefinition", BRItemDefinition)
 
-function BRItemArmorDefinition:__init(p_Name, p_Durability, p_DamageReduction)
+function BRItemArmorDefinition:__init(
+    p_UId,
+    p_Name,
+    p_Durability,
+    p_DamageReduction
+)
     BRItemDefinition.__init(self)
 
     self.m_Type = ItemType.Armor
+    self.m_UId = p_UId
     self.m_Name = p_Name
-
     self.m_Description = "" -- TODO
     self.m_Weight = 0.0 -- TODO
     self.m_Mesh = nil -- TODO
@@ -22,6 +27,10 @@ function BRItemArmorDefinition:__init(p_Name, p_Durability, p_DamageReduction)
 end
 
 return {
-    NoArmor = BRItemArmorDefinition("NoArmor", 0, 0),
-    BasicArmor = BRItemArmorDefinition("BasicArmor", 100, 1)
+    ["armor-basic"] = BRItemArmorDefinition(
+        "armor-basic",
+        "Basic Armor",
+        100,
+        1
+    ),
 }

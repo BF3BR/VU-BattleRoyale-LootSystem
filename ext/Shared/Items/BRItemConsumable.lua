@@ -9,7 +9,7 @@ function BRItemConsumable:__init(p_Id, p_Definition, p_Quantity)
 end
 
 function BRItemConsumable:CreateFromTable(p_Table)
-    return BRItemConsumable(p_Table.Id, m_ConsumableDefinitions[p_Table.Name], p_Table.Quantity)
+    return BRItemConsumable(p_Table.Id, m_ConsumableDefinitions[p_Table.UId], p_Table.Quantity)
 end
 
 --==============================

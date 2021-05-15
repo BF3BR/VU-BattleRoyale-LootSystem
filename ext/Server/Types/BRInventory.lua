@@ -131,18 +131,18 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
             s_NewQuantity = math.abs(s_NewQuantity - s_Item.m_Definition.m_MaxStack)
             if s_NewQuantity > s_Item.m_Definition.m_MaxStack then
                 local s_CreatedItem = BRItem:CreateFromTable({
-                    Id = tostring(MathUtils:RandomGuid()),
+                    Id = nil,
                     Type = s_Item.m_Definition.m_Type,
-                    Name = s_Item.m_Definition.m_Name,
+                    UId = s_Item.m_Definition.m_UId,
                     Quantity = s_Item.m_Definition.m_MaxStack
                 })
                 m_ItemDatabase:RegisterItem(s_CreatedItem)
                 self:AddItem(s_CreatedItem.m_Id)
             else
                 local s_CreatedItem = BRItem:CreateFromTable({
-                    Id = tostring(MathUtils:RandomGuid()),
+                    Id = nil,
                     Type = s_Item.m_Definition.m_Type,
-                    Name = s_Item.m_Definition.m_Name,
+                    UId = s_Item.m_Definition.m_UId,
                     Quantity = s_NewQuantity
                 })
                 m_ItemDatabase:RegisterItem(s_CreatedItem)

@@ -1,5 +1,7 @@
 class "VuBattleRoyaleLootSystemClient"
 
+require "ClientCommands"
+
 require "__shared/Types/DataContainer"
 
 require "__shared/Enums/CustomEvents"
@@ -18,14 +20,28 @@ local m_Logger = Logger("VuBattleRoyaleLootSystemClient", true)
 
 function VuBattleRoyaleLootSystemClient:__init()
     Events:Subscribe("Extension:Loaded", self, self.OnExtensionLoaded)
+    Events:Subscribe("Extension:Unloaded", self, self.OnExtensionUnloaded)
 end
 
 function VuBattleRoyaleLootSystemClient:OnExtensionLoaded()
     self:RegisterVars()
     self:RegisterEvents()
+    self:RegisterCommands()
 
     WebUI:Init()
 	WebUI:Show()
+end
+
+function VuBattleRoyaleLootSystemClient:OnExtensionUnloaded()
+    self:UnregisterCommands()
+end
+
+function VuBattleRoyaleLootSystemClient:RegisterCommands()
+    Console:Register("give", "Gives player items", ClientCommands.Give)
+end
+
+function VuBattleRoyaleLootSystemClient:UnregisterCommands()
+    Console:Deregister("give")
 end
 
 function VuBattleRoyaleLootSystemClient:RegisterVars()

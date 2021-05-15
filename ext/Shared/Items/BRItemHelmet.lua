@@ -19,7 +19,7 @@ function BRItemHelmet:AsTable()
 end
 
 function BRItemHelmet:CreateFromTable(p_Table)
-    return BRItemHelmet(p_Table.Id, m_ArmorDefinitions[p_Table.Name], p_Table.CurrentDurability)
+    return BRItemHelmet(p_Table.Id, m_ArmorDefinitions[p_Table.UId], p_Table.CurrentDurability)
 end
 
 --==============================
