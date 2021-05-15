@@ -47,14 +47,8 @@ function BRInventoryManager:OnPlayerGiveCommand(p_Player, p_Args)
 	end
 
 	local s_Inventory = self:GetPlayersInventory(p_Player, false)
-	local s_CreatedItem = BRItem:CreateFromTable({
-		Id = nil,
-		Type = s_Definition.m_Type,
-		UId = s_Definition.m_UId,
-		Quantity = p_Args[2] ~= nil and p_Args[2] or 1
-	})
+	local s_CreatedItem = m_ItemDatabase:CreateItem(s_Definition, p_Args[2] ~= nil and p_Args[2] or 1)
 
-	m_ItemDatabase:RegisterItem(s_CreatedItem)
 	s_Inventory:AddItem(s_CreatedItem.m_Id)
 	m_Logger:Write(s_Definition.m_Name .. " - Item given to player: " .. p_Player.name)
 end

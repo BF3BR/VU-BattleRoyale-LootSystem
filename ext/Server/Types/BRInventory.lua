@@ -113,41 +113,28 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
     end
 
     if s_Slot.m_Item ~= nil then
-        local s_CurrentSlotItemTable = s_Slot.m_Item
-        local s_NewQuantity = s_CurrentSlotItemTable.m_Quantity + s_Item.m_Quantity
+        local s_CurrentSlotItem = s_Slot.m_Item
+        local s_NewQuantity = s_CurrentSlotItem.m_Quantity + s_Item.m_Quantity
 
         if s_NewQuantity <= s_Item.m_Definition.m_MaxStack then
-            local s_CurrentSlotItem = m_ItemDatabase:GetItem(s_CurrentSlotItemTable.m_Id)
             s_CurrentSlotItem.m_Quantity = s_NewQuantity
             s_Slot.m_Item.m_Quantity = s_NewQuantity
             m_Logger:Write("(Less than maxstack) Item quantity updated to: " .. s_NewQuantity .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
         else
             -- Set the current one to max stack
-            local s_CurrentSlotItem = m_ItemDatabase:GetItem(s_CurrentSlotItemTable.m_Id)
             s_CurrentSlotItem.m_Quantity = s_Item.m_Definition.m_MaxStack
             s_Slot.m_Item.m_Quantity = s_Item.m_Definition.m_MaxStack
             m_Logger:Write("(More than maxstack) Item quantity updated to: " .. s_Item.m_Definition.m_MaxStack .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
 
             s_NewQuantity = math.abs(s_NewQuantity - s_Item.m_Definition.m_MaxStack)
             if s_NewQuantity > s_Item.m_Definition.m_MaxStack then
-                local s_CreatedItem = BRItem:CreateFromTable({
-                    Id = nil,
-                    Type = s_Item.m_Definition.m_Type,
-                    UId = s_Item.m_Definition.m_UId,
-                    Quantity = s_Item.m_Definition.m_MaxStack
-                })
-                m_ItemDatabase:RegisterItem(s_CreatedItem)
+                local s_CreatedItem = m_ItemDatabase:CreateItem(s_Item.m_Definition, s_Item.m_Definition.m_MaxStack)
                 self:AddItem(s_CreatedItem.m_Id)
             else
-                local s_CreatedItem = BRItem:CreateFromTable({
-                    Id = nil,
-                    Type = s_Item.m_Definition.m_Type,
-                    UId = s_Item.m_Definition.m_UId,
-                    Quantity = s_NewQuantity
-                })
-                m_ItemDatabase:RegisterItem(s_CreatedItem)
+                m_ItemDatabase:CreateItem(s_Item.m_Definition, s_NewQuantity)
                 self:AddItem(s_CreatedItem.m_Id)
             end
+
             m_ItemDatabase:UnregisterItem(p_ItemId)
         end
     else

@@ -7,6 +7,24 @@ function BRItemDatabase:__init()
     self.m_Items = {}
 end
 
+-- All items should created using this methods from the database
+-- to keep it's integrity
+function BRItemDatabase:CreateItem(p_Definition, p_Quantity)
+    p_Quantity = p_Quantity or 1
+
+    local s_Id = self:GetRandomId()
+    self.m_Items[s_Id] = BRItem:CreateFromTable({
+        Id = s_Id,
+        Type = p_Definition.m_Type,
+        UId = p_Definition.m_UId,
+        Quantity = p_Quantity
+    })
+
+    m_Logger:Write("Item added to database. (" .. s_Item.m_Definition.m_Name .. ")")
+
+    return self.m_Items[s_Id]
+end
+
 function BRItemDatabase:RegisterItem(p_Item)
     if p_Item == nil then
         m_Logger:Write("Cannot register nil item.")
@@ -36,6 +54,11 @@ function BRItemDatabase:UnregisterItem(p_Id)
     self.m_Items[p_Id] = nil
 
     m_Logger:Write("Item removed from database. (" .. tostring(p_Id) .. ")")
+end
+
+function BRItemDatabase:GetRandomId()
+    -- for now use the guid string
+    return tostring(MathUtils:RandomGuid())
 end
 
 function BRItemDatabase:GetItem(p_Id)
