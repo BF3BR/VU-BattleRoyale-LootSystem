@@ -1,4 +1,5 @@
 require "__shared/Enums/ItemEnums"
+require "__shared/Enums/CustomEvents"
 
 require "__shared/Items/BRItem"
 
@@ -9,7 +10,7 @@ require "__shared/Slots/BRInventoryHelmetSlot"
 require "__shared/Slots/BRInventoryGadgetSlot"
 require "__shared/Slots/BRInventoryBackpackSlot"
 
-local m_ItemDatabase = require "__shared/Types/BRItemDatabase"
+local m_ItemDatabase = require "Types/BRItemDatabase"
 
 class "BRInventory"
 
@@ -154,6 +155,8 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
         s_Slot.m_Item = s_Item
         m_Logger:Write("Item added to inventory. (" .. s_Item.m_Definition.m_Name .. ")")
     end
+
+    self:SendState()
 end
 
 function BRInventory:RemoveItem(p_ItemId)
@@ -168,6 +171,7 @@ function BRInventory:RemoveItem(p_ItemId)
         if l_Slot.m_Item.Id == s_Item.m_Id then
             self.m_Slots[l_Index].m_Item = nil
             m_Logger:Write("Item removed from inventory. (" .. s_Item.m_Definition.m_Name .. ")")
+            self:SendState()
             return true
         end
     end
@@ -199,3 +203,23 @@ function BRInventory:GetAvailableSlot(p_Item)
 
     return nil
 end
+
+function BRInventory:SendState()
+    if self.m_Owner == nil then
+        return
+    end
+
+    NetEvents:SendToLocal(InventoryNetEvent.InventoryState, self.m_Owner, self:AsTable())
+end
+
+-- Destroys the `BRInventory` instance
+function BRInventory:Destroy()
+    self.m_Owner = nil
+	self.m_Slots = {}
+end
+
+-- Garbage collector metamethod
+function BRInventory:__gc()
+	self:Destroy()
+end
+

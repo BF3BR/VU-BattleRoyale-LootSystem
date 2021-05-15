@@ -1,6 +1,8 @@
 import React from "react";
 import Inventory from "./components/Inventory";
 
+import "./App.scss";
+
 const App: React.FC = () => {
 
     /*

@@ -9,7 +9,6 @@ import { Draggable } from './dnd/Draggable';
 import { Droppable } from './dnd/Droppable';
 
 import InventorySlot, { InventoryItem } from "../helpers/InventoryHelper";
-import Player from "../helpers/PlayerHelper";
 
 import skull from "../assets/img/skull.svg";
 import dummyweapon from "../assets/img/dummyweapon.png";
@@ -17,7 +16,7 @@ import dummyweapon from "../assets/img/dummyweapon.png";
 import "./Inventory.scss";
 
 interface StateFromReducer {
-    primaryWeapon: {
+    /*primaryWeapon: {
         weaponSlot: InventorySlot,
         attachmentSlot1: InventorySlot,
         attachmentSlot2: InventorySlot,
@@ -30,16 +29,16 @@ interface StateFromReducer {
         attachmentSlot3: InventorySlot,
     },
     backpack: Array<InventorySlot>,
-    ammo: Array<InventorySlot>,
+    ammo: Array<InventorySlot>,*/
 }
 
 type Props = StateFromReducer;
 
 const Inventory: React.FC<Props> = ({
-    ammo,
+    /*ammo,
     backpack,
     primaryWeapon,
-    secondaryWeapon
+    secondaryWeapon*/
 }) => {
     //const [parent, setParent] = useState(null);
 
@@ -186,16 +185,16 @@ const Inventory: React.FC<Props> = ({
                                 </div>*/}
                                 {/*parent === null ? draggableMarkup : null*/}
 
-                                {backpack.map((inventorySlot: InventorySlot) => (
+                                {/*backpack.map((inventorySlot: InventorySlot) => (
                                     <Droppable 
                                         key={inventorySlot.id} 
                                         id={inventorySlot.id}
                                         accepts={inventorySlot.accepts}
                                         item={inventorySlot.item}
                                     >
-                                        {/*inventorySlot.item ? draggableItem(inventorySlot.item) : 'Empty'*/}
+                                        {/*inventorySlot.item ? draggableItem(inventorySlot.item) : 'Empty'
                                     </Droppable>
-                                ))}
+                                ))*/}
                             </div>
                         </div>
 
@@ -206,7 +205,7 @@ const Inventory: React.FC<Props> = ({
                                 </h1>
                             </div>
                             <div className="card-content ammo-grid">
-                                {ammo.map((inventorySlot: InventorySlot) => (
+                                {/*ammo.map((inventorySlot: InventorySlot) => (
                                     <Droppable 
                                         key={inventorySlot.id} 
                                         id={inventorySlot.id}
@@ -215,7 +214,7 @@ const Inventory: React.FC<Props> = ({
                                     >
                                         
                                     </Droppable>
-                                ))}
+                                ))*/}
                             </div>
                         </div>
                     </div>
@@ -231,10 +230,10 @@ const Inventory: React.FC<Props> = ({
 const mapStateToProps = (state: RootState) => {
     return {
         // InventoryReducer
-        backpack: state.InventoryReducer.backpack,
-        primaryWeapon: state.InventoryReducer.primaryWeapon,
-        secondaryWeapon: state.InventoryReducer.secondaryWeapon,
-        ammo: state.InventoryReducer.ammo,
+        //backpack: state.InventoryReducer.backpack,
+        //primaryWeapon: state.InventoryReducer.primaryWeapon,
+        //secondaryWeapon: state.InventoryReducer.secondaryWeapon,
+        //ammo: state.InventoryReducer.ammo,
     };
 }
 const mapDispatchToProps = (dispatch: any) => {

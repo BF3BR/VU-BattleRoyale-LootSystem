@@ -26,9 +26,10 @@ function Logger:Write(p_Message)
 
 	elseif self.debug == false or self.debug == nil or self.className == nil then
 		return
-	end]]
-
+	end
 	::continue::
+	]]
+
 	if(type(p_Message) == "table") then
 		print("["..self.className.."]")
 		print(p_Message)

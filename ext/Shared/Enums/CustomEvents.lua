@@ -1,0 +1,3 @@
+InventoryNetEvent = {
+	InventoryState = "IV:IS",
+}
