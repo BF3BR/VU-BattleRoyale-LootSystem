@@ -1,7 +1,8 @@
 class "VuBattleRoyaleLootSystemShared"
 
-require "__shared/Types/DataContainer"
+require "__shared/Utils/Logger"
 
+require "__shared/Types/DataContainer"
 require "__shared/Types/BRLootPickup"
 require "__shared/Types/BRInventory"
 
@@ -21,6 +22,8 @@ local m_AttachmentDefinitions = require "__shared/Items/Definitions/BRItemAttach
 
 local m_ItemDatabase = require "__shared/Types/BRItemDatabase"
 local m_LootPickupDatabase = require "__shared/Types/BRLootPickupDatabase"
+
+local m_Logger = Logger("VuBattleRoyaleLootSystemShared", true)
 
 function VuBattleRoyaleLootSystemShared:__init()
     Events:Subscribe("Extension:Loaded", self, self.OnExtensionLoaded)
@@ -66,7 +69,7 @@ function VuBattleRoyaleLootSystemShared:OnLevelLoaded()
     m_ItemDatabase:RegisterItem(s_ItemHelmet)
     s_TestInventory:AddItem(s_ItemHelmet.m_Id)
 
-    print(s_TestInventory:AsTable())
+    m_Logger:Write(s_TestInventory:AsTable())
 
     --[[local s_BasicPickup = BRLootPickup(
         nil,

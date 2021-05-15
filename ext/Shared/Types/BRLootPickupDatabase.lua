@@ -1,5 +1,7 @@
 class "BRLootPickupDatabase"
 
+local m_Logger = Logger("BRLootPickupDatabase", true)
+
 -- This is gonna get replaced with the Spatial index, probably
 
 function BRLootPickupDatabase:__init()
@@ -17,7 +19,7 @@ function BRLootPickupDatabase:RegisterLootPickup(p_LootPickup)
 
     -- Check if loot pickup already exists
     if self.m_LootPickups[p_LootPickup.m_Id] ~= nil then
-        print("Loot pickup already spawned.")
+        m_Logger:Write("Loot pickup already spawned.")
         return
     end
 
@@ -47,7 +49,7 @@ function BRLootPickupDatabase:Spawn(p_LootPickup)
 
     local s_LootPickupMesh = p_LootPickup:GetMesh()
 	if s_LootPickupMesh == nil then
-		print("Couldn't find loot pickup mesh.")
+		m_Logger:Write("Couldn't find loot pickup mesh.")
 		return
     end
     
@@ -63,7 +65,7 @@ function BRLootPickupDatabase:Spawn(p_LootPickup)
 
         self.m_SpawnedEntities[p_LootPickup.m_Id] = s_Bus
     else
-		print("Couldn't spawn loot pickup.")
+		prm_Logger:Writeint("Couldn't spawn loot pickup.")
 	end
 end
 

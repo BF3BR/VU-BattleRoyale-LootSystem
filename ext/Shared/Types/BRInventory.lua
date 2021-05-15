@@ -13,6 +13,8 @@ local m_ItemDatabase = require "__shared/Types/BRItemDatabase"
 
 class "BRInventory"
 
+local m_Logger = Logger("BRInventory", true)
+
 function BRInventory:__init(p_Owner)
     -- BRPlayer (or Player for now)
     self.m_Owner = p_Owner
@@ -95,7 +97,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
     -- Check if item exists
     local s_Item = m_ItemDatabase:GetItem(p_ItemId)
     if s_Item == nil then
-        print("Invalid item Id.")
+        m_Logger:Write("Invalid item Id.")
         return p_ItemId
     end
 
@@ -105,7 +107,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
     end
 
     if s_Slot == nil then
-        print("No available slot in the inventory.")
+        m_Logger:Write("No available slot in the inventory.")
         return p_ItemId
     end
 
@@ -117,13 +119,13 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
             local s_CurrentSlotItem = m_ItemDatabase:GetItem(s_CurrentSlotItemTable.m_Id)
             s_CurrentSlotItem.m_Quantity = s_NewQuantity
             s_Slot.m_Item.m_Quantity = s_NewQuantity
-            print("(Less than maxstack) Item quantity updated to: " .. s_NewQuantity .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
+            m_Logger:Write("(Less than maxstack) Item quantity updated to: " .. s_NewQuantity .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
         else
             -- Set the current one to max stack
             local s_CurrentSlotItem = m_ItemDatabase:GetItem(s_CurrentSlotItemTable.m_Id)
             s_CurrentSlotItem.m_Quantity = s_Item.m_Definition.m_MaxStack
             s_Slot.m_Item.m_Quantity = s_Item.m_Definition.m_MaxStack
-            print("(More than maxstack) Item quantity updated to: " .. s_Item.m_Definition.m_MaxStack .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
+            m_Logger:Write("(More than maxstack) Item quantity updated to: " .. s_Item.m_Definition.m_MaxStack .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
 
             s_NewQuantity = math.abs(s_NewQuantity - s_Item.m_Definition.m_MaxStack)
             if s_NewQuantity > s_Item.m_Definition.m_MaxStack then
@@ -150,7 +152,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
     else
         -- If the slot is empty / nil then we can just put the item there
         s_Slot.m_Item = s_Item
-        print("Item added to inventory. (" .. s_Item.m_Definition.m_Name .. ")")
+        m_Logger:Write("Item added to inventory. (" .. s_Item.m_Definition.m_Name .. ")")
     end
 end
 
@@ -158,19 +160,19 @@ function BRInventory:RemoveItem(p_ItemId)
     -- Check if item exists
     local s_Item = m_ItemDatabase:GetItem(p_ItemId)
     if s_Item == nil then
-        print("Invalid item Id.")
+        m_Logger:Write("Invalid item Id.")
         return false
     end
 
     for l_Index, l_Slot in pairs(self.m_Slots) do
         if l_Slot.m_Item.Id == s_Item.m_Id then
             self.m_Slots[l_Index].m_Item = nil
-            print("Item removed from inventory. (" .. s_Item.m_Definition.m_Name .. ")")
+            m_Logger:Write("Item removed from inventory. (" .. s_Item.m_Definition.m_Name .. ")")
             return true
         end
     end
 
-    print("Item not found in any slot.")
+    m_Logger:Write("Item not found in any slot.")
     return false
 end
 
