@@ -1,4 +1,4 @@
-require "__shared/Enums/InventoryEnums"
+require "__shared/Enums/ItemEnums"
 require "__shared/Slots/BRInventorySlot"
 
 class("BRInventoryBackpackSlot", BRInventorySlot)

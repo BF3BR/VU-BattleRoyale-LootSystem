@@ -1,17 +1,22 @@
-require "__shared/Enums/InventoryEnums"
+require "__shared/Enums/ItemEnums"
 require "__shared/Slots/BRInventorySlot"
 
 class("BRInventoryAttachmentSlot", BRInventorySlot)
 
-function BRInventoryAttachmentSlot:__init()
+function BRInventoryAttachmentSlot:__init(p_AttachmentType)
     BRInventorySlot.__init(self, { ItemType.Attachment })
 
     self.m_WeaponSlot = nil
+    self.m_AttachmentType = p_AttachmentType
 end
 
 function BRInventoryAttachmentSlot:IsAccepted(p_Item)
     -- Do the basic check
     if not BRInventorySlot.IsAccepted(self, p_Item) then
+        return false
+    end
+
+    if p_Item.m_Definition.m_AttachmentType ~= self.m_AttachmentType then
         return false
     end
 

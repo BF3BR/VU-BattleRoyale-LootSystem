@@ -42,7 +42,7 @@ return {
             m_WeaponDefinitions["AK-74M"],
             m_WeaponDefinitions["PP-2000"]
         },
-        AttachmentSlotType.Optics
+        AttachmentType.Optics
     ),
     Suppressor = BRItemAttachmentDefinition(
         "Suppressor", 
@@ -54,6 +54,6 @@ return {
             m_WeaponDefinitions["AK-74M"],
             m_WeaponDefinitions["PP-2000"]
         },
-        AttachmentSlotType.Barrel
+        AttachmentType.Barrel
     ),
 }

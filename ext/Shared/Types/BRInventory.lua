@@ -1,4 +1,4 @@
-require "__shared/Enums/InventoryEnums"
+require "__shared/Enums/ItemEnums"
 
 require "__shared/Items/BRItem"
 
@@ -21,14 +21,14 @@ function BRInventory:__init(p_Owner)
     self.m_Slots = {
         -- PrimaryWeapon slots
         [InventorySlot.PrimaryWeapon] = BRInventoryWeaponSlot(),
-        [InventorySlot.PrimaryWeaponAttachmentOptics] = BRInventoryAttachmentSlot(),
-        [InventorySlot.PrimaryWeaponAttachmentBarrel] = BRInventoryAttachmentSlot(),
-        [InventorySlot.PrimaryWeaponAttachmentOther] = BRInventoryAttachmentSlot(),
+        [InventorySlot.PrimaryWeaponAttachmentOptics] = BRInventoryAttachmentSlot(AttachmentType.Optics),
+        [InventorySlot.PrimaryWeaponAttachmentBarrel] = BRInventoryAttachmentSlot(AttachmentType.Barrel),
+        [InventorySlot.PrimaryWeaponAttachmentOther] = BRInventoryAttachmentSlot(AttachmentType.Other),
         -- SecondaryWeapon slots
         [InventorySlot.SecondaryWeapon] = BRInventoryWeaponSlot(),
-        [InventorySlot.SecondaryWeaponAttachmentOptics] = BRInventoryAttachmentSlot(),
-        [InventorySlot.SecondaryWeaponAttachmentBarrel] = BRInventoryAttachmentSlot(),
-        [InventorySlot.SecondaryWeaponAttachmentOther] = BRInventoryAttachmentSlot(),
+        [InventorySlot.SecondaryWeaponAttachmentOptics] = BRInventoryAttachmentSlot(AttachmentType.Optics),
+        [InventorySlot.SecondaryWeaponAttachmentBarrel] = BRInventoryAttachmentSlot(AttachmentType.Barrel),
+        [InventorySlot.SecondaryWeaponAttachmentOther] = BRInventoryAttachmentSlot(AttachmentType.Other),
         -- Gadget slots
         [InventorySlot.Armor] = BRInventoryArmorSlot(),
         [InventorySlot.Helmet] = BRInventoryHelmetSlot(),
