@@ -14,12 +14,17 @@ function BRItem:__init(p_Id, p_Definition, p_Quantity)
 end
 
 function BRItem:AsTable()
-    return {
+    local s_Table = {
         Id = self.m_Id,
         Type = self.m_Definition.m_Type,
         UId = self.m_Definition.m_UId,
-        Quantity = self.m_Quantity
     }
+
+    if self.m_Definition.m_Stackable then
+        s_Table.Quantity = self.m_Quantity
+    end
+
+    return s_Table
 end
 
 function BRItem:CreateFromTable(p_Table)
