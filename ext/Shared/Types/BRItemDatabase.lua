@@ -32,6 +32,8 @@ function BRItemDatabase:UnregisterItem(p_Id)
     end
 
     self.m_Items[p_Id] = nil
+
+    print("Item removed from database. (" .. tostring(p_Id) .. ")")
 end
 
 function BRItemDatabase:GetItem(p_Id)

@@ -25,6 +25,8 @@ end
 function BRItem:CreateFromTable(p_Table)
     if p_Table.Type == ItemType.Armor then
         return BRItemArmor:CreateFromTable(p_Table)
+    elseif p_Table.Type == ItemType.Helmet then
+        return BRItemHelmet:CreateFromTable(p_Table)
     elseif p_Table.Type == ItemType.Consumable then
         return BRItemConsumable:CreateFromTable(p_Table)
     elseif p_Table.Type == ItemType.Ammo then

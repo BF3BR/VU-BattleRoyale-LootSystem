@@ -64,34 +64,6 @@ function BRInventory:__init(p_Owner)
         self.m_Slots[InventorySlot.SecondaryWeaponAttachmentBarrel],
         self.m_Slots[InventorySlot.SecondaryWeaponAttachmentOther]
     )
-
-    -- A table of items
-    self.m_SlotValidators = {
-        -- PrimaryWeapon slots
-        [InventorySlot.PrimaryWeapon] = { ItemType.Weapon },
-        [InventorySlot.PrimaryWeaponAttachmentOptics] = { ItemType.Attachment },
-        [InventorySlot.PrimaryWeaponAttachmentBarrel] = { ItemType.Attachment },
-        [InventorySlot.PrimaryWeaponAttachmentOther] = { ItemType.Attachment },
-        -- SecondaryWeapon slots
-        [InventorySlot.SecondaryWeapon] = { ItemType.Weapon },
-        [InventorySlot.SecondaryWeaponAttachmentOptics] = { ItemType.Attachment },
-        [InventorySlot.SecondaryWeaponAttachmentBarrel] = { ItemType.Attachment },
-        [InventorySlot.SecondaryWeaponAttachmentOther] = { ItemType.Attachment },
-        -- Gadget slots
-        [InventorySlot.Armor] = { ItemType.Armor },
-        [InventorySlot.Helmet] = { ItemType.Helmet },
-        [InventorySlot.Gadget] = { ItemType.Gadget },
-        -- Backpack slots
-        [InventorySlot.Backpack1] = { ItemType.Attachment, ItemType.Gadget, ItemType.Consumable, ItemType.Ammo },
-        [InventorySlot.Backpack2] = { ItemType.Attachment, ItemType.Gadget, ItemType.Consumable, ItemType.Ammo },
-        [InventorySlot.Backpack3] = { ItemType.Attachment, ItemType.Gadget, ItemType.Consumable, ItemType.Ammo },
-        [InventorySlot.Backpack4] = { ItemType.Attachment, ItemType.Gadget, ItemType.Consumable, ItemType.Ammo },
-        [InventorySlot.Backpack5] = { ItemType.Attachment, ItemType.Gadget, ItemType.Consumable, ItemType.Ammo },
-        [InventorySlot.Backpack6] = { ItemType.Attachment, ItemType.Gadget, ItemType.Consumable, ItemType.Ammo },
-        [InventorySlot.Backpack7] = { ItemType.Attachment, ItemType.Gadget, ItemType.Consumable, ItemType.Ammo },
-        [InventorySlot.Backpack8] = { ItemType.Attachment, ItemType.Gadget, ItemType.Consumable, ItemType.Ammo },
-        [InventorySlot.Backpack9] = { ItemType.Attachment, ItemType.Gadget, ItemType.Consumable, ItemType.Ammo },
-    }
 end
 
 function BRInventory:AsTable()
@@ -124,7 +96,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
     local s_Item = m_ItemDatabase:GetItem(p_ItemId)
     if s_Item == nil then
         print("Invalid item Id.")
-        return
+        return p_ItemId
     end
 
     local s_Slot = nil
@@ -133,8 +105,8 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
     end
 
     if s_Slot == nil then
-        print("No available slot.")
-        return
+        print("No available slot in the inventory.")
+        return p_ItemId
     end
 
     if s_Slot.m_Item ~= nil then
@@ -145,15 +117,35 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
             local s_CurrentSlotItem = m_ItemDatabase:GetItem(s_CurrentSlotItemTable.m_Id)
             s_CurrentSlotItem.m_Quantity = s_NewQuantity
             s_Slot.m_Item.m_Quantity = s_NewQuantity
-            print("Item quantity updated to: " .. s_NewQuantity .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
+            print("(Less than maxstack) Item quantity updated to: " .. s_NewQuantity .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
         else
             -- Set the current one to max stack
             local s_CurrentSlotItem = m_ItemDatabase:GetItem(s_CurrentSlotItemTable.m_Id)
             s_CurrentSlotItem.m_Quantity = s_Item.m_Definition.m_MaxStack
-            s_Slot.m_Item.m_Quantity = s_NewQuantity
-            print("Item quantity updated to: " .. s_Item.m_Definition.m_MaxStack .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
+            s_Slot.m_Item.m_Quantity = s_Item.m_Definition.m_MaxStack
+            print("(More than maxstack) Item quantity updated to: " .. s_Item.m_Definition.m_MaxStack .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
 
-            -- TODO: Create new item and put in other slots or drop if we don't have enough slots
+            s_NewQuantity = math.abs(s_NewQuantity - s_Item.m_Definition.m_MaxStack)
+            if s_NewQuantity > s_Item.m_Definition.m_MaxStack then
+                local s_CreatedItem = BRItem:CreateFromTable({
+                    Id = tostring(MathUtils:RandomGuid()),
+                    Type = s_Item.m_Definition.m_Type,
+                    Name = s_Item.m_Definition.m_Name,
+                    Quantity = s_Item.m_Definition.m_MaxStack
+                })
+                m_ItemDatabase:RegisterItem(s_CreatedItem)
+                self:AddItem(s_CreatedItem.m_Id)
+            else
+                local s_CreatedItem = BRItem:CreateFromTable({
+                    Id = tostring(MathUtils:RandomGuid()),
+                    Type = s_Item.m_Definition.m_Type,
+                    Name = s_Item.m_Definition.m_Name,
+                    Quantity = s_NewQuantity
+                })
+                m_ItemDatabase:RegisterItem(s_CreatedItem)
+                self:AddItem(s_CreatedItem.m_Id)
+            end
+            m_ItemDatabase:UnregisterItem(p_ItemId)
         end
     else
         -- If the slot is empty / nil then we can just put the item there
@@ -188,8 +180,7 @@ function BRInventory:GetAvailableSlot(p_Item)
             -- If we found a slot with the matching type and it is not empty
             if l_Slot:IsAccepted(p_Item) and l_Slot.m_Item ~= nil then
                 if l_Slot.m_Item.m_Quantity < p_Item.m_Definition.m_MaxStack and 
-                    l_Slot.m_Item.m_Definition.m_Type == p_Item.m_Definition.m_Type and 
-                    l_Slot.m_Item.m_Definition.m_Name == p_Item.m_Definition.m_Name then
+                    l_Slot.m_Item.m_Definition:Equals(p_Item.m_Definition) then
                     return l_Slot
                 end
             end

@@ -11,7 +11,8 @@ function BRItemAttachmentDefinition:__init(
     p_Weight,
     p_UIIcon,
     p_Mesh,
-    p_CompatibleWith
+    p_CompatibleWith,
+    p_AttachmentType
 )
     BRItemDefinition.__init(self)
 
@@ -27,6 +28,7 @@ function BRItemAttachmentDefinition:__init(
     
     -- A list of weapon definitions from BRItemWeaponDefinition
     self.m_CompatibleWith = p_CompatibleWith
+    self.m_AttachmentType = p_AttachmentType
 end
 
 return {
@@ -39,7 +41,8 @@ return {
         {
             m_WeaponDefinitions["AK-74M"],
             m_WeaponDefinitions["PP-2000"]
-        }
+        },
+        AttachmentSlotType.Optics
     ),
     Suppressor = BRItemAttachmentDefinition(
         "Suppressor", 
@@ -50,6 +53,7 @@ return {
         {
             m_WeaponDefinitions["AK-74M"],
             m_WeaponDefinitions["PP-2000"]
-        }
+        },
+        AttachmentSlotType.Barrel
     ),
 }

@@ -22,8 +22,8 @@ function BRInventoryAttachmentSlot:IsAccepted(p_Item)
     end
 
     -- Check if compatible with weapon
-    for l_Index, l_WeaponDefinition in ipairs(p_Item.m_CompatibleWith) do
-        if p_Item.m_Definition:Equals(l_WeaponDefinition) then
+    for l_Index, l_WeaponDefinition in ipairs(p_Item.m_Definition.m_CompatibleWith) do
+        if s_WeaponItem.m_Definition:Equals(l_WeaponDefinition) then
             return true
         end
     end
