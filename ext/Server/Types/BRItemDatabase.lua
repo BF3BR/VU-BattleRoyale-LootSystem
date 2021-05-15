@@ -13,16 +13,17 @@ function BRItemDatabase:CreateItem(p_Definition, p_Quantity)
     p_Quantity = p_Quantity or 1
 
     local s_Id = self:GetRandomId()
-    self.m_Items[s_Id] = BRItem:CreateFromTable({
+    local s_Item = BRItem:CreateFromTable({
         Id = s_Id,
         Type = p_Definition.m_Type,
         UId = p_Definition.m_UId,
         Quantity = p_Quantity
     })
 
+    self.m_Items[s_Id] = s_Item
     m_Logger:Write("Item added to database. (" .. s_Item.m_Definition.m_Name .. ")")
 
-    return self.m_Items[s_Id]
+    return s_Item
 end
 
 function BRItemDatabase:RegisterItem(p_Item)

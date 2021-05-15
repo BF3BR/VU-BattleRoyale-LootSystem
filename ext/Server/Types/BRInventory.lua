@@ -131,7 +131,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
                 local s_CreatedItem = m_ItemDatabase:CreateItem(s_Item.m_Definition, s_Item.m_Definition.m_MaxStack)
                 self:AddItem(s_CreatedItem.m_Id)
             else
-                m_ItemDatabase:CreateItem(s_Item.m_Definition, s_NewQuantity)
+                local s_CreatedItem = m_ItemDatabase:CreateItem(s_Item.m_Definition, s_NewQuantity)
                 self:AddItem(s_CreatedItem.m_Id)
             end
 

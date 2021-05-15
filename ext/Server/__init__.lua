@@ -54,10 +54,10 @@ function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
     s_Inventory:AddItem(s_ItemAmmo2.m_Id)
     s_Inventory:AddItem(s_ItemAmmo3.m_Id)
 
-    local s_ItemArmor = m_ItemDatabase:CreateItem(m_AttachmentDefinitions["armor-basic"])
+    local s_ItemArmor = m_ItemDatabase:CreateItem(m_ArmorDefinitions["armor-basic"])
     s_Inventory:AddItem(s_ItemArmor.m_Id)
 
-    local s_ItemHelmet = m_ItemDatabase:CreateItem(m_AttachmentDefinitions["helmet-basic"])
+    local s_ItemHelmet = m_ItemDatabase:CreateItem(m_HelmetDefinitions["helmet-basic"])
     s_Inventory:AddItem(s_ItemHelmet.m_Id)
 
     m_Logger:Write(s_Inventory:AsTable())
