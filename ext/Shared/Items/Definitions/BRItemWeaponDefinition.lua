@@ -43,7 +43,7 @@ return {
         DC(Guid("F365F081-D11B-B278-F6E3-062116758181"), Guid("8940BC20-0F27-1C19-58E6-CB07E1ADA643")),
         DC(Guid("A7C73A1A-ECD7-11DF-9B09-83A1F299B70D"), Guid("3AC0B0C2-BA58-9D83-F5EC-102A37A550BF")),
         m_AmmoDefinitions["ammo-556mm"],
-        WeaponTier.Tier1
+        WeaponTier.Tier2
     ),
     ["weapon-pp2000"] = BRItemWeaponDefinition(
         "weapon-pp2000",

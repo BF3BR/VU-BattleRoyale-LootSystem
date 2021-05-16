@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Tooltip from "react-simple-tooltip";
 
 import { connect } from "react-redux";
 import { RootState } from "../store/RootReducer";
@@ -83,11 +82,9 @@ const Inventory: React.FC<Props> = ({
 
         return (
             <Draggable id={slot.Id} currentSlot={key}>
-                <Tooltip
-                    content={slot.Name ?? ""}
-                >
+                <div>
                     {getSlotDrag(slot)}
-                </Tooltip>
+                </div>
             </Draggable>
         )
     }
@@ -98,15 +95,30 @@ const Inventory: React.FC<Props> = ({
                 {slot.UIIcon !== null &&
                     <img src={"fb://" + slot.UIIcon} />
                 }
+                <div className="information">
                 <span className="name">{slot.Name ?? ""}</span>
-                {slot.Quantity > 1 &&
-                    <span className="count">{slot.Quantity ?? 1}</span>
-                }
-                <span className="ammoType">{slot.AmmoName ?? "-"}</span>
-                {(slot.CurrentDurability !== undefined && slot.Durability !== undefined) &&
-                    <div className="progressWrapper">
-                        <div className="progress" style={{ height: (slot.CurrentDurability / slot.Durability * 100) + "%" }}></div>
-                    </div>
+                    {slot.Quantity > 1 &&
+                        <span className="count">{slot.Quantity ?? 1}</span>
+                    }
+                    <span className="ammoType">{slot.AmmoName ?? "-"}</span>
+                    {(slot.CurrentDurability !== undefined && slot.Durability !== undefined) &&
+                        <div className="progressWrapper">
+                            <div className="progress" style={{ height: (slot.CurrentDurability / slot.Durability * 100) + "%" }}></div>
+                        </div>
+                    }
+                </div>
+                {slot.Tier !== undefined &&
+                    <span className="weaponTier">
+                        {slot.Tier === 1 &&
+                            <img src="fb://UI/Art/Persistence/Ranks/Rank001" />
+                        }
+                        {slot.Tier === 2 &&
+                            <img src="fb://UI/Art/Persistence/Ranks/Rank002" />
+                        }
+                        {slot.Tier === 3 &&
+                            <img src="fb://UI/Art/Persistence/Ranks/Rank003" />
+                        }
+                    </span>
                 }
             </>
         )

@@ -11,8 +11,8 @@ ItemType = {
 
 WeaponTier = {
     Tier1 = 1,
-    Tier2 = 1,
-    Tier3 = 1,
+    Tier2 = 2,
+    Tier3 = 3,
 }
 
 LootPickupType = {
