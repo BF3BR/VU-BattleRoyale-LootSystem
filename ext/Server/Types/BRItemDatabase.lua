@@ -9,18 +9,25 @@ end
 
 -- All items should created using this methods from the database
 -- to keep it's integrity
-function BRItemDatabase:CreateItem(p_Definition, p_Quantity)
+function BRItemDatabase:CreateItem(p_Definition, p_Quantity, p_Props)
     p_Quantity = p_Quantity or 1
+    p_Props = p_Props or {}
 
-    local s_Id = self:GetRandomId()
-    local s_Item = BRItem:CreateFromTable({
-        Id = s_Id,
+    -- create data table
+    local s_Table = {
+        Id = self:GetRandomId(),
         Type = p_Definition.m_Type,
         UId = p_Definition.m_UId,
         Quantity = p_Quantity
-    })
+    }
 
-    self.m_Items[s_Id] = s_Item
+    -- extend and overwrite p_Props with s_Table data
+    for l_Key, l_Value in pairs(s_Table) do p_Props[l_Key] = l_Value end
+
+    -- create item instance and insert it to the items table
+    local s_Item = BRItem:CreateFromTable(p_Props)
+    self.m_Items[s_Item.m_Id] = s_Item
+
     m_Logger:Write("Item added to database. (" .. s_Item.m_Definition.m_Name .. ")")
 
     return s_Item
