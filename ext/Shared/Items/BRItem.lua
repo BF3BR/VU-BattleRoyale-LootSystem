@@ -17,7 +17,6 @@ end
 function BRItem:AsTable()
     local s_Table = {
         Id = self.m_Id,
-        Type = self.m_Definition.m_Type,
         UId = self.m_Definition.m_UId,
     }
 

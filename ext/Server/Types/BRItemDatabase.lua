@@ -16,7 +16,6 @@ function BRItemDatabase:CreateItem(p_Definition, p_Quantity, p_Props)
     -- create data table
     local s_Table = {
         Id = self:GetRandomId(),
-        Type = p_Definition.m_Type,
         UId = p_Definition.m_UId,
         Quantity = p_Quantity
     }
