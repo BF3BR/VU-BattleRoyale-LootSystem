@@ -6,6 +6,7 @@ class("BRItemArmorDefinition", BRItemDefinition)
 function BRItemArmorDefinition:__init(
     p_UId,
     p_Name,
+    p_UIIcon,
     p_Durability,
     p_DamageReduction
 )
@@ -17,7 +18,7 @@ function BRItemArmorDefinition:__init(
     self.m_Description = "" -- TODO
     self.m_Weight = 0.0 -- TODO
     self.m_Mesh = nil -- TODO
-    self.m_UIIcon = nil -- TODO
+    self.m_UIIcon = p_UIIcon
     self.m_Stackable = false
     self.m_MaxStack = nil
     self.m_Price = 0
@@ -30,6 +31,7 @@ return {
     ["armor-basic"] = BRItemArmorDefinition(
         "armor-basic",
         "Basic Armor",
+        "UI/art/Persistence/Specializations/Fancy/Suppression", -- TODO: Swap this out
         100,
         1
     ),

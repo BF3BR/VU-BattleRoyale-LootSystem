@@ -16,3 +16,5 @@ declare module '*.mp3' {
 }
 
 declare var WebUI:any;
+
+declare module "react-simple-tooltip";

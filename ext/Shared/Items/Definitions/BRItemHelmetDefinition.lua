@@ -6,6 +6,7 @@ class("BRItemHelmetDefinition", BRItemDefinition)
 function BRItemHelmetDefinition:__init(
     p_UId,
     p_Name,
+    p_UIIcon,
     p_Durability,
     p_DamageReduction
 )
@@ -17,7 +18,7 @@ function BRItemHelmetDefinition:__init(
     self.m_Description = "" -- TODO
     self.m_Weight = 0.0 -- TODO
     self.m_Mesh = nil -- TODO
-    self.m_UIIcon = nil -- TODO
+    self.m_UIIcon = p_UIIcon
     self.m_Stackable = false
     self.m_MaxStack = nil
     self.m_Price = 0
@@ -30,6 +31,7 @@ return {
     ["helmet-basic"] = BRItemHelmetDefinition(
         "helmet-basic",
         "Basic Helmet",
+        "UI/art/Persistence/Specializations/Fancy/ExplResist", -- TODO: Swap this out
         100,
         1
     ),

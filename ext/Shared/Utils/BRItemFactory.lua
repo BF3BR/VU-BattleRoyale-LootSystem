@@ -26,6 +26,16 @@ function BRItemFactory:AppendDefinitions(p_Definitions)
     end
 end
 
+function BRItemFactory:FindDefinitionByUId(p_DefinitionUId)
+    for l_DefinitionKey, l_Definition in pairs(self.m_Definitions) do
+        if l_DefinitionKey == p_DefinitionUId then
+			return l_Definition
+        end
+	end
+
+	return nil
+end
+
 function BRItemFactory:CreateFromTable(p_Table)
     local s_Definition = self.m_Definitions[p_Table.UId]
 

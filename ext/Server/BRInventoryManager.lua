@@ -14,13 +14,15 @@ local m_ConsumableDefinitions = require "__shared/Items/Definitions/BRItemConsum
 local m_HelmetDefinitions = require "__shared/Items/Definitions/BRItemHelmetDefinition"
 local m_WeaponDefinitions = require "__shared/Items/Definitions/BRItemWeaponDefinition"
 
+require "__shared/Utils/BRItemFactory"
+
 function BRInventoryManager:__init()
 	self:RegisterVars()
 	self:RegisterEvents()
 end
 
 function BRInventoryManager:RegisterVars()
-	-- [id] -> [BRInventory]
+	-- [Player.id] -> [BRInventory]
 	self.m_Inventories = {}
 end
 
@@ -39,14 +41,14 @@ function BRInventoryManager:OnPlayerGiveCommand(p_Player, p_Args)
         return
 	end
 
-	local s_Definition = self:FindDefinitionByName(p_Args[1])
+	local s_Definition = g_BRItemFactory:FindDefinitionByUId(p_Args[1])
 
 	if s_Definition == nil then
-		m_Logger:Error("Invalid item definition name: " .. p_Args[1])
+		m_Logger:Error("Invalid item definition UId: " .. p_Args[1])
         return
 	end
 
-	local s_Inventory = self:GetPlayersInventory(p_Player, false)
+	local s_Inventory = self.m_Inventories[p_Player.id]
 	local s_CreatedItem = m_ItemDatabase:CreateItem(s_Definition, p_Args[2] ~= nil and p_Args[2] or 1)
 
 	s_Inventory:AddItem(s_CreatedItem.m_Id)
@@ -55,78 +57,25 @@ end
 
 function BRInventoryManager:OnPlayerLeft(p_Player)
 	m_Logger:Write(string.format("Destroying Inventory for '%s'", p_Player.name))
-
-	local s_InventoryId = self:GetPlayersInventory(p_Player, true)
-	if s_InventoryId ~= nil then
-		self:RemoveInventory()
+	
+	if self.m_Inventories[p_Player.id] ~= nil then
+		self:RemoveInventory(p_Player.id)
 	end
 end
 
 -- Removes a BRInventory
--- @param p_InventoryId integer
-function BRInventoryManager:RemoveInventory(p_InventoryId)
+-- @param p_PlayerId integer
+function BRInventoryManager:RemoveInventory(p_PlayerId)
 	-- destroy inventory and clear reference
-    self.m_Inventories[p_InventoryId]:Destroy()
-	self.m_Inventories[p_InventoryId] = nil
+    self.m_Inventories[p_PlayerId]:Destroy()
+	self.m_Inventories[p_PlayerId] = nil
 end
 
 -- Adds a BRInventory
 -- @param p_Inventory BRInventory
-function BRInventoryManager:AddInventory(p_Inventory)
-    table.insert(self.m_Inventories, p_Inventory)
-end
-
-function BRInventoryManager:GetPlayersInventory(p_Player, p_KeyOnly)
-    for l_InventoryId, l_Inventory in pairs(self.m_Inventories) do
-        if l_Inventory.m_Owner == p_Player then
-			-- TODO we should use PlayerID for the inventory IDs for faster search
-			if p_KeyOnly then
-				return l_InventoryId
-			end
-
-            return l_Inventory
-        end
-	end
-end
-
-function BRInventoryManager:FindDefinitionByName(p_DefinitionName)
-    for l_DefinitionKey, l_Definition in pairs(m_AmmoDefinitions) do
-        if l_DefinitionKey == p_DefinitionName then
-			return l_Definition
-        end
-	end
-
-	for l_DefinitionKey, l_Definition in pairs(m_ArmorDefinitions) do
-        if l_DefinitionKey == p_DefinitionName then
-			return l_Definition
-        end
-	end
-
-	for l_DefinitionKey, l_Definition in pairs(m_AttachmentDefinitions) do
-        if l_DefinitionKey == p_DefinitionName then
-			return l_Definition
-        end
-	end
-
-	for l_DefinitionKey, l_Definition in pairs(m_ConsumableDefinitions) do
-        if l_DefinitionKey == p_DefinitionName then
-			return l_Definition
-        end
-	end
-
-	for l_DefinitionKey, l_Definition in pairs(m_HelmetDefinitions) do
-        if l_DefinitionKey == p_DefinitionName then
-			return l_Definition
-        end
-	end
-
-	for l_DefinitionKey, l_Definition in pairs(m_WeaponDefinitions) do
-        if l_DefinitionKey == p_DefinitionName then
-			return l_Definition
-        end
-	end
-
-	return nil
+-- @param p_PlayerId integer
+function BRInventoryManager:AddInventory(p_Inventory, p_PlayerId)
+    self.m_Inventories[p_PlayerId] = p_Inventory
 end
 
 -- define global

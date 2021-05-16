@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import Tooltip from "react-simple-tooltip";
 
 import { connect } from "react-redux";
 import { RootState } from "../store/RootReducer";
@@ -60,12 +60,23 @@ const Inventory: React.FC<Props> = ({
 
         return (
             <Draggable id={slot.Id}>
-                {slot.UIIcon !== null &&
-                    <img src={"fb://" + slot.UIIcon} />
-                }
-                <span className="name">{slot.Name??""}</span>
-                <span className="count">{slot.Quantity??1}</span>
-                <span className="ammoType">{"TODO: 5.56mm"}</span>
+                <Tooltip 
+                    content={slot.Name??""}
+                >
+                    {slot.UIIcon !== null &&
+                        <img src={"fb://" + slot.UIIcon} />
+                    }
+                    <span className="name">{slot.Name??""}</span>
+                    {slot.Quantity > 1 &&
+                        <span className="count">{slot.Quantity??1}</span>
+                    }
+                    <span className="ammoType">{slot.AmmoName??"-"}</span>
+                    {(slot.CurrentDurability !== undefined && slot.Durability !== undefined) &&
+                        <div className="progressWrapper">
+                            <div className="progress" style={{ height: (slot.CurrentDurability / slot.Durability * 100) + "%" }}></div>
+                        </div>
+                    }
+                </Tooltip>
             </Draggable>
         )
     }

@@ -62,7 +62,7 @@ function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
 
     m_Logger:Write(s_Inventory:AsTable())
 
-    m_InventoryManager:AddInventory(s_Inventory)
+    m_InventoryManager:AddInventory(s_Inventory, p_Player.id)
 end
 
 return VuBattleRoyaleLootSystemServer()
