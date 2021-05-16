@@ -3,7 +3,7 @@ class "VuBattleRoyaleLootSystemServer"
 require "__shared/Utils/Logger"
 
 require "__shared/Types/DataContainer"
-require "Types/BRLootPickup"
+require "__shared/Types/BRLootPickup"
 require "Types/BRInventory"
 
 require "__shared/Enums/ItemEnums"
@@ -63,6 +63,22 @@ function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
     m_Logger:Write(s_Inventory:AsTable())
 
     m_InventoryManager:AddInventory(s_Inventory, p_Player.id)
+
+
+    ------------------
+    local s_ItemAKSpawned = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-ak74m"])
+    m_LootPickupDatabase:CreateLootPickup(
+        "Basic",
+        LinearTransform(
+            Vec3(1.0, 0.0, 0.0), 
+            Vec3(0.0, 1.0, 0.0), 
+            Vec3(0.0, 0.0, 1.0), 
+            Vec3(487.717773, 149.940231, -428.448242)
+        ),
+        {
+            s_ItemAKSpawned,
+        }
+    )
 end
 
 return VuBattleRoyaleLootSystemServer()

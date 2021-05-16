@@ -32,7 +32,7 @@ function BRInventoryWeaponSlot:Drop()
         end
     end
 
-    self:Clear()
+    self.m_Item = nil
 
     return s_DroppedItems
 end

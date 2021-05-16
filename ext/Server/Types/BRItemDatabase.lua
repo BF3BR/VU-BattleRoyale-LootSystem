@@ -32,23 +32,6 @@ function BRItemDatabase:CreateItem(p_Definition, p_Quantity, p_Props)
     return s_Item
 end
 
-function BRItemDatabase:RegisterItem(p_Item)
-    if p_Item == nil then
-        m_Logger:Write("Cannot register nil item.")
-        return false
-    end
-
-    -- Check if item already exists
-    if self.m_Items[p_Item.m_Id] ~= nil then
-        m_Logger:Write("Item already exists in database. (" .. p_Item.m_Definition.m_Name .. ")")
-        return false
-    end
-
-    self.m_Items[p_Item.m_Id] = p_Item
-    m_Logger:Write("Item added to database. (" .. p_Item.m_Definition.m_Name .. ")")
-    return true
-end
-
 function BRItemDatabase:UnregisterItem(p_Id)
     if p_Id == nil then
         return

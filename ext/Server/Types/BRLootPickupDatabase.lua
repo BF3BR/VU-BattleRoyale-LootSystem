@@ -1,80 +1,67 @@
 class "BRLootPickupDatabase"
 
+require "__shared/Enums/CustomEvents"
+
+require "__shared/Types/BRLootPickup"
+
 local m_Logger = Logger("BRLootPickupDatabase", true)
+local m_ItemDatabase = require "Types/BRItemDatabase"
 
 -- This is gonna get replaced with the Spatial index, probably
 
 function BRLootPickupDatabase:__init()
     -- A table of items (id -> BRLootPickup)
     self.m_LootPickups = {}
-
-    -- A table of enitites (id -> EntityBus)
-    self.m_SpawnedEntities = {}
 end
 
-function BRLootPickupDatabase:RegisterLootPickup(p_LootPickup)
-    if p_LootPickup == nil then
-        return
+function BRLootPickupDatabase:CreateLootPickup(p_Type, p_Transform, p_Items)
+    local s_Items = {}
+    for _, l_Item in pairs(p_Items) do
+        table.insert(s_Items, l_Item:AsTable())
     end
 
-    -- Check if loot pickup already exists
-    if self.m_LootPickups[p_LootPickup.m_Id] ~= nil then
-        m_Logger:Write("Loot pickup already spawned.")
-        return
-    end
+    local s_DataArray = {
+        Id = self:GetRandomId(),
+        Type = p_Type,
+        Transform = p_Transform,
+        Items = s_Items
+    }
 
-    self.m_LootPickups[p_LootPickup.m_Id] = p_LootPickup
+    -- create item instance and insert it to the items table
+    local s_LootPickup = BRLootPickup:CreateFromTable(s_DataArray)
+    self.m_LootPickups[s_DataArray.Id] = s_LootPickup
 
-    self:Spawn(p_LootPickup)
+    m_Logger:Write("Loot Pickup added to database.")
+
+    NetEvents:BroadcastLocal(InventoryNetEvent.CreateLootPickup, s_DataArray)
 end
 
 function BRLootPickupDatabase:UnregisterLootPickup(p_LootPickupId)
-    if p_LootPickupId == nil then
-        return
-    end
-
     if self.m_LootPickups[p_LootPickupId] == nil then
         return
     end
 
+    for _, l_Item in pairs(self.m_LootPickups[p_LootPickupId].m_Items) do
+        m_ItemDatabase:UnregisterItem(l_Item.m_Id)
+    end
+
     self.m_LootPickups[p_LootPickupId] = nil
 
-    self:Destory(p_LootPickupId)
+    NetEvents:BroadcastLocal(InventoryNetEvent.UnregisterLootPickup, p_LootPickupId)
+
+    m_Logger:Write("Loot Pickup removed from database.")
 end
 
-function BRLootPickupDatabase:Spawn(p_LootPickup)
-    if self.m_SpawnedEntities[p_LootPickup.m_Id] ~= nil then
-        return
-    end
-
-    local s_LootPickupMesh = p_LootPickup:GetMesh()
-	if s_LootPickupMesh == nil then
-		m_Logger:Write("Couldn't find loot pickup mesh.")
-		return
-    end
-    
-	local s_Params = EntityCreationParams()
-	s_Params.transform = p_LootPickup.m_Transform
-	s_Params.networked = false
-
-    local s_Bus = EntityManager:CreateEntitiesFromBlueprint(s_LootPickupMesh, s_Params)
-    if s_Bus ~= nil then
-        for _, l_Entity in pairs(s_Bus.entities) do
-            l_Entity:Init(Realm.Realm_ClientAndServer, true)
-        end
-
-        self.m_SpawnedEntities[p_LootPickup.m_Id] = s_Bus
-    else
-		prm_Logger:Writeint("Couldn't spawn loot pickup.")
-	end
+function BRLootPickupDatabase:GetRandomId()
+    -- for now use the guid string
+    return tostring(MathUtils:RandomGuid())
 end
 
-function BRLootPickupDatabase:Destory(p_LootPickupId)
-    if self.m_SpawnedEntities[p_LootPickupId] == nil then
-        return
-    end
 
-    for _, l_Entity in pairs(self.m_SpawnedEntities[p_LootPickupId].entities) do
-        l_Entity:Destroy()
-    end
+-- TODO: OnPlayerJoin send the whole self.m_LootPickups to that player
+
+if g_BRLootPickupDatabase == nil then
+    g_BRLootPickupDatabase = BRLootPickupDatabase()
 end
+
+return g_BRLootPickupDatabase

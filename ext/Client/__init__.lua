@@ -3,6 +3,7 @@ class "VuBattleRoyaleLootSystemClient"
 require "ClientCommands"
 
 require "__shared/Types/DataContainer"
+require "__shared/Types/BRLootPickup"
 
 require "__shared/Enums/CustomEvents"
 
@@ -47,10 +48,13 @@ end
 
 function VuBattleRoyaleLootSystemClient:RegisterVars()
 	self.m_Invetnory = BRInventory()
+    self.m_LootPickups = {}
 end
 
 function VuBattleRoyaleLootSystemClient:RegisterEvents()
 	NetEvents:Subscribe(InventoryNetEvent.InventoryState, self, self.OnReceiveInventoryState)
+    NetEvents:Subscribe(InventoryNetEvent.CreateLootPickup, self, self.OnCreateLootPickup)
+    NetEvents:Subscribe(InventoryNetEvent.UnregisterLootPickup, self, self.OnUnregisterLootPickup)
 end
 
 function VuBattleRoyaleLootSystemClient:RegisterWebUIEvents()
@@ -68,6 +72,24 @@ end
 
 function VuBattleRoyaleLootSystemClient:OnReceiveInventoryState(p_State)
     self.m_Invetnory:OnReceiveInventoryState(p_State)
+end
+
+function VuBattleRoyaleLootSystemClient:OnCreateLootPickup(p_DataArray)
+    if self.m_LootPickups[p_LootPickupId] ~= nil then
+        return
+    end
+
+    self.m_LootPickups[p_DataArray.Id] = BRLootPickup:CreateFromTable(p_DataArray)
+    self.m_LootPickups[p_DataArray.Id]:Spawn()
+end
+
+function VuBattleRoyaleLootSystemClient:OnUnregisterLootPickup(p_LootPickupId)
+    if self.m_LootPickups[p_LootPickupId] == nil then
+        return
+    end
+
+    self.m_LootPickups[p_LootPickupId]:Destroy()
+    self.m_LootPickups[p_LootPickupId] = nil
 end
 
 return VuBattleRoyaleLootSystemClient()
