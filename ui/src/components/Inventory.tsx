@@ -1,35 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tooltip from "react-simple-tooltip";
 
 import { connect } from "react-redux";
 import { RootState } from "../store/RootReducer";
 
-import { DndContext } from '@dnd-kit/core';
+import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { Draggable } from './dnd/Draggable';
 import { Droppable } from './dnd/Droppable';
 
 import InventorySlot, { InventoryItem } from "../helpers/InventoryHelper";
 
-import skull from "../assets/img/skull.svg";
-import dummyweapon from "../assets/img/dummyweapon.png";
-
 import "./Inventory.scss";
+import { sendToLua } from "../Helpers";
 
 interface StateFromReducer {
-    /*primaryWeapon: {
-        weaponSlot: InventorySlot,
-        attachmentSlot1: InventorySlot,
-        attachmentSlot2: InventorySlot,
-        attachmentSlot3: InventorySlot,
-    },
-    secondaryWeapon: {
-        weaponSlot: InventorySlot,
-        attachmentSlot1: InventorySlot,
-        attachmentSlot2: InventorySlot,
-        attachmentSlot3: InventorySlot,
-    },
-    backpack: Array<InventorySlot>,
-    ammo: Array<InventorySlot>,*/
     slots: any
 }
 
@@ -38,52 +22,161 @@ type Props = StateFromReducer;
 const Inventory: React.FC<Props> = ({
     slots
 }) => {
-    //const [parent, setParent] = useState(null);
+    /*const [isHoldingCtrl, setIsHoldingCtrl] = useState<boolean>(false);
 
-    function handleDragEnd(event: any) {
-        const { active, over } = event;
+    const handleUserKeyDown = (event: any) => {
+        const { keyCode } = event;
 
-        console.log(over);
-        
-        if (over && 
-            (over.data.current.accepts !== undefined && over.data.current.accepts.includes(active.data.current.type)) && 
-            (over.data.current.item === undefined || over.data.current.item?.id !== active.id)
-        ) {
-            alert("ok");
+        if (keyCode === 17) {
+            setIsHoldingCtrl(true);
         }
     }
 
-    const getSlotItem = (slot: any) => {
+    const handleUserKeyUp = (event: any) => {
+        const { keyCode } = event;
+
+        if (keyCode === 17) {
+            setIsHoldingCtrl(false);
+        }
+    }
+
+    useEffect(() => {
+        setIsHoldingCtrl(false);
+        window.addEventListener('keydown', handleUserKeyDown);
+        window.addEventListener('keyup', handleUserKeyUp);
+
+        return () => {
+            window.removeEventListener('keydown', handleUserKeyDown);
+            window.removeEventListener('keyup', handleUserKeyUp);
+        };
+    });*/
+
+    const [isDragging, setIsDragging] = useState<any>(null);
+
+    function handleDragStart(event: any) {
+        const { active } = event;
+        setIsDragging(active.data.current.currentSlot);
+    }
+
+    function handleDragEnd(event: any) {
+        const { active, over } = event;
+        setIsDragging(null);
+
+        if (over !== null) {
+            const slot = over.id;
+            if (active.data.current.currentSlot.toString() !== slot) {
+                if (slot === "item-drop") {
+                    sendToLua('WebUI:DropItem', JSON.stringify({ item: active.id }));
+                } else {
+                    sendToLua('WebUI:MoveItem', JSON.stringify({ item: active.id, slot: slot }));
+                }
+            }
+        }
+    }
+
+    const getSlotItem = (slot: any, key: number) => {
         if (slot === undefined || slot === null || Object.keys(slot).length === 0) {
-            return <></>
+            return <>
+                {getEmptySlot(key)}
+            </>
         }
 
         return (
-            <Draggable id={slot.Id}>
-                <Tooltip 
-                    content={slot.Name??""}
+            <Draggable id={slot.Id} currentSlot={key}>
+                <Tooltip
+                    content={slot.Name ?? ""}
                 >
-                    {slot.UIIcon !== null &&
-                        <img src={"fb://" + slot.UIIcon} />
-                    }
-                    <span className="name">{slot.Name??""}</span>
-                    {slot.Quantity > 1 &&
-                        <span className="count">{slot.Quantity??1}</span>
-                    }
-                    <span className="ammoType">{slot.AmmoName??"-"}</span>
-                    {(slot.CurrentDurability !== undefined && slot.Durability !== undefined) &&
-                        <div className="progressWrapper">
-                            <div className="progress" style={{ height: (slot.CurrentDurability / slot.Durability * 100) + "%" }}></div>
-                        </div>
-                    }
+                    {getSlotDrag(slot)}
                 </Tooltip>
             </Draggable>
         )
     }
 
+    const getSlotDrag = (slot: any) => {
+        return (
+            <>
+                {slot.UIIcon !== null &&
+                    <img src={"fb://" + slot.UIIcon} />
+                }
+                <span className="name">{slot.Name ?? ""}</span>
+                {slot.Quantity > 1 &&
+                    <span className="count">{slot.Quantity ?? 1}</span>
+                }
+                <span className="ammoType">{slot.AmmoName ?? "-"}</span>
+                {(slot.CurrentDurability !== undefined && slot.Durability !== undefined) &&
+                    <div className="progressWrapper">
+                        <div className="progress" style={{ height: (slot.CurrentDurability / slot.Durability * 100) + "%" }}></div>
+                    </div>
+                }
+            </>
+        )
+    }
+
+    const getEmptySlot = (key: number) => {
+        switch (key) {
+            case 0:
+                return (
+                    <div className="empty-slot">
+                        Primary Weapon
+                    </div>
+                );
+            case 4:
+                return (
+                    <div className="empty-slot">
+                        Secondary Weapon
+                    </div>
+                );
+            case 1:
+            case 5:
+                return (
+                    <div className="empty-slot">
+                        Optics
+                    </div>
+                );
+            case 2:
+            case 6:
+                return (
+                    <div className="empty-slot">
+                        Barrel
+                    </div>
+                );
+            case 3:
+            case 7:
+                return (
+                    <div className="empty-slot">
+                        Other
+                    </div>
+                );
+            case 8:
+                return (
+                    <div className="empty-slot">
+                        Helmet
+                    </div>
+                );
+            case 9:
+                return (
+                    <div className="empty-slot">
+                        Armor
+                    </div>
+                );
+            case 10:
+                return (
+                    <div className="empty-slot">
+                        Gadget
+                    </div>
+                );
+            default:
+                return (
+                    <div className="empty-slot">
+                        Empty
+                    </div>
+                );
+        }
+    }
+
     return (
         <>
-            <DndContext onDragEnd={handleDragEnd}>
+            <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
                 <div id="Inventory" className="open">
                     <div className="InventoryWrapper">
                         <div className="card PrimaryWeaponBox">
@@ -94,16 +187,16 @@ const Inventory: React.FC<Props> = ({
                             </div>
                             <div className="card-content weapon-grid">
                                 <Droppable id={0} type="weapon-slot">
-                                    {getSlotItem(slots[0])}
+                                    {getSlotItem(slots[0], 0)}
                                 </Droppable>
                                 <Droppable id={1}>
-                                    {getSlotItem(slots[1])}
+                                    {getSlotItem(slots[1], 1)}
                                 </Droppable>
                                 <Droppable id={2}>
-                                    {getSlotItem(slots[2])}
+                                    {getSlotItem(slots[2], 2)}
                                 </Droppable>
                                 <Droppable id={3}>
-                                    {getSlotItem(slots[3])}
+                                    {getSlotItem(slots[3], 3)}
                                 </Droppable>
                             </div>
                         </div>
@@ -116,16 +209,16 @@ const Inventory: React.FC<Props> = ({
                             </div>
                             <div className="card-content weapon-grid">
                                 <Droppable id={4} type="weapon-slot">
-                                    {getSlotItem(slots[4])}
+                                    {getSlotItem(slots[4], 4)}
                                 </Droppable>
                                 <Droppable id={5}>
-                                    {getSlotItem(slots[5])}
+                                    {getSlotItem(slots[5], 5)}
                                 </Droppable>
                                 <Droppable id={6}>
-                                    {getSlotItem(slots[6])}
+                                    {getSlotItem(slots[6], 6)}
                                 </Droppable>
                                 <Droppable id={7}>
-                                    {getSlotItem(slots[7])}
+                                    {getSlotItem(slots[7], 7)}
                                 </Droppable>
                             </div>
                         </div>
@@ -139,7 +232,7 @@ const Inventory: React.FC<Props> = ({
                                 </div>
                                 <div className="card-content">
                                     <Droppable id={9}>
-                                        {getSlotItem(slots[9])}
+                                        {getSlotItem(slots[9], 9)}
                                     </Droppable>
                                 </div>
                             </div>
@@ -151,7 +244,7 @@ const Inventory: React.FC<Props> = ({
                                 </div>
                                 <div className="card-content">
                                     <Droppable id={8}>
-                                        {getSlotItem(slots[8])}
+                                        {getSlotItem(slots[8], 8)}
                                     </Droppable>
                                 </div>
                             </div>
@@ -163,7 +256,7 @@ const Inventory: React.FC<Props> = ({
                                 </div>
                                 <div className="card-content">
                                     <Droppable id={10}>
-                                        {getSlotItem(slots[10])}
+                                        {getSlotItem(slots[10], 10)}
                                     </Droppable>
                                 </div>
                             </div>
@@ -180,52 +273,11 @@ const Inventory: React.FC<Props> = ({
                                     <React.Fragment key={key}>
                                         {key >= 11 &&
                                             <Droppable key={key} id={key}>
-                                                {getSlotItem(slots[key])}
+                                                {getSlotItem(slots[key], key)}
                                             </Droppable>
                                         }
                                     </React.Fragment>
                                 ))}
-                                {/*<div className="item-holder">
-                                    <img src={skull} />
-                                    <span className="count">60</span>
-                                </div>
-                                <div className="item-holder">
-                                    <img src={skull} />
-                                    <span className="count">120</span>
-                                </div>
-                                <div className="item-holder">
-                                    <img src={skull} />
-                                </div>
-                                <div className="item-holder">
-                                    <img src={skull} />
-                                </div>
-                                <div className="item-holder">
-                                    <img src={skull} />
-                                </div>
-                                <div className="item-holder">
-                                    <img src={skull} />
-                                </div>
-                                <div className="item-holder">
-                                    <img src={skull} />
-                                </div>
-                                <div className="item-holder">
-                                    <img src={skull} />
-                                </div>
-                                <div className="item-holder">
-                                    <img src={skull} />
-                                </div>*/}
-                                {/*parent === null ? draggableMarkup : null*/}
-
-                                {/*backpack.map((inventorySlot: InventorySlot) => (
-                                    <Droppable 
-                                        key={inventorySlot.id} 
-                                        id={inventorySlot.id}
-                                        accepts={inventorySlot.accepts}
-                                        item={inventorySlot.item}
-                                    >
-                                        {/*inventorySlot.item ? draggableItem(inventorySlot.item) : 'Empty'
-                                    </Droppable>
-                                ))*/}
                             </div>
                         </div>
                     </div>
@@ -233,6 +285,19 @@ const Inventory: React.FC<Props> = ({
                         <Droppable id="item-drop"></Droppable>
                     </div>
                 </div>
+                <DragOverlay 
+                    dropAnimation={null}
+                    adjustScale={false}
+                    style={{
+                        background: "red",
+                    }}
+                >
+                    {isDragging !== null && 
+                        <div className="dragoverlay-object">
+                            {getSlotDrag(slots[isDragging])}
+                        </div>
+                    }
+                </DragOverlay>
             </DndContext>
         </>
     );

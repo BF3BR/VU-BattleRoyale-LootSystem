@@ -26,6 +26,7 @@ end
 function VuBattleRoyaleLootSystemClient:OnExtensionLoaded()
     self:RegisterVars()
     self:RegisterEvents()
+    self:RegisterWebUIEvents()
     self:RegisterCommands()
 
     WebUI:Init()
@@ -50,6 +51,19 @@ end
 
 function VuBattleRoyaleLootSystemClient:RegisterEvents()
 	NetEvents:Subscribe(InventoryNetEvent.InventoryState, self, self.OnReceiveInventoryState)
+end
+
+function VuBattleRoyaleLootSystemClient:RegisterWebUIEvents()
+	Events:Subscribe("WebUI:MoveItem", self, self.OnWebUIMoveItem)
+    Events:Subscribe("WebUI:DropItem", self, self.OnWebUIDropItem)
+end
+
+function VuBattleRoyaleLootSystemClient:OnWebUIMoveItem(p_JsonData)
+    self.m_Invetnory:OnWebUIMoveItem(p_JsonData)
+end
+
+function VuBattleRoyaleLootSystemClient:OnWebUIDropItem(p_JsonData)
+    self.m_Invetnory:OnWebUIDropItem(p_JsonData)
 end
 
 function VuBattleRoyaleLootSystemClient:OnReceiveInventoryState(p_State)

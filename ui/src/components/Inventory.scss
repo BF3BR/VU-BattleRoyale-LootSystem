@@ -7,7 +7,7 @@
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
-    z-index: 9999;
+    z-index: 800;
     display: none;
 
     &.open {
@@ -80,7 +80,7 @@
     }
 
     .draggable {
-        z-index: 999999;
+        z-index: 800;
     }
 
     .item-slot {
@@ -92,6 +92,10 @@
         padding: 0;
         height: 4vw;
         font-size: 1vw;
+
+        &.isOver {
+            background-color: rgba(75, 75, 75, 0.65) !important;
+        }
 
         img {
             position: absolute;
@@ -194,6 +198,7 @@
             align-items: center;
             justify-content: center;
             grid-column: span 3 / auto;
+            height: 6vw;
 
             background: rgba(255, 153, 0, 0.2);
 
@@ -285,5 +290,53 @@
                 border: 0;
             }
         }*/
+    }
+}
+
+.empty-slot {
+    font-size: .7vw;
+    opacity: .4;
+    text-transform: uppercase;
+}
+
+
+.dragoverlay-object {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    border: .1vw dashed #fff;
+    position: relative;
+
+    img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 5vw;
+    }
+
+    span {
+        text-transform: uppercase;
+        margin: 0;
+        font-style: normal;
+        font-weight: 600;
+        font-size: .75vw;
+        line-height: 1vw;
+        position: absolute;
+        bottom: 0.25vw;
+        color: #d5dde5;
+
+        &.ammoType,
+        &.name {
+            display: none;
+        }
+
+        &.count {
+            right: 0.25vw;
+            font-style: normal;
+            font-weight: 600;
+            font-size: .75vw;
+            line-height: 1vw;
+        }
     }
 }

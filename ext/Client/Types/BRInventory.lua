@@ -65,3 +65,31 @@ end
 function BRInventory:SyncInventoryWithUI()
     WebUI:ExecuteJS(string.format("SyncInventory(%s);", json.encode(self:AsTable())))
 end
+
+function BRInventory:OnWebUIMoveItem(p_JsonData)
+    local s_DecodedData = json.decode(p_JsonData)
+
+    -- Load params from the decoded JSON.
+	local p_ItemId = s_DecodedData.item
+	local p_SlotId = tonumber(s_DecodedData.slot) + 1
+
+    if p_ItemId == nil or p_SlotId == nil then
+        return
+    end
+
+    NetEvents:Send(InventoryNetEvent.MoveItem, p_ItemId, p_SlotId)
+end
+
+
+function BRInventory:OnWebUIDropItem(p_JsonData)
+    local s_DecodedData = json.decode(p_JsonData)
+
+    -- Load params from the decoded JSON.
+	local p_ItemId = s_DecodedData.item
+
+    if p_ItemId == nil then
+        return
+    end
+
+    NetEvents:Send(InventoryNetEvent.DropItem, p_ItemId)
+end

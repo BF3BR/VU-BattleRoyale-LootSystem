@@ -146,6 +146,35 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
     self:SendState()
 end
 
+function BRInventory:SwapItems(p_ItemId, p_SlotId)
+    local s_SlotReplaced = self.m_Slots[p_SlotId].m_Item
+    for l_Index, l_Slot in pairs(self.m_Slots) do
+        if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
+            if self.m_Slots[p_SlotId]:IsAccepted(l_Slot.m_Item) then
+                self.m_Slots[p_SlotId].m_Item = l_Slot.m_Item
+                self.m_Slots[l_Index].m_Item = s_SlotReplaced
+                m_Logger:Write("Slots swapped.")
+                self:SendState()
+                return
+            end
+        end
+    end
+
+    m_Logger:Write("Item not found in your inventory.")
+end
+
+function BRInventory:DropItem(p_ItemId)
+    -- TODO: Use this later on 
+    --[[for _, l_Slot in pairs(self.m_Slots) do
+        if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
+            l_Slot:Drop()
+            return
+        end
+    end]]
+
+    self:RemoveItem(p_ItemId)
+end
+
 function BRInventory:RemoveItem(p_ItemId)
     -- Check if item exists
     local s_Item = m_ItemDatabase:GetItem(p_ItemId)
@@ -155,8 +184,9 @@ function BRInventory:RemoveItem(p_ItemId)
     end
 
     for l_Index, l_Slot in pairs(self.m_Slots) do
-        if l_Slot.m_Item.Id == s_Item.m_Id then
-            self.m_Slots[l_Index].m_Item = nil
+        if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
+            l_Slot.m_Item = nil
+            m_ItemDatabase:UnregisterItem(p_ItemId)
             m_Logger:Write("Item removed from inventory. (" .. s_Item.m_Definition.m_Name .. ")")
             self:SendState()
             return true

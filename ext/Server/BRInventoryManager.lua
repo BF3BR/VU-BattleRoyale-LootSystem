@@ -28,6 +28,31 @@ end
 
 function BRInventoryManager:RegisterEvents()
 	NetEvents:Subscribe(InventoryNetEvent.InventoryGiveCommand, self, self.OnPlayerGiveCommand)
+	NetEvents:Subscribe(InventoryNetEvent.MoveItem, self, self.OnInventoryMoveItem)
+	NetEvents:Subscribe(InventoryNetEvent.DropItem, self, self.OnInventoryDropItem)
+end
+
+function BRInventoryManager:OnPlayerLeft(p_Player)
+	m_Logger:Write(string.format("Destroying Inventory for '%s'", p_Player.name))
+	
+	if self.m_Inventories[p_Player.id] ~= nil then
+		self:RemoveInventory(p_Player.id)
+	end
+end
+
+-- Removes a BRInventory
+-- @param p_PlayerId integer
+function BRInventoryManager:RemoveInventory(p_PlayerId)
+	-- destroy inventory and clear reference
+    self.m_Inventories[p_PlayerId]:Destroy()
+	self.m_Inventories[p_PlayerId] = nil
+end
+
+-- Adds a BRInventory
+-- @param p_Inventory BRInventory
+-- @param p_PlayerId integer
+function BRInventoryManager:AddInventory(p_Inventory, p_PlayerId)
+    self.m_Inventories[p_PlayerId] = p_Inventory
 end
 
 function BRInventoryManager:OnPlayerGiveCommand(p_Player, p_Args)
@@ -55,27 +80,22 @@ function BRInventoryManager:OnPlayerGiveCommand(p_Player, p_Args)
 	m_Logger:Write(s_Definition.m_Name .. " - Item given to player: " .. p_Player.name)
 end
 
-function BRInventoryManager:OnPlayerLeft(p_Player)
-	m_Logger:Write(string.format("Destroying Inventory for '%s'", p_Player.name))
+function BRInventoryManager:OnInventoryMoveItem(p_Player, p_ItemId, p_SlotId)
+    local s_Inventory = self.m_Inventories[p_Player.id]
+    if s_Inventory == nil then
+        return
+    end
 	
-	if self.m_Inventories[p_Player.id] ~= nil then
-		self:RemoveInventory(p_Player.id)
-	end
+	s_Inventory:SwapItems(p_ItemId, p_SlotId)
 end
 
--- Removes a BRInventory
--- @param p_PlayerId integer
-function BRInventoryManager:RemoveInventory(p_PlayerId)
-	-- destroy inventory and clear reference
-    self.m_Inventories[p_PlayerId]:Destroy()
-	self.m_Inventories[p_PlayerId] = nil
-end
-
--- Adds a BRInventory
--- @param p_Inventory BRInventory
--- @param p_PlayerId integer
-function BRInventoryManager:AddInventory(p_Inventory, p_PlayerId)
-    self.m_Inventories[p_PlayerId] = p_Inventory
+function BRInventoryManager:OnInventoryDropItem(p_Player, p_ItemId)
+    local s_Inventory = self.m_Inventories[p_Player.id]
+    if s_Inventory == nil then
+        return
+    end
+	
+	s_Inventory:DropItem(p_ItemId)
 end
 
 -- define global
