@@ -1,6 +1,8 @@
 require "__shared/Enums/ItemEnums"
 require "__shared/Slots/BRInventorySlot"
 
+local m_Logger = Logger("BRInventoryWeaponSlot", true)
+
 class("BRInventoryWeaponSlot", BRInventorySlot)
 
 function BRInventoryWeaponSlot:__init()
@@ -33,6 +35,11 @@ function BRInventoryWeaponSlot:Drop()
     self:Clear()
 
     return s_DroppedItems
+end
+
+function BRInventoryWeaponSlot:OnUpdate()
+    m_Logger:Write("Weapon slot updated")
+    -- TODO logic to update weapon
 end
 
 function BRInventoryWeaponSlot:SetAttachmentSlots(p_OpticsSlot, p_BarrelSlot, p_OtherSlot)

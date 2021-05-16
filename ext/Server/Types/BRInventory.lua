@@ -139,7 +139,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
         end
     else
         -- If the slot is empty / nil then we can just put the item there
-        s_Slot.m_Item = s_Item
+        s_Slot:PutItem(s_Item)
         m_Logger:Write("Item added to inventory. (" .. s_Item.m_Definition.m_Name .. ")")
     end
 
@@ -168,22 +168,19 @@ function BRInventory:RemoveItem(p_ItemId)
 end
 
 function BRInventory:GetAvailableSlot(p_Item)
+    -- If the item is stackable then search for an existing item with same
+    -- definition and available space first
     if p_Item.m_Definition.m_Stackable and p_Item.m_Definition.m_MaxStack ~= nil then
         for _, l_Slot in pairs(self.m_Slots) do
-            -- If we found a slot with the matching type and it is not empty
-            if l_Slot:IsAccepted(p_Item) and l_Slot.m_Item ~= nil then
-                if l_Slot.m_Item.m_Quantity < p_Item.m_Definition.m_MaxStack and 
-                    l_Slot.m_Item.m_Definition:Equals(p_Item.m_Definition) then
-                    return l_Slot
-                end
+            if l_Slot.m_Item ~= nil and l_Slot:IsAvailable(p_Item) then
+                return l_Slot
             end
         end
-        
     end
 
+    -- If we found a slot with the matching type and it is empty
     for _, l_Slot in pairs(self.m_Slots) do
-        -- If we found a slot with the matching type and it is empty
-        if l_Slot:IsAccepted(p_Item) and l_Slot.m_Item == nil then
+        if l_Slot:IsAvailable(p_Item) then
             return l_Slot
         end
     end
@@ -202,11 +199,10 @@ end
 -- Destroys the `BRInventory` instance
 function BRInventory:Destroy()
     self.m_Owner = nil
-	self.m_Slots = {}
+    self.m_Slots = {}
 end
 
 -- Garbage collector metamethod
 function BRInventory:__gc()
-	self:Destroy()
+    self:Destroy()
 end
-

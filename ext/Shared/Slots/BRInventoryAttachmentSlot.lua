@@ -36,6 +36,10 @@ function BRInventoryAttachmentSlot:IsAccepted(p_Item)
     return false
 end
 
+function BRInventoryAttachmentSlot:OnUpdate()
+    self.m_WeaponSlot:OnUpdate()
+end
+
 function BRInventoryAttachmentSlot:SetWeaponSlot(p_WeaponSlot)
     self.m_WeaponSlot = p_WeaponSlot
 end
