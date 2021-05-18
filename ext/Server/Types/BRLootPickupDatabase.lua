@@ -31,6 +31,8 @@ function BRLootPickupDatabase:CreateLootPickup(p_Type, p_Transform, p_Items)
     local s_LootPickup = BRLootPickup:CreateFromTable(s_DataArray)
     self.m_LootPickups[s_DataArray.Id] = s_LootPickup
 
+    self.m_LootPickups[s_DataArray.Id]:Spawn()
+
     m_Logger:Write("Loot Pickup added to database.")
 
     NetEvents:BroadcastLocal(InventoryNetEvent.CreateLootPickup, s_DataArray)
@@ -45,6 +47,7 @@ function BRLootPickupDatabase:UnregisterLootPickup(p_LootPickupId)
         m_ItemDatabase:UnregisterItem(l_Item.m_Id)
     end
 
+    self.m_LootPickups[p_LootPickupId]:Destroy()
     self.m_LootPickups[p_LootPickupId] = nil
 
     NetEvents:BroadcastLocal(InventoryNetEvent.UnregisterLootPickup, p_LootPickupId)

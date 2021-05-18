@@ -89,13 +89,13 @@ function BRInventoryManager:OnInventoryMoveItem(p_Player, p_ItemId, p_SlotId)
 	s_Inventory:SwapItems(p_ItemId, p_SlotId)
 end
 
-function BRInventoryManager:OnInventoryDropItem(p_Player, p_ItemId)
+function BRInventoryManager:OnInventoryDropItem(p_Player, p_ItemId, p_Quantity)
     local s_Inventory = self.m_Inventories[p_Player.id]
     if s_Inventory == nil then
         return
     end
 	
-	s_Inventory:DropItem(p_ItemId)
+	s_Inventory:DropItem(p_ItemId, p_Quantity)
 end
 
 -- define global

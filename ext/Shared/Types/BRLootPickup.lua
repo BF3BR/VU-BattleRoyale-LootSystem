@@ -28,7 +28,6 @@ function BRLootPickup:GetMesh()
         return self.m_Items[1].m_Definition.m_Mesh
     end
 
-    -- TODO: We might need to specify a default mesh
     return nil
 end
 
@@ -62,7 +61,7 @@ end
 
 
 --==============================
--- Client only functions
+-- Spawn / Destory functions
 --==============================
 
 function BRLootPickup:Spawn()
@@ -70,9 +69,13 @@ function BRLootPickup:Spawn()
         return
     end
 
-    -- TODO: Use self:GetMesh()
+    local s_Mesh = self:GetMesh()
+    if s_Mesh == nil then
+        m_Logger:Write("Mesh not found.")
+        return
+    end
 
-    local s_Asset = ResourceManager:FindInstanceByGuid(Guid('3D606B79-946A-4A6E-BF28-6F92357DB103'), Guid('C6C78918-23C2-4FF7-9A93-904066867737'))
+    local s_Asset = s_Mesh:GetInstance()
     if s_Asset == nil then
         m_Logger:Write("Asset not found.")
         return
@@ -87,7 +90,7 @@ function BRLootPickup:Spawn()
 	end
 
 	for _, l_Entity in pairs(s_Bus.entities) do
-		l_Entity:Init(Realm.Realm_Client, true, false)
+		l_Entity:Init(Realm.Realm_ClientAndServer, true, false)
 	end
 
     self.m_Entities = s_Bus.entities

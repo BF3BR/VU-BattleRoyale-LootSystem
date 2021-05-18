@@ -163,7 +163,7 @@ function BRInventory:SwapItems(p_ItemId, p_SlotId)
     m_Logger:Write("Item not found in your inventory.")
 end
 
-function BRInventory:DropItem(p_ItemId)
+function BRInventory:DropItem(p_ItemId, p_Quantity)
     -- TODO: Use this later on 
     --[[for _, l_Slot in pairs(self.m_Slots) do
         if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
@@ -171,6 +171,8 @@ function BRInventory:DropItem(p_ItemId)
             return
         end
     end]]
+
+    --TODO: Use p_Quantity for splitting
 
     self:RemoveItem(p_ItemId)
 end

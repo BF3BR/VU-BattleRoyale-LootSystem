@@ -86,10 +86,11 @@ function BRInventory:OnWebUIDropItem(p_JsonData)
 
     -- Load params from the decoded JSON.
 	local p_ItemId = s_DecodedData.item
+    local p_Quantity = s_DecodedData.quantity
 
-    if p_ItemId == nil then
+    if p_ItemId == nil or p_Quantity == nil then
         return
     end
 
-    NetEvents:Send(InventoryNetEvent.DropItem, p_ItemId)
+    NetEvents:Send(InventoryNetEvent.DropItem, p_ItemId, p_Quantity)
 end

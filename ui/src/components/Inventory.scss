@@ -25,13 +25,25 @@
             top: 0;
             right: 0;
             width: 71vw;
-            background: rgba(0, 0, 0, 0.15);
+            background: transparent;
             height: 100vh;
+            display: grid;
+            grid-template-columns: 65% 35%;
 
             .item-slot {
                 position: relative;
                 width: 100%;
                 height: 100%;
+                background: transparent;
+                
+                &.isOver {
+                    background: rgba(7,7,7,.45) !important;
+                }
+
+                .overlay-placeholder {
+                    font-size: 1.25vw;
+                    bottom: 2vw;
+                }
             }
         }
 
@@ -356,6 +368,99 @@
             font-weight: 600;
             font-size: .75vw;
             line-height: 1vw;
+        }
+    }
+}
+
+.split-modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    &.show {
+        display: flex;
+    }
+
+    .split-modal-inner {
+        width: 35vw;
+        height: 15vw;
+        background: rgba(0,0,0,1);
+        padding: 1vw 2vw;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+
+        .range-grid {
+            display: grid;
+            grid-template-columns: 10% 1fr 10%;
+            grid-gap: .5vw;
+
+            input,
+            button {
+                padding: 0;
+                margin: 0;
+                border: 0;
+            }
+
+            div,
+            button {
+                height: 3vw;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            margin: 1vw 0 1vw;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: .5vw;
+            margin-top: 1vw;
+            
+            button {
+                padding: 0;
+                margin: 0;
+                border: 0;
+                height: 3vw;
+            }
+        }
+
+        .slidecontainer {
+            width: 100%;
+        }
+          
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 3vw;
+            background: rgba(255,255,255,.5);
+            outline: none;
+            opacity: 1;
+        }
+          
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 2vw;
+            height: 3vw;
+            background: rgb(255, 153, 0);
+            cursor: pointer;
+        }
+          
+        .slider::-moz-range-thumb {
+            width: 2vw;
+            height: 3vw;
+            background: rgb(255, 153, 0);
+            cursor: pointer;
         }
     }
 }
