@@ -66,7 +66,7 @@ function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
 
 
     ------------------
-    local s_ItemAKSpawned = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-ak74m"])
+    --[[local s_ItemAKSpawned = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-ak74m"])
     m_LootPickupDatabase:CreateLootPickup(
         "Basic",
         LinearTransform(
@@ -78,7 +78,7 @@ function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
         {
             s_ItemAKSpawned,
         }
-    )
+    )]]
 end
 
 return VuBattleRoyaleLootSystemServer()

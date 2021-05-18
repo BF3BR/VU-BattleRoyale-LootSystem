@@ -225,6 +225,8 @@ function BRInventory:SendState()
         return
     end
 
+    self:OnUpdate()
+
     NetEvents:SendToLocal(InventoryNetEvent.InventoryState, self.m_Owner, self:AsTable())
 end
 
@@ -237,4 +239,90 @@ end
 -- Garbage collector metamethod
 function BRInventory:__gc()
     self:Destroy()
+end
+
+--==============================
+-- Player / Soldier related functions
+--==============================
+function BRInventory:OnUpdate()
+    if self.m_Owner == nil then
+        return
+    end
+
+    if self.m_Owner.soldier == nil then
+        return
+    end
+
+    self.m_Owner.soldier:ApplyCustomization(self:CreateCustomizeSoldierData())
+end
+
+function BRInventory:CreateCustomizeSoldierData()
+	local s_CustomizeSoldierData = CustomizeSoldierData()
+	s_CustomizeSoldierData.restoreToOriginalVisualState = false
+	s_CustomizeSoldierData.clearVisualState = true
+	s_CustomizeSoldierData.overrideMaxHealth = -1.0
+	s_CustomizeSoldierData.overrideCriticalHealthThreshold = -1.0
+
+    local function setAttachments(p_UnlockWeapon, p_WeaponSlot, p_AttachmentSlot)
+        if self.m_Slots[p_AttachmentSlot].m_Item ~= nil then
+            local s_AttachmentId = self.m_Slots[p_AttachmentSlot].m_Item.m_Definition.m_AttachmentId
+            local s_UnlockAsset = UnlockAsset(
+                self.m_Slots[p_WeaponSlot].m_Item.m_Definition.m_EbxAttachments[s_AttachmentId]:GetInstance()
+            )
+            p_UnlockWeapon.unlockAssets:add(s_UnlockAsset)
+        else
+            if p_AttachmentSlot == InventorySlot.PrimaryWeaponAttachmentOptics or 
+                p_AttachmentSlot == InventorySlot.SecondaryWeaponAttachmentOptics 
+            then
+                local s_UnlockAsset = UnlockAsset(
+                    self.m_Slots[p_WeaponSlot].m_Item.m_Definition.m_EbxAttachments[g_AttachmentIds.NoOptics]:GetInstance()
+                )
+                p_UnlockWeapon.unlockAssets:add(s_UnlockAsset)
+            end
+        end
+	end
+
+    if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item ~= nil then
+        local s_PrimaryWeapon = UnlockWeaponAndSlot()
+        s_PrimaryWeapon.weapon = SoldierWeaponUnlockAsset(
+            self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_SoldierWeaponBlueprint:GetInstance()
+        )
+        setAttachments(s_PrimaryWeapon, InventorySlot.PrimaryWeapon, InventorySlot.PrimaryWeaponAttachmentOptics)
+        setAttachments(s_PrimaryWeapon, InventorySlot.PrimaryWeapon, InventorySlot.PrimaryWeaponAttachmentBarrel)
+        setAttachments(s_PrimaryWeapon, InventorySlot.PrimaryWeapon, InventorySlot.PrimaryWeaponAttachmentOther)
+        s_PrimaryWeapon.slot = WeaponSlot.WeaponSlot_0
+        s_CustomizeSoldierData.weapons:add(s_PrimaryWeapon)
+    end
+
+    if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item ~= nil then
+        local s_SecondaryWeapon = UnlockWeaponAndSlot()
+        s_SecondaryWeapon.weapon = SoldierWeaponUnlockAsset(
+            self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_SoldierWeaponBlueprint:GetInstance()
+        )
+        setAttachments(s_SecondaryWeapon, InventorySlot.SecondaryWeapon, InventorySlot.SecondaryWeaponAttachmentOptics)
+        setAttachments(s_SecondaryWeapon, InventorySlot.SecondaryWeapon, InventorySlot.SecondaryWeaponAttachmentBarrel)
+        setAttachments(s_SecondaryWeapon, InventorySlot.SecondaryWeapon, InventorySlot.SecondaryWeaponAttachmentOther)
+        s_SecondaryWeapon.slot = WeaponSlot.WeaponSlot_1
+        s_CustomizeSoldierData.weapons:add(s_SecondaryWeapon)
+    end
+
+	local s_UnlockWeaponAndSlot = UnlockWeaponAndSlot()
+	s_UnlockWeaponAndSlot.weapon = SoldierWeaponUnlockAsset(
+        ResourceManager:FindInstanceByGuid(Guid("0003DE1B-F3BA-11DF-9818-9F37AB836AC2"),Guid("8963F500-E71D-41FC-4B24-AE17D18D8C73"))
+    )
+	s_UnlockWeaponAndSlot.slot = WeaponSlot.WeaponSlot_7
+	s_CustomizeSoldierData.weapons:add(s_UnlockWeaponAndSlot)
+
+	local s_UnlockWeaponAndSlot = UnlockWeaponAndSlot()
+	s_UnlockWeaponAndSlot.weapon = SoldierWeaponUnlockAsset(
+        ResourceManager:FindInstanceByGuid(Guid("7C58AA2F-DCF2-4206-8880-E32497C15218"),Guid("B145A444-BC4D-48BF-806A-0CEFA0EC231B"))
+    )
+	s_UnlockWeaponAndSlot.slot = WeaponSlot.WeaponSlot_9
+	s_CustomizeSoldierData.weapons:add(s_UnlockWeaponAndSlot)
+
+    s_CustomizeSoldierData.activeSlot = self.m_Owner.soldier.weaponsComponent.currentWeaponSlot
+	s_CustomizeSoldierData.removeAllExistingWeapons = true
+	s_CustomizeSoldierData.disableDeathPickup = false
+
+	return s_CustomizeSoldierData
 end
