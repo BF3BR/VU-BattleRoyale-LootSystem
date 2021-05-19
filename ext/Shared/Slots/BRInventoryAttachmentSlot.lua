@@ -3,8 +3,8 @@ require "__shared/Slots/BRInventorySlot"
 
 class("BRInventoryAttachmentSlot", BRInventorySlot)
 
-function BRInventoryAttachmentSlot:__init(p_AttachmentType)
-    BRInventorySlot.__init(self, { ItemType.Attachment })
+function BRInventoryAttachmentSlot:__init(p_Inventory, p_AttachmentType)
+    BRInventorySlot.__init(self, p_Inventory, { ItemType.Attachment })
 
     self.m_WeaponSlot = nil
     self.m_AttachmentType = p_AttachmentType

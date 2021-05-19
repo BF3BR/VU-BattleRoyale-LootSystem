@@ -1,7 +1,8 @@
 class "BRInventorySlot"
 
-function BRInventorySlot:__init(p_AcceptedTypes)
+function BRInventorySlot:__init(p_Inventory, p_AcceptedTypes)
     self.m_Item = nil
+    self.m_Inventory = p_Inventory
     self.m_AcceptedTypes = p_AcceptedTypes or {}
 end
 

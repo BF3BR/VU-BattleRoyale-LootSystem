@@ -23,29 +23,29 @@ function BRInventory:__init(p_Owner)
     -- A table of slots
     self.m_Slots = {
         -- PrimaryWeapon slots
-        [InventorySlot.PrimaryWeapon] = BRInventoryWeaponSlot(),
-        [InventorySlot.PrimaryWeaponAttachmentOptics] = BRInventoryAttachmentSlot(AttachmentType.Optics),
-        [InventorySlot.PrimaryWeaponAttachmentBarrel] = BRInventoryAttachmentSlot(AttachmentType.Barrel),
-        [InventorySlot.PrimaryWeaponAttachmentOther] = BRInventoryAttachmentSlot(AttachmentType.Other),
+        [InventorySlot.PrimaryWeapon] = BRInventoryWeaponSlot(self),
+        [InventorySlot.PrimaryWeaponAttachmentOptics] = BRInventoryAttachmentSlot(self, AttachmentType.Optics),
+        [InventorySlot.PrimaryWeaponAttachmentBarrel] = BRInventoryAttachmentSlot(self, AttachmentType.Barrel),
+        [InventorySlot.PrimaryWeaponAttachmentOther] = BRInventoryAttachmentSlot(self, AttachmentType.Other),
         -- SecondaryWeapon slots
-        [InventorySlot.SecondaryWeapon] = BRInventoryWeaponSlot(),
-        [InventorySlot.SecondaryWeaponAttachmentOptics] = BRInventoryAttachmentSlot(AttachmentType.Optics),
-        [InventorySlot.SecondaryWeaponAttachmentBarrel] = BRInventoryAttachmentSlot(AttachmentType.Barrel),
-        [InventorySlot.SecondaryWeaponAttachmentOther] = BRInventoryAttachmentSlot(AttachmentType.Other),
+        [InventorySlot.SecondaryWeapon] = BRInventoryWeaponSlot(self),
+        [InventorySlot.SecondaryWeaponAttachmentOptics] = BRInventoryAttachmentSlot(self, AttachmentType.Optics),
+        [InventorySlot.SecondaryWeaponAttachmentBarrel] = BRInventoryAttachmentSlot(self, AttachmentType.Barrel),
+        [InventorySlot.SecondaryWeaponAttachmentOther] = BRInventoryAttachmentSlot(self, AttachmentType.Other),
         -- Gadget slots
-        [InventorySlot.Armor] = BRInventoryArmorSlot(),
-        [InventorySlot.Helmet] = BRInventoryHelmetSlot(),
-        [InventorySlot.Gadget] = BRInventoryGadgetSlot(),
+        [InventorySlot.Armor] = BRInventoryArmorSlot(self),
+        [InventorySlot.Helmet] = BRInventoryHelmetSlot(self),
+        [InventorySlot.Gadget] = BRInventoryGadgetSlot(self),
         -- Backpack slots
-        [InventorySlot.Backpack1] = BRInventoryBackpackSlot(),
-        [InventorySlot.Backpack2] = BRInventoryBackpackSlot(),
-        [InventorySlot.Backpack3] = BRInventoryBackpackSlot(),
-        [InventorySlot.Backpack4] = BRInventoryBackpackSlot(),
-        [InventorySlot.Backpack5] = BRInventoryBackpackSlot(),
-        [InventorySlot.Backpack6] = BRInventoryBackpackSlot(),
-        [InventorySlot.Backpack7] = BRInventoryBackpackSlot(),
-        [InventorySlot.Backpack8] = BRInventoryBackpackSlot(),
-        [InventorySlot.Backpack9] = BRInventoryBackpackSlot(),
+        [InventorySlot.Backpack1] = BRInventoryBackpackSlot(self),
+        [InventorySlot.Backpack2] = BRInventoryBackpackSlot(self),
+        [InventorySlot.Backpack3] = BRInventoryBackpackSlot(self),
+        [InventorySlot.Backpack4] = BRInventoryBackpackSlot(self),
+        [InventorySlot.Backpack5] = BRInventoryBackpackSlot(self),
+        [InventorySlot.Backpack6] = BRInventoryBackpackSlot(self),
+        [InventorySlot.Backpack7] = BRInventoryBackpackSlot(self),
+        [InventorySlot.Backpack8] = BRInventoryBackpackSlot(self),
+        [InventorySlot.Backpack9] = BRInventoryBackpackSlot(self),
     }
 
     self.m_Slots[InventorySlot.PrimaryWeaponAttachmentOptics]:SetWeaponSlot(self.m_Slots[InventorySlot.PrimaryWeapon])
@@ -147,6 +147,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
 end
 
 function BRInventory:SwapItems(p_ItemId, p_SlotId)
+    -- TODO: Use slots insted of this also if possible merge items when we can
     local s_SlotReplaced = self.m_Slots[p_SlotId].m_Item
     for l_Index, l_Slot in pairs(self.m_Slots) do
         if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
@@ -225,8 +226,6 @@ function BRInventory:SendState()
         return
     end
 
-    self:OnUpdate()
-
     NetEvents:SendToLocal(InventoryNetEvent.InventoryState, self.m_Owner, self:AsTable())
 end
 
@@ -280,7 +279,7 @@ function BRInventory:GetAmmoTypeCount(p_WeaponName)
     return s_Sum
 end
 
-function BRInventory:OnUpdate()
+function BRInventory:UpdateSoldierCustomization()
     if self.m_Owner == nil then
         return
     end

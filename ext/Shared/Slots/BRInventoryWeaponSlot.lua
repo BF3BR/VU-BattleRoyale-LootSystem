@@ -5,8 +5,8 @@ local m_Logger = Logger("BRInventoryWeaponSlot", true)
 
 class("BRInventoryWeaponSlot", BRInventorySlot)
 
-function BRInventoryWeaponSlot:__init()
-    BRInventorySlot.__init(self, { ItemType.Weapon })
+function BRInventoryWeaponSlot:__init(p_Inventory)
+    BRInventorySlot.__init(self, p_Inventory, { ItemType.Weapon })
 
     self.m_AttachmentSlots = {
         OpticsSlot = nil,
@@ -39,7 +39,7 @@ end
 
 function BRInventoryWeaponSlot:OnUpdate()
     m_Logger:Write("Weapon slot updated")
-    -- TODO logic to update weapon
+    self.m_Inventory:UpdateSoldierCustomization()
 end
 
 function BRInventoryWeaponSlot:SetAttachmentSlots(p_OpticsSlot, p_BarrelSlot, p_OtherSlot)
