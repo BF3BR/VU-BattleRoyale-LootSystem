@@ -35,10 +35,11 @@ function BRInventory:OnReceiveInventoryState(p_State)
                 }
 
                 if l_GeneratedItem.m_Definition.m_Type == ItemType.Weapon then
-                    l_ReturnVal.Tier = l_GeneratedItem.m_Definition.m_WeaponTier
+                    l_ReturnVal.Tier = l_GeneratedItem.m_Definition.m_Tier
                     l_ReturnVal.AmmoName = l_GeneratedItem.m_Definition.m_AmmoDefinition.m_Name
                 elseif l_GeneratedItem.m_Definition.m_Type == ItemType.Helmet or 
                     l_GeneratedItem.m_Definition.m_Type == ItemType.Armor then
+                    l_ReturnVal.Tier = l_GeneratedItem.m_Definition.m_Tier
                     l_ReturnVal.Durability = l_GeneratedItem.m_Definition.m_Durability
                     l_ReturnVal.CurrentDurability = l_GeneratedItem.m_CurrentDurability
                 end

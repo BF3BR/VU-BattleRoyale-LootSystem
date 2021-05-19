@@ -7,7 +7,7 @@
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
-    z-index: 800;
+    z-index: 80;
     display: none;
 
     &.open {
@@ -69,7 +69,7 @@
         }
 
         &.BackpackBox {
-            margin: 2vw 0 0;
+            margin: 1vw 0 0;
 
             .backpack-grid {
                 padding: 0;
@@ -92,7 +92,7 @@
     }
 
     .draggable {
-        z-index: 800;
+        z-index: 80;
     }
 
     .item-slot {
@@ -144,23 +144,58 @@
             &.ammoType {
                 display: none;
             }
+
+            &.tier {
+                position: absolute;
+                top: .35vw;
+                left: -.25vw;
+                width: 3vw;
+
+                img {
+                    transform: translate(0, 0);
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                }
+            }
         }
 
         div {
             &.progressWrapper {
                 width: .35vw;
-                background: #000;
+                background: transparent;
                 position: absolute;
                 right: .75vw;
                 top: .5vw;
                 bottom: .5vw;
-
-                .progress {
-                    background: #fff;
+                
+                .progressWrapperBg {
+                    flex: 1 1 auto;
+                    height: 100%;
+                    background-color: rgba(255, 255, 255, 0.4);
+                    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 24%, transparent 25%, transparent);
+                    background-size: 100% 0.175vw;
+                }
+                
+                .progressWrapperFg {
                     position: absolute;
-                    width: 100%;
-                    right: 0;
                     bottom: 0;
+                    width: 100%;
+                    transition: height 0.1s ease;
+                    background-color: #fff;
+                    box-shadow: 0 0 0.2vw 0.05vw #fff inset, 0 0 0.15vw 0.05vw rgba(255, 255, 255, 0.5);
+            
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 24%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0));
+                        background-size: 100% 0.175vw;
+                        z-index: 99;
+                    }
                 }
             }
         }
@@ -176,24 +211,77 @@
             height: 100%;
             width: 100%;
 
+            &:hover {
+                z-index: 9999 !important;
+            }
+
             & > div {
                 display: flex;
                 width: 100%;
                 height: 100%;
-            }
 
-            
-            div[class*="-Bubble"] {
-                padding: 0.75vw 1vw;
-                border: 0;
-                font-size: .75vw;
-                white-space: nowrap;
-            }
+                & > div {
+                    &:hover {
+                        z-index: 9999 !important;
+                    }
+                }
 
-            div[class*="-BaseArrow"] {
-                width: .65vw;
-                height: .65vw;
-                border: 0;
+                h5 {
+                    margin: 0 0 1vw;
+                    text-align: left;
+                    font-size: 1vw;
+                }
+
+                p {
+                    margin: 0;
+                    text-align: left;
+                    font-size: .65vw;
+                }
+
+                &.tier-1 {
+                    background: radial-gradient(circle, rgba(133, 193, 223, 0.07) 0%, rgba(173, 200, 218, 0.3) 100%);
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        height: 100%;
+                        width: 0.1vw;
+                        background: #fff;
+                        box-shadow: 0 0 .5vw .075vw rgba(255, 255, 255, .45);
+                    }
+                }
+
+                &.tier-2 {
+                    background: radial-gradient(circle, rgba(144, 200, 228, 0.07) 0%, rgba(82, 176, 223, 0.3) 100%);
+    
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        height: 100%;
+                        width: 0.1vw;
+                        background: rgb(82, 176, 223);
+                        box-shadow: 0 0 .5vw .075vw rgba(82, 176, 223, .45);
+                    }
+                }
+
+                &.tier-3 {
+                    background: radial-gradient(circle, rgba(255, 153, 0, 0.07) 0%, rgba(255, 153, 0, 0.3) 100%);
+    
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        height: 100%;
+                        width: 0.1vw;
+                        background: rgb(255, 153, 0);
+                        box-shadow: 0 0 .5vw .075vw rgba(255, 153, 0, .45);
+                    }
+                }
             }
         }
     }
@@ -212,41 +300,9 @@
             grid-column: span 3 / auto;
             height: 6.5vw;
 
-            background: rgba(255, 153, 0, 0.2);
-
             img {
                 width: 12vw;
                 left: 50%;
-            }
-
-            &.tier3 {
-                background: rgb(255, 153, 0);
-                background: linear-gradient(90deg, rgba(255, 153, 0, 0.3) 0%, rgba(255, 153, 0, 0) 30%);
-
-                &::after {
-                    content: "";
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    height: 100%;
-                    width: 0.125vw;
-                    background: rgb(255, 153, 0);
-                }
-            }
-
-            &.tier2 {
-                background: rgb(82, 176, 223);
-                background: linear-gradient(90deg, rgba(82, 176, 223, 0.3) 0%, rgba(255, 153, 0, 0) 30%);
-
-                &::after {
-                    content: "";
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    height: 100%;
-                    width: 0.125vw;
-                    background: #52b0df;
-                }
             }
 
             span {
@@ -261,11 +317,10 @@
                     display: block;
                     position: absolute;
                     bottom: 0.55vw;
-                    left: 0.55vw;
-                    color: rgb(255, 153, 0);
+                    left: 0.85vw;
                     font-size: 1.25vw;
                     height: 1.25vw;
-                    text-shadow: 0 0 .75vw rgba(255, 153, 0, 0.45);
+                    text-shadow: 0 0 .75vw rgba(255, 255, 255, 0.45);
                 }
 
                 &.count {
@@ -279,20 +334,13 @@
                     right: 0.55vw;
                     font-size: 0.85vw;
                     text-shadow: 0 0 .75vw rgba(255, 255, 255, 0.45);
-
-                    &.ammo556mm {
-                        color: #ff9f80;
-                    }
-
-                    &.ammo9mm {
-                        color: #52b0df;
-                    }
                 }
 
-                &.weaponTier {
+                &.tier {
                     position: absolute;
                     top: .55vw;
                     right: -.45vw;
+                    left: auto;
                     width: 4vw;
 
                     img {
@@ -304,22 +352,6 @@
                 }
             }
         }
-
-        /*.attachment-holder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75vw 0.5vw;
-            border-right: 1px solid rgba(255, 255, 255, 0.25);
-
-            img {
-                max-width: 1.25vw;
-            }
-
-            &:last-of-type {
-                border: 0;
-            }
-        }*/
     }
 }
 
@@ -336,6 +368,24 @@
     background: #000;
     border: .1vw dashed #fff;
     position: relative;
+
+    & > div {
+        display: flex;
+        width: 100%;
+        height: 100%;
+
+        h5 {
+            margin: 0 0 1vw;
+            text-align: left;
+            font-size: 1vw;
+        }
+
+        p {
+            margin: 0;
+            text-align: left;
+            font-size: .65vw;
+        }
+    }
 
     img {
         position: absolute;
@@ -356,10 +406,10 @@
         bottom: 0.25vw;
         color: #d5dde5;
 
-        &.weaponTier,
+        &.tier,
         &.ammoType,
         &.name {
-            display: none;
+            display: none !important;
         }
 
         &.count {

@@ -43,6 +43,24 @@ return {
         0.1,
         DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
         "UI/Art/Persistence/KitItem/Fancy/ammobag",
-        120
+        90
+    ),
+    ["ammo-762mm"] = BRItemAmmoDefinition(
+        "ammo-762mm",
+        "7.62mm", 
+        "The 7.62mm ammo is used for Snipers.",
+        0.1,
+        DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
+        "UI/Art/Persistence/KitItem/Fancy/ammobag",
+        15
+    ),
+    ["ammo-12-gauge"] = BRItemAmmoDefinition(
+        "ammo-12-gauge",
+        "12 Gauge", 
+        "The 7.62mm ammo is used for Snipers.",
+        0.1,
+        DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
+        "UI/Art/Persistence/KitItem/Fancy/ammobag",
+        30
     ),
 }

@@ -1,7 +1,6 @@
-require "__shared/Enums/CustomEvents"
-require "Types/BRInventory"
-
 class "BRInventoryManager"
+
+require "__shared/Enums/CustomEvents"
 
 local m_Logger = Logger("BRInventoryManager", true)
 
@@ -38,6 +37,44 @@ function BRInventoryManager:OnPlayerLeft(p_Player)
 	if self.m_Inventories[p_Player.id] ~= nil then
 		self:RemoveInventory(p_Player.id)
 	end
+end
+
+function BRInventoryManager:OnPlayerChangingWeapon(p_Player)
+    if p_Player == nil then
+        return
+    end
+
+    if p_Player.alive == false then
+        return
+    end
+
+    if p_Player.soldier == nil then
+        return
+    end
+
+    local s_Inventory = self.m_Inventories[p_Player.id]
+
+    if s_Inventory == nil then
+        return
+    end
+
+    local s_CurrentWeapon = p_Player.soldier.weaponsComponent.currentWeapon
+    local s_WeaponFiringData = WeaponFiringData(s_CurrentWeapon.weaponFiring.data)
+
+    local s_MagazineCapacity = s_WeaponFiringData.primaryFire.ammo.magazineCapacity
+    local s_AmmoCount = s_Inventory:GetAmmoTypeCount(s_CurrentWeapon.name)
+
+    if s_AmmoCount < s_MagazineCapacity then
+        s_CurrentWeapon.primaryAmmo = s_AmmoCount
+        s_CurrentWeapon.secondaryAmmo = 0
+    else
+        s_CurrentWeapon.primaryAmmo = s_MagazineCapacity
+        s_CurrentWeapon.secondaryAmmo = s_AmmoCount - s_MagazineCapacity
+    end
+end
+
+function BRInventoryManager:OnWeaponFiringUpdate(p_WeaponFiring)
+	-- TODO
 end
 
 -- Removes a BRInventory

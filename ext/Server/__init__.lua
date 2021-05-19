@@ -34,45 +34,25 @@ end
 
 function VuBattleRoyaleLootSystemServer:OnExtensionLoaded()
     Events:Subscribe("Player:SpawnOnSelectedSpawnPoint", self, self.OnPlayerAuthenticated)
+    Events:Subscribe("Player:Left", self, self.OnPlayerLeft)
     Events:Subscribe("Player:ChangingWeapon", self, self.OnPlayerChangingWeapon)
+    Events:Subscribe("WeaponFiring:Update", self, self.OnWeaponFiringUpdate)
+end
+
+function VuBattleRoyaleLootSystemServer:OnPlayerLeft(p_Player)
+    m_InventoryManager:OnPlayerLeft(p_Player)
 end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerChangingWeapon(p_Player)
-    -- TODO: Probably need to move this somewhere near the invenotry
-    if p_Player == nil then
-        return
-    end
+    m_InventoryManager:OnPlayerChangingWeapon(p_Player)
+end
 
-    if p_Player.alive == false then
-        return
-    end
-
-    if p_Player.soldier == nil then
-        return
-    end
-
-    local s_Inventory = m_InventoryManager.m_Inventories[p_Player.id]
-
-    if s_Inventory == nil then
-        return
-    end
-
-    local s_CurrentWeapon = p_Player.soldier.weaponsComponent.currentWeapon
-    local s_WeaponFiringData = WeaponFiringData(s_CurrentWeapon.weaponFiring.data)
-
-    local s_MagazineCapacity = s_WeaponFiringData.primaryFire.ammo.magazineCapacity
-    local s_AmmoCount = s_Inventory:GetAmmoTypeCount(s_CurrentWeapon.name)
-
-    if s_AmmoCount < s_MagazineCapacity then
-        s_CurrentWeapon.primaryAmmo = s_AmmoCount
-        s_CurrentWeapon.secondaryAmmo = 0
-    else
-        s_CurrentWeapon.primaryAmmo = s_MagazineCapacity
-        s_CurrentWeapon.secondaryAmmo = s_AmmoCount - s_MagazineCapacity
-    end
+function VuBattleRoyaleLootSystemServer:OnWeaponFiringUpdate(p_WeaponFiring)
+    m_InventoryManager:OnWeaponFiringUpdate(p_WeaponFiring)
 end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
+    -- Test only function
     local s_Inventory = BRInventory(p_Player)
 
     local s_ItemPP2000 = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-pp2000"])
@@ -90,10 +70,10 @@ function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
     s_Inventory:AddItem(s_ItemAmmo2.m_Id)
     s_Inventory:AddItem(s_ItemAmmo3.m_Id)
 
-    local s_ItemArmor = m_ItemDatabase:CreateItem(m_ArmorDefinitions["armor-basic"])
+    local s_ItemArmor = m_ItemDatabase:CreateItem(m_ArmorDefinitions["armor-tier-2"])
     s_Inventory:AddItem(s_ItemArmor.m_Id)
 
-    local s_ItemHelmet = m_ItemDatabase:CreateItem(m_HelmetDefinitions["helmet-basic"])
+    local s_ItemHelmet = m_ItemDatabase:CreateItem(m_HelmetDefinitions["helmet-tier-3"])
     s_Inventory:AddItem(s_ItemHelmet.m_Id)
 
     m_Logger:Write(s_Inventory:AsTable())

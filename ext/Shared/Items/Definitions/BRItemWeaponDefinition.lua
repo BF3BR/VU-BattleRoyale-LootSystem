@@ -14,7 +14,7 @@ function BRItemWeaponDefinition:__init(
     p_Mesh,
     p_SoldierWeaponBlueprint,
     p_AmmoDefinition,
-    p_WeaponTier,
+    p_Tier,
     p_EbxName,
     p_EbxAttachments
 )
@@ -33,7 +33,7 @@ function BRItemWeaponDefinition:__init(
     
     self.m_SoldierWeaponBlueprint = p_SoldierWeaponBlueprint
     self.m_AmmoDefinition = p_AmmoDefinition
-    self.m_WeaponTier = p_WeaponTier
+    self.m_Tier = p_Tier
     self.m_EbxName = p_EbxName
     self.m_EbxAttachments = p_EbxAttachments
 end
@@ -47,7 +47,7 @@ return {
         DC(Guid("F365F081-D11B-B278-F6E3-062116758181"), Guid("8940BC20-0F27-1C19-58E6-CB07E1ADA643")),
         DC(Guid("1556281A-0F0B-4EB3-B280-661018F8D52F"), Guid("3BA55147-6619-4697-8E2B-AC6B1D183C0E")),
         m_AmmoDefinitions["ammo-556mm"],
-        WeaponTier.Tier2,
+        Tier.Tier2,
         "Weapons/AK74M/AK74",
         {
 			[g_AttachmentIds.EOTech] = DC(Guid("AE7B4C7E-3908-11E0-A679-E62A6140CBF0"), Guid("53B10FA8-2C64-BDB5-B195-6676EA575730")),
@@ -78,7 +78,7 @@ return {
         DC(Guid("BCAF822E-48AA-055F-E617-ECDD89799E22"), Guid("BE6743C4-8558-52DA-3AFE-5D5EAA7E188F")),
         DC(Guid("E104EF1F-807C-4576-A22A-CC849AE3EDB9"), Guid("50849B49-F3DA-4C92-9830-D4A2932BC9E7")),
         m_AmmoDefinitions["ammo-9mm"],
-        WeaponTier.Tier1,
+        Tier.Tier1,
         "Weapons/PP2000/PP2000",
         {
 			[g_AttachmentIds.EOTech] = DC(Guid("F2D12B69-4A45-11E0-AA9B-CBCA7495985E"), Guid("7F8F73B8-AEF7-241F-2559-C37941DC4565")),

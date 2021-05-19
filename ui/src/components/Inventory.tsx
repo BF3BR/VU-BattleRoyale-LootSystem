@@ -7,10 +7,11 @@ import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { Draggable } from './dnd/Draggable';
 import { Droppable } from './dnd/Droppable';
 
-import InventorySlot, { InventoryItem } from "../helpers/InventoryHelper";
+import InventoryTooltip from "./tooltip/InventoryTooltip";
+
+import { sendToLua } from "../Helpers";
 
 import "./Inventory.scss";
-import { sendToLua } from "../Helpers";
 
 interface StateFromReducer {
     slots: any
@@ -104,45 +105,54 @@ const Inventory: React.FC<Props> = ({
 
         return (
             <Draggable id={slot.Id} currentSlot={key}>
-                <div>
-                    {getSlotDrag(slot)}
-                </div>
+                {getSlotDrag(slot)}
             </Draggable>
         )
     }
 
     const getSlotDrag = (slot: any) => {
         return (
-            <>
-                {slot.UIIcon !== null &&
-                    <img src={"fb://" + slot.UIIcon} />
-                }
-                <div className="information">
-                <span className="name">{slot.Name ?? ""}</span>
-                    {slot.Quantity > 1 &&
-                        <span className="count">{slot.Quantity ?? 1}</span>
+            <div className={(slot.Tier !== undefined ? "tier-" + slot.Tier : "")}>
+                <InventoryTooltip
+                    content={
+                        [
+                            <h5>{slot.Name ?? ""}</h5>,
+                            <p>{slot.Description ?? ""}</p>,
+                        ]
                     }
-                    <span className="ammoType">{slot.AmmoName ?? "-"}</span>
-                    {(slot.CurrentDurability !== undefined && slot.Durability !== undefined) &&
-                        <div className="progressWrapper">
-                            <div className="progress" style={{ height: (slot.CurrentDurability / slot.Durability * 100) + "%" }}></div>
-                        </div>
+                >
+                    {slot.UIIcon !== null &&
+                        <img src={"fb://" + slot.UIIcon} />
                     }
-                </div>
-                {slot.Tier !== undefined &&
-                    <span className="weaponTier">
-                        {slot.Tier === 1 &&
-                            <img src="fb://UI/Art/Persistence/Ranks/Rank001" />
+                    <div className="information">
+                    <span className="name">{slot.Name ?? ""}</span>
+                        {slot.Quantity > 1 &&
+                            <span className="count">{slot.Quantity ?? 1}</span>
                         }
-                        {slot.Tier === 2 &&
-                            <img src="fb://UI/Art/Persistence/Ranks/Rank002" />
+                        <span className="ammoType">{slot.AmmoName ?? "-"}</span>
+                        {(slot.CurrentDurability !== undefined && slot.Durability !== undefined) &&
+                            <div className="progressWrapper">
+                                <div className="progressWrapperBg">
+                                    <div className="progressWrapperFg" style={{ height: (slot.CurrentDurability / slot.Durability * 100) + "%" }}></div>
+                                </div>
+                            </div>
                         }
-                        {slot.Tier === 3 &&
-                            <img src="fb://UI/Art/Persistence/Ranks/Rank003" />
-                        }
-                    </span>
-                }
-            </>
+                    </div>
+                    {slot.Tier !== undefined &&
+                        <span className="tier">
+                            {slot.Tier === 1 &&
+                                <img src="fb://UI/Art/Persistence/Ranks/Rank001" />
+                            }
+                            {slot.Tier === 2 &&
+                                <img src="fb://UI/Art/Persistence/Ranks/Rank002" />
+                            }
+                            {slot.Tier === 3 &&
+                                <img src="fb://UI/Art/Persistence/Ranks/Rank003" />
+                            }
+                        </span>
+                    }
+                </InventoryTooltip>
+            </div>
         )
     }
 

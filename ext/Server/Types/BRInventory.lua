@@ -11,6 +11,7 @@ require "__shared/Slots/BRInventoryGadgetSlot"
 require "__shared/Slots/BRInventoryBackpackSlot"
 
 local m_ItemDatabase = require "Types/BRItemDatabase"
+local m_InventoryManager = require "BRInventoryManager"
 
 class "BRInventory"
 
@@ -289,6 +290,7 @@ function BRInventory:UpdateSoldierCustomization()
     end
 
     self.m_Owner.soldier:ApplyCustomization(self:CreateCustomizeSoldierData())
+    m_InventoryManager:OnPlayerChangingWeapon(self.m_Owner)
 end
 
 function BRInventory:CreateCustomizeSoldierData()

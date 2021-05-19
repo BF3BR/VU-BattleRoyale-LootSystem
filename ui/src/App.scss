@@ -76,3 +76,38 @@ h6 {
     margin: 0;
     padding: 0;
 }
+
+.card {
+    .card-header {
+        background-color: rgba(7, 7, 7, 0.8);
+        padding: 0.2vw 0.4vw;
+        margin-bottom: 0.1vw;
+        text-shadow: 0 0 .5vw rgba(255, 255, 255, 0.4);
+
+        h1 {
+            line-height: 1vw;
+            color: #d5dde5;
+            font-size: .8vw;
+            text-transform: uppercase;
+            margin: 0;
+            font-style: normal;
+            font-weight: 600;
+
+            span {
+                float: right;
+
+                b {
+                    color: #ff9900;
+                    text-shadow: 0 0 .5vw rgba(255, 153, 0, 0.4);
+                    font-weight: 400;
+                    letter-spacing: .05vw;
+                }
+            }
+        }
+    }
+
+    .card-content {
+        background-color: rgba(7, 7, 7, 0.5);
+        padding: .75vw 1vw;
+    }
+}

@@ -9,7 +9,7 @@ ItemType = {
     Gadget = 8,
 }
 
-WeaponTier = {
+Tier = {
     Tier1 = 1,
     Tier2 = 2,
     Tier3 = 3,
