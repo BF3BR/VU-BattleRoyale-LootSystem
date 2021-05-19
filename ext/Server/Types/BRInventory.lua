@@ -244,6 +244,42 @@ end
 --==============================
 -- Player / Soldier related functions
 --==============================
+function BRInventory:GetAmmoTypeCount(p_WeaponName)
+    local s_Sum = 0
+    local s_AmmoDefinition = nil
+
+    if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            s_AmmoDefinition = self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_AmmoDefinition
+        end
+    end
+
+    -- If we already found the ammo definition we don't need to check the secondary weapon slot
+    if s_AmmoDefinition == nil then
+        if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item ~= nil then
+            if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
+                s_AmmoDefinition = self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_AmmoDefinition
+            end
+        end
+    end
+
+    if s_AmmoDefinition == nil then
+        return 0
+    end
+
+    for l_Key, l_Slot in pairs(self.m_Slots) do
+        if l_Key >= InventorySlot.Backpack1 then
+            if l_Slot.m_Item ~= nil then
+                if l_Slot.m_Item.m_Definition:Equals(s_AmmoDefinition) then
+                    s_Sum = s_Sum + l_Slot.m_Item.m_Quantity
+                end
+            end
+        end
+    end
+
+    return s_Sum
+end
+
 function BRInventory:OnUpdate()
     if self.m_Owner == nil then
         return
