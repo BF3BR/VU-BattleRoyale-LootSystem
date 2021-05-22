@@ -124,7 +124,7 @@ function BRInventoryManager:OnPlayerGiveCommand(p_Player, p_Args)
 	end
 
 	local s_Inventory = self.m_Inventories[p_Player.id]
-	local s_CreatedItem = m_ItemDatabase:CreateItem(s_Definition, p_Args[2] ~= nil and p_Args[2] or 1)
+	local s_CreatedItem = m_ItemDatabase:CreateItem(s_Definition, p_Args[2] ~= nil and tonumber(p_Args[2]) or 1)
 
 	s_Inventory:AddItem(s_CreatedItem.m_Id)
 	m_Logger:Write(s_Definition.m_Name .. " - Item given to player: " .. p_Player.name)

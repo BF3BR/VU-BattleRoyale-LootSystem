@@ -304,7 +304,7 @@ function BRInventory:RemoveAmmoForWeapon(p_WeaponName)
         end
     end
 
-    if s_AmmoSlot ~= nil then
+    if s_AmmoSlot ~= nil and s_AmmoSlot.m_Item ~= nil then
         if s_AmmoSlot.m_Item.m_Quantity > 1 then
             s_AmmoSlot.m_Item.m_Quantity = s_AmmoSlot.m_Item.m_Quantity - 1
         else
