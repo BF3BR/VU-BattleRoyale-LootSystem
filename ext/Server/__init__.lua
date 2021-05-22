@@ -36,7 +36,7 @@ function VuBattleRoyaleLootSystemServer:OnExtensionLoaded()
     Events:Subscribe("Player:SpawnOnSelectedSpawnPoint", self, self.OnPlayerAuthenticated)
     Events:Subscribe("Player:Left", self, self.OnPlayerLeft)
     Events:Subscribe("Player:ChangingWeapon", self, self.OnPlayerChangingWeapon)
-    Events:Subscribe("WeaponFiring:Update", self, self.OnWeaponFiringUpdate)
+    Events:Subscribe("GunSway:UpdateRecoil", self, self.OnGunSwayUpdateRecoil)
 end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerLeft(p_Player)
@@ -47,8 +47,8 @@ function VuBattleRoyaleLootSystemServer:OnPlayerChangingWeapon(p_Player)
     m_InventoryManager:OnPlayerChangingWeapon(p_Player)
 end
 
-function VuBattleRoyaleLootSystemServer:OnWeaponFiringUpdate(p_WeaponFiring)
-    m_InventoryManager:OnWeaponFiringUpdate(p_WeaponFiring)
+function VuBattleRoyaleLootSystemServer:OnGunSwayUpdateRecoil(p_GunSway, p_Weapon, p_WeaponFiring, p_DeltaTime)
+    m_InventoryManager:OnGunSwayUpdateRecoil(p_GunSway, p_Weapon, p_WeaponFiring, p_DeltaTime)
 end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)

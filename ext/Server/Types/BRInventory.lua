@@ -280,6 +280,55 @@ function BRInventory:GetAmmoTypeCount(p_WeaponName)
     return s_Sum
 end
 
+function BRInventory:RemoveAmmoForWeapon(p_WeaponName)
+    local s_AmmoDefinition = nil
+
+    if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            s_AmmoDefinition = self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_AmmoDefinition
+        end
+    end
+
+    -- If we already found the ammo definition we don't need to check the secondary weapon slot
+    if s_AmmoDefinition == nil then
+        if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item ~= nil then
+            if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
+                s_AmmoDefinition = self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_AmmoDefinition
+            end
+        end
+    end
+
+    if s_AmmoDefinition == nil then
+        return
+    end
+
+    local s_AmmoSlot = nil
+    for l_Key, l_Slot in pairs(self.m_Slots) do
+        if l_Key >= InventorySlot.Backpack1 then
+            if l_Slot.m_Item ~= nil then
+                if l_Slot.m_Item.m_Definition:Equals(s_AmmoDefinition) then
+                    if s_AmmoSlot == nil then
+                        s_AmmoSlot = l_Slot
+                    else
+                        if s_AmmoSlot.m_Item.m_Quantity > l_Slot.m_Item.m_Quantity then
+                            s_AmmoSlot = l_Slot
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    if s_AmmoSlot ~= nil then
+        if s_AmmoSlot.m_Item.m_Quantity > 1 then
+            s_AmmoSlot.m_Item.m_Quantity = s_AmmoSlot.m_Item.m_Quantity - 1
+        else
+            self:RemoveItem(s_AmmoSlot.m_Item.m_Id)
+            
+        end
+    end
+end
+
 function BRInventory:UpdateSoldierCustomization()
     if self.m_Owner == nil then
         return
