@@ -222,6 +222,23 @@ function BRInventory:GetAvailableSlot(p_Item)
     return nil
 end
 
+function BRInventory:GetAmmoDefinition(p_WeaponName)
+    if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            return self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_AmmoDefinition
+        end
+    end
+
+    -- If we already found the ammo definition we don't need to check the secondary weapon slot
+    if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            return self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_AmmoDefinition
+        end
+    end
+
+    return nil
+end
+
 function BRInventory:SendState()
     if self.m_Owner == nil then
         return
@@ -246,23 +263,7 @@ end
 --==============================
 function BRInventory:GetAmmoTypeCount(p_WeaponName)
     local s_Sum = 0
-    local s_AmmoDefinition = nil
-
-    if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item ~= nil then
-        if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
-            s_AmmoDefinition = self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_AmmoDefinition
-        end
-    end
-
-    -- If we already found the ammo definition we don't need to check the secondary weapon slot
-    if s_AmmoDefinition == nil then
-        if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item ~= nil then
-            if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
-                s_AmmoDefinition = self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_AmmoDefinition
-            end
-        end
-    end
-
+    local s_AmmoDefinition = self:GetAmmoDefinition(p_WeaponName)
     if s_AmmoDefinition == nil then
         return 0
     end
@@ -281,23 +282,7 @@ function BRInventory:GetAmmoTypeCount(p_WeaponName)
 end
 
 function BRInventory:RemoveAmmoForWeapon(p_WeaponName)
-    local s_AmmoDefinition = nil
-
-    if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item ~= nil then
-        if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
-            s_AmmoDefinition = self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_AmmoDefinition
-        end
-    end
-
-    -- If we already found the ammo definition we don't need to check the secondary weapon slot
-    if s_AmmoDefinition == nil then
-        if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item ~= nil then
-            if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
-                s_AmmoDefinition = self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_AmmoDefinition
-            end
-        end
-    end
-
+    local s_AmmoDefinition = self:GetAmmoDefinition(p_WeaponName)
     if s_AmmoDefinition == nil then
         return
     end
@@ -324,7 +309,6 @@ function BRInventory:RemoveAmmoForWeapon(p_WeaponName)
             s_AmmoSlot.m_Item.m_Quantity = s_AmmoSlot.m_Item.m_Quantity - 1
         else
             self:RemoveItem(s_AmmoSlot.m_Item.m_Id)
-            
         end
     end
 end

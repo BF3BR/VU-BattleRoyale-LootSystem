@@ -73,8 +73,8 @@ function BRInventoryManager:OnPlayerChangingWeapon(p_Player)
     end
 end
 
-function BRInventoryManager:OnGunSwayUpdateRecoil(p_GunSway, p_Weapon, p_WeaponFiring, p_DeltaTime)    
-    if p_GunSway.isFiring and p_GunSway.fireShot and p_GunSway.timeSinceLastShot == 0 then
+function BRInventoryManager:OnGunSwayUpdateRecoil(p_GunSway, p_Weapon, p_WeaponFiring, p_DeltaTime)
+    if p_GunSway.isFiring and p_GunSway.fireShot then
         local s_Players = PlayerManager:GetPlayers()
         for _, l_Player in pairs(s_Players) do
             if l_Player.soldier.weaponsComponent.currentWeapon.instanceId == p_Weapon.instanceId then
