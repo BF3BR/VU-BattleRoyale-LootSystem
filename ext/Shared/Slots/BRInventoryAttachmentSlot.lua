@@ -36,6 +36,22 @@ function BRInventoryAttachmentSlot:IsAccepted(p_Item)
     return false
 end
 
+function BRInventoryAttachmentSlot:GetUnlockAsset()
+    if self.m_Item == nil and self.m_AttachmentType ~= AttachmentType.Optics then
+        return nil
+    end
+
+    -- Resolve attachment id
+    local s_AttachmentId = g_AttachmentIds.NoOptics
+    if self.m_Item ~= nil then
+        s_AttachmentId = self.m_Item.m_Definition.m_AttachmentId
+    end
+
+    return UnlockAsset(
+        self.m_WeaponSlot.m_Item.m_Definition.m_EbxAttachments[s_AttachmentId]:GetInstance()
+    )
+end
+
 function BRInventoryAttachmentSlot:OnUpdate()
     self.m_WeaponSlot:OnUpdate()
 end

@@ -37,6 +37,29 @@ function BRInventoryWeaponSlot:Drop()
     return s_DroppedItems
 end
 
+function BRInventoryWeaponSlot:GetUnlockWeaponAndSlot()
+    if self.m_Item == nil then
+        return nil
+    end
+
+    -- Create weapon unlock
+    local s_Weapon = UnlockWeaponAndSlot()
+    s_Weapon.weapon = SoldierWeaponUnlockAsset(
+        self.m_Item.m_Definition.m_SoldierWeaponBlueprint:GetInstance()
+    )
+
+    -- Add attachments
+    for _, l_Slot in pairs(self.m_AttachmentSlots) do
+        local s_Unlock = l_Slot:GetUnlockAsset()
+
+        if s_Unlock ~= nil then
+            s_Weapon.unlockAssets:add(s_Unlock)
+        end
+    end
+
+    return s_Weapon
+end
+
 function BRInventoryWeaponSlot:OnUpdate()
     m_Logger:Write("Weapon slot updated")
     self.m_Inventory:UpdateSoldierCustomization()
