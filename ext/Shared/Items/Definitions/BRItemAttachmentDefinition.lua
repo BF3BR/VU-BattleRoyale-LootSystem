@@ -12,7 +12,6 @@ function BRItemAttachmentDefinition:__init(
     p_Weight,
     p_UIIcon,
     p_Mesh,
-    p_CompatibleWith,
     p_AttachmentType,
     p_AttachmentId
 )
@@ -30,7 +29,6 @@ function BRItemAttachmentDefinition:__init(
     self.m_Price = 0
     
     -- A list of weapon definitions from BRItemWeaponDefinition
-    self.m_CompatibleWith = p_CompatibleWith
     self.m_AttachmentType = p_AttachmentType
     self.m_AttachmentId = p_AttachmentId -- TODO: Rename this lol
 end
@@ -44,10 +42,6 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/acog",
         DC(Guid("D01B86C8-5176-E446-85CB-DE8871DAC528"), Guid("D7875B6B-37F1-4C5D-60CD-273DDA3E553F")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-            m_WeaponDefinitions["weapon-pp2000"],
-        },
         AttachmentType.Optics,
         g_AttachmentIds.Acog
     ),
@@ -58,10 +52,6 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/kobra",
         DC(Guid("0B08EAEF-553D-CAD3-D7A4-CA770735FFFA"), Guid("F8FC2931-D0E1-3102-5FD0-E474B9CAAB66")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-            m_WeaponDefinitions["weapon-pp2000"],
-        },
         AttachmentType.Optics,
         g_AttachmentIds.Kobra
     ),
@@ -72,10 +62,6 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/eotech",
         DC(Guid("0B08EAEF-553D-CAD3-D7A4-CA770735FFFA"), Guid("F8FC2931-D0E1-3102-5FD0-E474B9CAAB66")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-            m_WeaponDefinitions["weapon-pp2000"],
-        },
         AttachmentType.Optics,
         g_AttachmentIds.EOTech
     ),
@@ -86,10 +72,6 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/pka",
         DC(Guid("0B08EAEF-553D-CAD3-D7A4-CA770735FFFA"), Guid("F8FC2931-D0E1-3102-5FD0-E474B9CAAB66")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-            m_WeaponDefinitions["weapon-pp2000"],
-        },
         AttachmentType.Optics,
         g_AttachmentIds.PKA
     ),
@@ -100,10 +82,6 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/pkas",
         DC(Guid("0B08EAEF-553D-CAD3-D7A4-CA770735FFFA"), Guid("F8FC2931-D0E1-3102-5FD0-E474B9CAAB66")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-            m_WeaponDefinitions["weapon-pp2000"],
-        },
         AttachmentType.Optics,
         g_AttachmentIds.PK_AS
     ),
@@ -114,9 +92,6 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/riflescope",
         DC(Guid("0B08EAEF-553D-CAD3-D7A4-CA770735FFFA"), Guid("F8FC2931-D0E1-3102-5FD0-E474B9CAAB66")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-        },
         AttachmentType.Optics,
         g_AttachmentIds.RifleScope
     ),
@@ -129,10 +104,6 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/soundsuppressor",
         DC(Guid("0B08EAEF-553D-CAD3-D7A4-CA770735FFFA"), Guid("F8FC2931-D0E1-3102-5FD0-E474B9CAAB66")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-            m_WeaponDefinitions["weapon-pp2000"],
-        },
         AttachmentType.Barrel,
         g_AttachmentIds.Silencer
     ),
@@ -143,10 +114,6 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/flashsuppressor",
         DC(Guid("0B08EAEF-553D-CAD3-D7A4-CA770735FFFA"), Guid("F8FC2931-D0E1-3102-5FD0-E474B9CAAB66")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-            m_WeaponDefinitions["weapon-pp2000"],
-        },
         AttachmentType.Barrel,
         g_AttachmentIds.FlashSuppressor
     ),
@@ -157,10 +124,6 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/heavybarrel",
         DC(Guid("0B08EAEF-553D-CAD3-D7A4-CA770735FFFA"), Guid("F8FC2931-D0E1-3102-5FD0-E474B9CAAB66")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-            m_WeaponDefinitions["weapon-pp2000"],
-        },
         AttachmentType.Barrel,
         g_AttachmentIds.HeavyBarrel
     ),
@@ -171,10 +134,6 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/flashlight",
         DC(Guid("0B08EAEF-553D-CAD3-D7A4-CA770735FFFA"), Guid("F8FC2931-D0E1-3102-5FD0-E474B9CAAB66")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-            m_WeaponDefinitions["weapon-pp2000"],
-        },
         AttachmentType.Barrel,
         g_AttachmentIds.Flashlight
     ),
@@ -187,9 +146,6 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/foregrip",
         DC(Guid("0B08EAEF-553D-CAD3-D7A4-CA770735FFFA"), Guid("F8FC2931-D0E1-3102-5FD0-E474B9CAAB66")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-        },
         AttachmentType.Other,
         g_AttachmentIds.Foregrip
     ),
@@ -200,13 +156,7 @@ return {
         25,
         "UI/Art/Persistence/WeaponAccessory/Fancy/targetpointer",
         DC(Guid("0B08EAEF-553D-CAD3-D7A4-CA770735FFFA"), Guid("F8FC2931-D0E1-3102-5FD0-E474B9CAAB66")), -- TODO FIXME
-        {
-            m_WeaponDefinitions["weapon-ak74m"],
-            m_WeaponDefinitions["weapon-pp2000"],
-        },
         AttachmentType.Other,
         g_AttachmentIds.TargetPointer
     ),
-    
-    
 }

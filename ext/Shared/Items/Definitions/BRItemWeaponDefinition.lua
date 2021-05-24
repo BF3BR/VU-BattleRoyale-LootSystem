@@ -39,6 +39,7 @@ function BRItemWeaponDefinition:__init(
 end
 
 return {
+    -- AR
     ["weapon-ak74m"] = BRItemWeaponDefinition(
         "weapon-ak74m",
         "AK-74M", 
@@ -70,6 +71,7 @@ return {
 			[g_AttachmentIds.Bipod] = DC(Guid("5E6BD6BC-390E-11E0-A679-E62A6140CBF0"), Guid("049B5E44-9CA2-9567-0CEE-37B1FB6449D8")),
 		}
     ),
+    -- SMG
     ["weapon-pp2000"] = BRItemWeaponDefinition(
         "weapon-pp2000",
         "PP-2000", 
@@ -97,6 +99,43 @@ return {
 			[g_AttachmentIds.Silencer] = DC(Guid("38C5AA18-4A46-11E0-AA9B-CBCA7495985E"), Guid("FE2DF152-BCE9-0AB8-6C03-5B4D16D8E526")),
 		}
     ),
+    -- Shotgun
+    ["weapon-r870"] = BRItemWeaponDefinition(
+        "weapon-r870",
+        "Model 870", 
+        "The Remington Model 870 is an American 12-gauge pump-action shotgun designed by Remington in 1951.",
+        "UI/Art/Persistence/Weapons/Fancy/remington870",
+        DC(Guid("244BD656-B62A-715A-FC6E-BCE517D4CE95"), Guid("B72B2A83-8B14-F5B3-3A31-844B2EC15EB6")),
+        DC(Guid("0B1B0AF6-75F5-4CA4-A945-372090333A83"), Guid("07A4C87A-D325-4A73-8C5A-C001ACD13334")),
+        m_AmmoDefinitions["ammo-12-gauge"],
+        Tier.Tier1,
+        "Weapons/Remington870/Remington870MCS",
+        {
+			[g_AttachmentIds.Acog] = DC(Guid("71C5B115-4A29-11E0-A181-90CCED4B9CC9"), Guid("CEE0438E-062B-E1BF-582C-20DB3F413DDC")),
+			[g_AttachmentIds.TargetPointer] = DC(Guid("D1BBE266-4A29-11E0-A181-90CCED4B9CC9"), Guid("88960C54-8753-975D-3254-95435B285084")),
+			[g_AttachmentIds.EOTech] = DC(Guid("E17A3036-4A29-11E0-A181-90CCED4B9CC9"), Guid("4E616BB3-FC59-4700-6B9F-06BA21A2B47C")),
+			[g_AttachmentIds.PKA] = DC(Guid("A05EDC46-4A29-11E0-A181-90CCED4B9CC9"), Guid("CBC40AC4-8415-0614-76BD-B933CF8BF2DB")),
+			[g_AttachmentIds.RX01] = DC(Guid("CACC8636-4A29-11E0-A181-90CCED4B9CC9"), Guid("9C3F4908-6ADD-9A92-2ED6-813D4F1BAA7C")),
+			[g_AttachmentIds.BuckshotShells] = DC(Guid("9F96740B-CE02-4120-B280-6A52A5BFE67B"), Guid("F2D71573-79F6-47FF-ADC4-305C24ADF81F")),
+			[g_AttachmentIds.ExtendedMag] = DC(Guid("91B6C3F6-4A2A-11E0-A181-90CCED4B9CC9"), Guid("524F4B44-EABF-494F-9A1C-87A790CA65E6")),
+			[g_AttachmentIds.IRNV] = DC(Guid("8B94E666-4A29-11E0-A181-90CCED4B9CC9"), Guid("1BAFE04F-AC41-C351-F9C3-038480696D75")),
+			[g_AttachmentIds.PK_AS] = DC(Guid("A7B20356-4A29-11E0-A181-90CCED4B9CC9"), Guid("A4AFE9ED-5453-008B-31FD-537E061E74DF")),
+			[g_AttachmentIds.M145] = DC(Guid("98901C96-4A29-11E0-A181-90CCED4B9CC9"), Guid("7450CDA7-067B-9A23-05C6-16D644DE3D12")),
+			[g_AttachmentIds.Flashlight] = DC(Guid("83776A76-4A29-11E0-A181-90CCED4B9CC9"), Guid("1235B4DE-9880-0776-0E55-220F0D63553A")),
+			[g_AttachmentIds.NoOptics] = DC(Guid("6D3830F2-3528-11E0-B502-B15F9292C9B8"), Guid("A1AD1762-C856-F5D7-66B5-5E485460D3DF")),
+			[g_AttachmentIds.FlechetteShells] = DC(Guid("D2A1E1EE-4997-11E0-B2FF-C5C18AA9A698"), Guid("B948A3F4-6278-E8A5-D025-B19363194AD7")),
+			[g_AttachmentIds.FragShells] = DC(Guid("D7A678C1-4997-11E0-B2FF-C5C18AA9A698"), Guid("47D5B1CD-1852-9B0C-40E2-8BC55C7E0D0B")),
+			[g_AttachmentIds.PKS_07] = DC(Guid("B2034F36-4A29-11E0-A181-90CCED4B9CC9"), Guid("08D5F51A-BC5C-9115-9B99-B3DD6DD6EF40")),
+			[g_AttachmentIds.Silencer] = DC(Guid("64812092-D8E8-499E-8C0A-16C8424755EA"), Guid("83254D90-7E94-4D0B-A9AC-ACC57862C495")),
+			[g_AttachmentIds.Kobra] = DC(Guid("92DC2696-4A29-11E0-A181-90CCED4B9CC9"), Guid("068E3303-FC3C-93C1-49E7-89EE4E00C86D")),
+			[g_AttachmentIds.RifleScope] = DC(Guid("7A32FAB6-4A29-11E0-A181-90CCED4B9CC9"), Guid("30B8A845-6B34-D2EB-11C8-21C98EE5C3F6")),
+			[g_AttachmentIds.FlashSuppressor] = DC(Guid("C9D7477D-4AF6-11E0-BE58-A4565229B5AA"), Guid("46BAA012-B1F4-9821-17A8-1557A08419C1")),
+			[g_AttachmentIds.RifleScope] = DC(Guid("C31AEB76-4A29-11E0-A181-90CCED4B9CC9"), Guid("276362CA-4588-75F7-F9C2-7AE89D8907DA")),
+			[g_AttachmentIds.PSO_1] = DC(Guid("B875DA46-4A29-11E0-A181-90CCED4B9CC9"), Guid("8927BB0B-F533-44A9-6A81-DE7511845715")),
+			[g_AttachmentIds.SlugShells] = DC(Guid("DC41C10F-4997-11E0-B2FF-C5C18AA9A698"), Guid("DF5BC116-2245-E2AD-0A97-BB8DA7452208")),
+		}
+    ),
+    -- Sniper
     ["weapon-m98b"] = BRItemWeaponDefinition(
         "weapon-m98b",
         "M98B", 
