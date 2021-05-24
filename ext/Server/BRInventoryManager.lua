@@ -29,6 +29,7 @@ function BRInventoryManager:RegisterEvents()
 	NetEvents:Subscribe(InventoryNetEvent.InventoryGiveCommand, self, self.OnPlayerGiveCommand)
 	NetEvents:Subscribe(InventoryNetEvent.MoveItem, self, self.OnInventoryMoveItem)
 	NetEvents:Subscribe(InventoryNetEvent.DropItem, self, self.OnInventoryDropItem)
+    NetEvents:Subscribe(InventoryNetEvent.UseItem, self, self.OnInventoryUseItem)
 end
 
 function BRInventoryManager:OnPlayerLeft(p_Player)
@@ -146,6 +147,15 @@ function BRInventoryManager:OnInventoryDropItem(p_Player, p_ItemId, p_Quantity)
     end
 	
 	s_Inventory:DropItem(p_ItemId, p_Quantity)
+end
+
+function BRInventoryManager:OnInventoryUseItem(p_Player, p_ItemId)
+    local s_Inventory = self.m_Inventories[p_Player.id]
+    if s_Inventory == nil then
+        return
+    end
+	
+	s_Inventory:UseItem(p_ItemId)
 end
 
 -- define global

@@ -9,6 +9,7 @@
         "@types/react-dom": "^16.9.0",
         "node-sass": "^4.14.1",
         "react": "^17.0.0",
+        "react-countdown-circle-timer": "^2.5.3",
         "react-dom": "^17.0.0",
         "react-lightweight-tooltip": "^1.0.0",
         "react-redux": "^7.2.3",

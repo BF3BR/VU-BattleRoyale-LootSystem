@@ -179,6 +179,15 @@ function BRInventory:DropItem(p_ItemId, p_Quantity)
     self:RemoveItem(p_ItemId)
 end
 
+function BRInventory:UseItem(p_ItemId)
+    for _, l_Slot in pairs(self.m_Slots) do
+        if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
+            l_Slot:Use()
+            return
+        end
+    end
+end
+
 function BRInventory:RemoveItem(p_ItemId)
     -- Check if item exists
     local s_Item = m_ItemDatabase:GetItem(p_ItemId)

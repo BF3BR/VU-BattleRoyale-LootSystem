@@ -13,6 +13,7 @@ require "__shared/Items/BRItemAmmo"
 require "__shared/Items/BRItemArmor"
 require "__shared/Items/BRItemHelmet"
 require "__shared/Items/BRItemAttachment"
+require "__shared/Items/BRItemConsumable"
 
 local m_AmmoDefinitions = require "__shared/Items/Definitions/BRItemAmmoDefinition"
 local m_ArmorDefinitions = require "__shared/Items/Definitions/BRItemArmorDefinition"
@@ -75,6 +76,9 @@ function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
 
     local s_ItemHelmet = m_ItemDatabase:CreateItem(m_HelmetDefinitions["helmet-tier-3"])
     s_Inventory:AddItem(s_ItemHelmet.m_Id)
+
+    local s_ItemLargeMedkit = m_ItemDatabase:CreateItem(m_ConsumableDefinitions["consumable-large-medkit"])
+    s_Inventory:AddItem(s_ItemLargeMedkit.m_Id)
 
     m_Logger:Write(s_Inventory:AsTable())
 

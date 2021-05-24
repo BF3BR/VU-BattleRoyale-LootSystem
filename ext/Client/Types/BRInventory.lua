@@ -42,6 +42,8 @@ function BRInventory:OnReceiveInventoryState(p_State)
                     l_ReturnVal.Tier = l_GeneratedItem.m_Definition.m_Tier
                     l_ReturnVal.Durability = l_GeneratedItem.m_Definition.m_Durability
                     l_ReturnVal.CurrentDurability = l_GeneratedItem.m_CurrentDurability
+                elseif l_GeneratedItem.m_Definition.m_Type == ItemType.Consumable then
+                    l_ReturnVal.TimeToApply = l_GeneratedItem.m_Definition.m_TimeToApply
                 end
             end
         end
@@ -94,4 +96,17 @@ function BRInventory:OnWebUIDropItem(p_JsonData)
     end
 
     NetEvents:Send(InventoryNetEvent.DropItem, p_ItemId, p_Quantity)
+end
+
+function BRInventory:OnWebUIUseItem(p_JsonData)
+    local s_DecodedData = json.decode(p_JsonData)
+
+    -- Load params from the decoded JSON.
+	local p_ItemId = s_DecodedData.id
+
+    if p_ItemId == nil then
+        return
+    end
+
+    NetEvents:Send(InventoryNetEvent.UseItem, p_ItemId)
 end

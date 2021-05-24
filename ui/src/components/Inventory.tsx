@@ -12,6 +12,7 @@ import InventoryTooltip from "./tooltip/InventoryTooltip";
 import { sendToLua } from "../Helpers";
 
 import "./Inventory.scss";
+import InventoryTimer from "./InventoryTimer";
 
 interface StateFromReducer {
     slots: any
@@ -29,6 +30,16 @@ const Inventory: React.FC<Props> = ({
         show: false,
         maxQuantity: 60,
         value: 30,
+    });
+
+    const [isDragging, setIsDragging] = useState<any>(null);
+
+    const [progress, setProgress] = useState<{
+        slot: any,
+        time: number|null,
+    }>({
+        slot: null,
+        time: null
     });
 
     const handleUserKeyDown = (event: any) => {
@@ -53,7 +64,6 @@ const Inventory: React.FC<Props> = ({
         };
     });
 
-    const [isDragging, setIsDragging] = useState<any>(null);
 
     function handleDragStart(event: any) {
         const { active } = event;
@@ -96,6 +106,21 @@ const Inventory: React.FC<Props> = ({
         }));
     }
 
+    const handleRightClick = (slot: any) => {
+        if (slot.TimeToApply !== undefined) {
+            setProgress({
+                slot: slot,
+                time: slot.TimeToApply,
+            });
+        }
+    }
+
+    const handleUseItem = (id: string) => {
+        if (id !== undefined) {
+            sendToLua('WebUI:UseItem', JSON.stringify({ id: id }));
+        }
+    }
+
     const getSlotItem = (slot: any, key: number) => {
         if (slot === undefined || slot === null || Object.keys(slot).length === 0) {
             return <>
@@ -112,7 +137,10 @@ const Inventory: React.FC<Props> = ({
 
     const getSlotDrag = (slot: any) => {
         return (
-            <div className={(slot.Tier !== undefined ? "tier-" + slot.Tier : "")}>
+            <div 
+                className={(slot.Tier !== undefined ? "tier-" + slot.Tier : "")}
+                onContextMenu={() => handleRightClick(slot)}
+            >
                 <InventoryTooltip
                     content={
                         [
@@ -405,6 +433,24 @@ const Inventory: React.FC<Props> = ({
                     }
                 </DragOverlay>
             </DndContext>
+            {(progress.slot !== null) &&
+                <>
+                    <InventoryTimer
+                        slot={progress.slot}
+                        onComplete={(slot: any) => {
+                            handleUseItem(slot.Id);
+                            setProgress({
+                                slot: null,
+                                time: null
+                            });
+                        }}
+                        time={progress.time}
+                    />
+                    <h4 id="InventoryTimerName">
+                        Using {progress.slot.Name}
+                    </h4>
+                </>
+            }
         </>
     );
 };

@@ -14,6 +14,7 @@ require "__shared/Items/BRItemAmmo"
 require "__shared/Items/BRItemArmor"
 require "__shared/Items/BRItemHelmet"
 require "__shared/Items/BRItemAttachment"
+require "__shared/Items/BRItemConsumable"
 
 require "Types/BRInventory"
 
@@ -60,6 +61,7 @@ end
 function VuBattleRoyaleLootSystemClient:RegisterWebUIEvents()
 	Events:Subscribe("WebUI:MoveItem", self, self.OnWebUIMoveItem)
     Events:Subscribe("WebUI:DropItem", self, self.OnWebUIDropItem)
+    Events:Subscribe("WebUI:UseItem", self, self.OnWebUIUseItem)
 end
 
 function VuBattleRoyaleLootSystemClient:OnWebUIMoveItem(p_JsonData)
@@ -68,6 +70,10 @@ end
 
 function VuBattleRoyaleLootSystemClient:OnWebUIDropItem(p_JsonData)
     self.m_Invetnory:OnWebUIDropItem(p_JsonData)
+end
+
+function VuBattleRoyaleLootSystemClient:OnWebUIUseItem(p_JsonData)
+    self.m_Invetnory:OnWebUIUseItem(p_JsonData)
 end
 
 function VuBattleRoyaleLootSystemClient:OnReceiveInventoryState(p_State)
