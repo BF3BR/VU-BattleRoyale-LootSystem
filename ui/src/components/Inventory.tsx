@@ -153,7 +153,7 @@ const Inventory: React.FC<Props> = ({
                         <img src={"fb://" + slot.UIIcon} />
                     }
                     <div className="information">
-                    <span className="name">{slot.Name ?? ""}</span>
+                        <span className="name">{slot.Name ?? ""}</span>
                         {slot.Quantity > 1 &&
                             <span className="count">{slot.Quantity ?? 1}</span>
                         }
