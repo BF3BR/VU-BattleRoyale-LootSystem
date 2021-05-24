@@ -36,20 +36,10 @@ end
 function VuBattleRoyaleLootSystemServer:OnExtensionLoaded()
     Events:Subscribe("Player:SpawnOnSelectedSpawnPoint", self, self.OnPlayerAuthenticated)
     Events:Subscribe("Player:Left", self, self.OnPlayerLeft)
-    Events:Subscribe("Player:ChangingWeapon", self, self.OnPlayerChangingWeapon)
-    Events:Subscribe("GunSway:UpdateRecoil", self, self.OnGunSwayUpdateRecoil)
 end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerLeft(p_Player)
     m_InventoryManager:OnPlayerLeft(p_Player)
-end
-
-function VuBattleRoyaleLootSystemServer:OnPlayerChangingWeapon(p_Player)
-    m_InventoryManager:OnPlayerChangingWeapon(p_Player)
-end
-
-function VuBattleRoyaleLootSystemServer:OnGunSwayUpdateRecoil(p_GunSway, p_Weapon, p_WeaponFiring, p_DeltaTime)
-    m_InventoryManager:OnGunSwayUpdateRecoil(p_GunSway, p_Weapon, p_WeaponFiring, p_DeltaTime)
 end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
@@ -70,6 +60,9 @@ function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
     s_Inventory:AddItem(s_ItemAmmo1.m_Id)
     s_Inventory:AddItem(s_ItemAmmo2.m_Id)
     s_Inventory:AddItem(s_ItemAmmo3.m_Id)
+
+    local s_ItemAmmo4 = m_ItemDatabase:CreateItem(m_AmmoDefinitions["ammo-9mm"], 80)
+    s_Inventory:AddItem(s_ItemAmmo4.m_Id)
 
     local s_ItemArmor = m_ItemDatabase:CreateItem(m_ArmorDefinitions["armor-tier-2"])
     s_Inventory:AddItem(s_ItemArmor.m_Id)

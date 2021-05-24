@@ -6,6 +6,15 @@ function BRInventorySlot:__init(p_Inventory, p_AcceptedTypes)
     self.m_AcceptedTypes = p_AcceptedTypes or {}
 end
 
+-- Checks if the slot contains an item with the specified definition
+function BRInventorySlot:Is(p_Definition)
+    if self.m_Item ~= nil and self.m_Item.m_Definition:Equals(p_Definition) then
+        return true
+    end
+
+    return false
+end
+
 function BRInventorySlot:PutItem(p_Item)
     -- TODO more checks + swap logic + more...
     if not self:IsAccepted(p_Item) then

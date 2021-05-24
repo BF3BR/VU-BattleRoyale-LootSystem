@@ -231,6 +231,18 @@ function BRInventory:GetAvailableSlot(p_Item)
     return nil
 end
 
+function BRInventory:GetItemsByDefinition(p_Definition)
+    local s_Items = {}
+
+    for _, l_Slot in pairs(self.m_Slots) do
+        if l_Slot:Is(p_Definition) then
+            table.insert(s_Items, l_Slot.m_Item)
+        end
+    end
+
+    return s_Items
+end
+
 function BRInventory:GetAmmoDefinition(p_WeaponName)
     if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item ~= nil then
         if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
@@ -290,36 +302,41 @@ function BRInventory:GetAmmoTypeCount(p_WeaponName)
     return s_Sum
 end
 
-function BRInventory:RemoveAmmoForWeapon(p_WeaponName)
+-- @return The number of ammo that was successfully removed
+function BRInventory:RemoveAmmo(p_WeaponName, p_Quantity)
     local s_AmmoDefinition = self:GetAmmoDefinition(p_WeaponName)
     if s_AmmoDefinition == nil then
-        return
+        return 0
     end
 
-    local s_AmmoSlot = nil
-    for l_Key, l_Slot in pairs(self.m_Slots) do
-        if l_Key >= InventorySlot.Backpack1 then
-            if l_Slot.m_Item ~= nil then
-                if l_Slot.m_Item.m_Definition:Equals(s_AmmoDefinition) then
-                    if s_AmmoSlot == nil then
-                        s_AmmoSlot = l_Slot
-                    else
-                        if s_AmmoSlot.m_Item.m_Quantity > l_Slot.m_Item.m_Quantity then
-                            s_AmmoSlot = l_Slot
-                        end
-                    end
-                end
-            end
+    -- Get similar ammo items
+    local s_AmmoItems = self:GetItemsByDefinition(s_AmmoDefinition)
+
+    -- Sort by quantity from low to high
+    table.sort(s_AmmoItems, function (p_AmmoItemA, p_AmmoItemB)
+        return p_AmmoItemA.m_Quantity < p_AmmoItemB.m_Quantity
+    end)
+
+    local s_QuantityLeftToRemove = p_Quantity
+    for _, l_AmmoItem in ipairs(s_AmmoItems) do
+        local s_QuantityRemoved = math.min(l_AmmoItem.m_Quantity, s_QuantityLeftToRemove)
+
+        -- Update ammo item state
+        l_AmmoItem.m_Quantity = l_AmmoItem.m_Quantity - s_QuantityRemoved
+        if l_AmmoItem.m_Quantity <= 0 then
+            self:RemoveItem(l_AmmoItem.m_Id)
+        end
+
+        -- Update quantity left to remove
+        s_QuantityLeftToRemove = s_QuantityLeftToRemove - s_QuantityRemoved
+        if s_QuantityLeftToRemove <= 0 then
+            self:SendState()
+            return p_Quantity
         end
     end
 
-    if s_AmmoSlot ~= nil and s_AmmoSlot.m_Item ~= nil then
-        if s_AmmoSlot.m_Item.m_Quantity > 1 then
-            s_AmmoSlot.m_Item.m_Quantity = s_AmmoSlot.m_Item.m_Quantity - 1
-        else
-            self:RemoveItem(s_AmmoSlot.m_Item.m_Id)
-        end
-    end
+    self:SendState()
+    return p_Quantity - s_QuantityLeftToRemove
 end
 
 function BRInventory:UpdateSoldierCustomization()

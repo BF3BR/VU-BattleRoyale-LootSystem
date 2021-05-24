@@ -16,87 +16,56 @@ local m_WeaponDefinitions = require "__shared/Items/Definitions/BRItemWeaponDefi
 require "__shared/Utils/BRItemFactory"
 
 function BRInventoryManager:__init()
-	self:RegisterVars()
-	self:RegisterEvents()
+    self:RegisterVars()
+    self:RegisterEvents()
 end
 
 function BRInventoryManager:RegisterVars()
-	-- [Player.id] -> [BRInventory]
-	self.m_Inventories = {}
+    -- [Player.id] -> [BRInventory]
+    self.m_Inventories = {}
 end
 
 function BRInventoryManager:RegisterEvents()
-	NetEvents:Subscribe(InventoryNetEvent.InventoryGiveCommand, self, self.OnPlayerGiveCommand)
-	NetEvents:Subscribe(InventoryNetEvent.MoveItem, self, self.OnInventoryMoveItem)
-	NetEvents:Subscribe(InventoryNetEvent.DropItem, self, self.OnInventoryDropItem)
     NetEvents:Subscribe(InventoryNetEvent.UseItem, self, self.OnInventoryUseItem)
+    NetEvents:Subscribe(InventoryNetEvent.InventoryGiveCommand, self, self.OnPlayerGiveCommand)
+    NetEvents:Subscribe(InventoryNetEvent.MoveItem, self, self.OnInventoryMoveItem)
+    NetEvents:Subscribe(InventoryNetEvent.DropItem, self, self.OnInventoryDropItem)
+
+    Events:Subscribe('Player:ChangingWeapon', self, self.OnPlayerChangingWeapon)
+    Events:Subscribe('Player:PostReload', self, self.OnPlayerPostReload)
 end
 
 function BRInventoryManager:OnPlayerLeft(p_Player)
-	m_Logger:Write(string.format("Destroying Inventory for '%s'", p_Player.name))
-	
-	if self.m_Inventories[p_Player.id] ~= nil then
-		self:RemoveInventory(p_Player.id)
-	end
+    m_Logger:Write(string.format("Destroying Inventory for '%s'", p_Player.name))
+
+    if self.m_Inventories[p_Player.id] ~= nil then
+        self:RemoveInventory(p_Player.id)
+    end
 end
 
 function BRInventoryManager:OnPlayerChangingWeapon(p_Player)
-    if p_Player == nil then
-        return
-    end
-
-    if p_Player.alive == false then
-        return
-    end
-
-    if p_Player.soldier == nil then
-        return
-    end
-
-    local s_Inventory = self.m_Inventories[p_Player.id]
-
-    if s_Inventory == nil then
+    if p_Player == nil or p_Player.soldier == nil then
         return
     end
 
     local s_CurrentWeapon = p_Player.soldier.weaponsComponent.currentWeapon
-    local s_WeaponFiringData = WeaponFiringData(s_CurrentWeapon.weaponFiring.data)
+    local s_Inventory = self.m_Inventories[p_Player.id]
 
-    local s_MagazineCapacity = s_WeaponFiringData.primaryFire.ammo.magazineCapacity
+    if s_CurrentWeapon == nil or s_Inventory == nil then
+        return
+    end
+
+    -- Update secondary ammo count
     local s_AmmoCount = s_Inventory:GetAmmoTypeCount(s_CurrentWeapon.name)
-
-    if s_AmmoCount < s_MagazineCapacity then
-        s_CurrentWeapon.primaryAmmo = s_AmmoCount
-        s_CurrentWeapon.secondaryAmmo = 0
-    else
-        s_CurrentWeapon.primaryAmmo = s_MagazineCapacity
-        s_CurrentWeapon.secondaryAmmo = s_AmmoCount - s_MagazineCapacity
-    end
-end
-
-function BRInventoryManager:OnGunSwayUpdateRecoil(p_GunSway, p_Weapon, p_WeaponFiring, p_DeltaTime)
-    if p_GunSway.isFiring and p_GunSway.fireShot then
-        local s_Players = PlayerManager:GetPlayers()
-        for _, l_Player in pairs(s_Players) do
-            if l_Player.soldier.weaponsComponent.currentWeapon.instanceId == p_Weapon.instanceId then
-                local s_Inventory = self.m_Inventories[l_Player.id]
-
-                if s_Inventory == nil then
-                    return
-                end
-
-                s_Inventory:RemoveAmmoForWeapon(l_Player.soldier.weaponsComponent.currentWeapon.name)
-            end
-        end
-    end
+    s_CurrentWeapon.secondaryAmmo = s_AmmoCount
 end
 
 -- Removes a BRInventory
 -- @param p_PlayerId integer
 function BRInventoryManager:RemoveInventory(p_PlayerId)
-	-- destroy inventory and clear reference
+    -- destroy inventory and clear reference
     self.m_Inventories[p_PlayerId]:Destroy()
-	self.m_Inventories[p_PlayerId] = nil
+    self.m_Inventories[p_PlayerId] = nil
 end
 
 -- Adds a BRInventory
@@ -108,27 +77,27 @@ end
 
 function BRInventoryManager:OnPlayerGiveCommand(p_Player, p_Args)
     if p_Player == nil then
-		m_Logger:Error("Invalid player.")
+        m_Logger:Error("Invalid player.")
         return
     end
 
-	if #p_Args == 0 then
-		m_Logger:Error("Invalid command.")
+    if #p_Args == 0 then
+        m_Logger:Error("Invalid command.")
         return
-	end
+    end
 
-	local s_Definition = g_BRItemFactory:FindDefinitionByUId(p_Args[1])
+    local s_Definition = g_BRItemFactory:FindDefinitionByUId(p_Args[1])
 
-	if s_Definition == nil then
-		m_Logger:Error("Invalid item definition UId: " .. p_Args[1])
+    if s_Definition == nil then
+        m_Logger:Error("Invalid item definition UId: " .. p_Args[1])
         return
-	end
+    end
 
-	local s_Inventory = self.m_Inventories[p_Player.id]
-	local s_CreatedItem = m_ItemDatabase:CreateItem(s_Definition, p_Args[2] ~= nil and tonumber(p_Args[2]) or 1)
+    local s_Inventory = self.m_Inventories[p_Player.id]
+    local s_CreatedItem = m_ItemDatabase:CreateItem(s_Definition, p_Args[2] ~= nil and tonumber(p_Args[2]) or 1)
 
-	s_Inventory:AddItem(s_CreatedItem.m_Id)
-	m_Logger:Write(s_Definition.m_Name .. " - Item given to player: " .. p_Player.name)
+    s_Inventory:AddItem(s_CreatedItem.m_Id)
+    m_Logger:Write(s_Definition.m_Name .. " - Item given to player: " .. p_Player.name)
 end
 
 function BRInventoryManager:OnInventoryMoveItem(p_Player, p_ItemId, p_SlotId)
@@ -136,8 +105,8 @@ function BRInventoryManager:OnInventoryMoveItem(p_Player, p_ItemId, p_SlotId)
     if s_Inventory == nil then
         return
     end
-	
-	s_Inventory:SwapItems(p_ItemId, p_SlotId)
+
+    s_Inventory:SwapItems(p_ItemId, p_SlotId)
 end
 
 function BRInventoryManager:OnInventoryDropItem(p_Player, p_ItemId, p_Quantity)
@@ -145,8 +114,25 @@ function BRInventoryManager:OnInventoryDropItem(p_Player, p_ItemId, p_Quantity)
     if s_Inventory == nil then
         return
     end
-	
-	s_Inventory:DropItem(p_ItemId, p_Quantity)
+
+    s_Inventory:DropItem(p_ItemId, p_Quantity)
+end
+
+function BRInventoryManager:OnPlayerPostReload(p_Player, p_PreviousPrimaryAmmo)
+    if p_Player == nil or p_Player.soldier == nil then
+        return
+    end
+
+    local s_CurrentWeapon = p_Player.soldier.weaponsComponent.currentWeapon
+    local s_Inventory = self.m_Inventories[p_Player.id]
+    local s_AmmoDiff = s_CurrentWeapon.primaryAmmo - p_PreviousPrimaryAmmo
+
+    local s_PrimaryAmmo = p_PreviousPrimaryAmmo + s_Inventory:RemoveAmmo(s_CurrentWeapon.name, s_AmmoDiff) 
+    local s_SecondaryAmmo = s_Inventory:GetAmmoTypeCount(s_CurrentWeapon.name)
+
+    -- Update ammo values
+    s_CurrentWeapon.primaryAmmo = s_PrimaryAmmo
+    s_CurrentWeapon.secondaryAmmo = s_SecondaryAmmo
 end
 
 function BRInventoryManager:OnInventoryUseItem(p_Player, p_ItemId)
@@ -154,13 +140,13 @@ function BRInventoryManager:OnInventoryUseItem(p_Player, p_ItemId)
     if s_Inventory == nil then
         return
     end
-	
-	s_Inventory:UseItem(p_ItemId)
+
+    s_Inventory:UseItem(p_ItemId)
 end
 
 -- define global
 if g_BRInventoryManager== nil then
-	g_BRInventoryManager = BRInventoryManager()
+    g_BRInventoryManager = BRInventoryManager()
 end
 
 return g_BRInventoryManager
