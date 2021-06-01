@@ -15,6 +15,7 @@ require "__shared/Items/BRItemArmor"
 require "__shared/Items/BRItemHelmet"
 require "__shared/Items/BRItemAttachment"
 require "__shared/Items/BRItemConsumable"
+require "__shared/Items/BRItemGadget"
 
 require "Types/BRInventory"
 

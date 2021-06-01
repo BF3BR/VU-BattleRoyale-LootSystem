@@ -14,6 +14,7 @@ require "__shared/Items/BRItemArmor"
 require "__shared/Items/BRItemHelmet"
 require "__shared/Items/BRItemAttachment"
 require "__shared/Items/BRItemConsumable"
+require "__shared/Items/BRItemGadget"
 
 local m_AmmoDefinitions = require "__shared/Items/Definitions/BRItemAmmoDefinition"
 local m_ArmorDefinitions = require "__shared/Items/Definitions/BRItemArmorDefinition"
@@ -21,6 +22,7 @@ local m_AttachmentDefinitions = require "__shared/Items/Definitions/BRItemAttach
 local m_ConsumableDefinitions = require "__shared/Items/Definitions/BRItemConsumableDefinition"
 local m_HelmetDefinitions = require "__shared/Items/Definitions/BRItemHelmetDefinition"
 local m_WeaponDefinitions = require "__shared/Items/Definitions/BRItemWeaponDefinition"
+local m_GadgetDefinitions = require "__shared/Items/Definitions/BRItemGadgetDefinition"
 
 local m_ItemDatabase = require "Types/BRItemDatabase"
 local m_LootPickupDatabase = require "Types/BRLootPickupDatabase"
@@ -72,6 +74,9 @@ function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
 
     local s_ItemLargeMedkit = m_ItemDatabase:CreateItem(m_ConsumableDefinitions["consumable-large-medkit"])
     s_Inventory:AddItem(s_ItemLargeMedkit.m_Id)
+
+    local s_ItemSmoke = m_ItemDatabase:CreateItem(m_GadgetDefinitions["gadget-m320-smoke"])
+    s_Inventory:AddItem(s_ItemSmoke.m_Id)
 
     m_Logger:Write(s_Inventory:AsTable())
 

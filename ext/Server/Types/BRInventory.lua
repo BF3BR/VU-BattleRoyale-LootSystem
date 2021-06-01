@@ -283,18 +283,23 @@ end
 -- Player / Soldier related functions
 --==============================
 function BRInventory:GetAmmoTypeCount(p_WeaponName)
-    local s_Sum = 0
+    if self.m_Slots[InventorySlot.Gadget].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.Gadget].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            return self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity - 1
+        end
+    end
+
     local s_AmmoDefinition = self:GetAmmoDefinition(p_WeaponName)
     if s_AmmoDefinition == nil then
         return 0
     end
 
+    local s_Sum = 0
+
     for l_Key, l_Slot in pairs(self.m_Slots) do
-        if l_Key >= InventorySlot.Backpack1 then
-            if l_Slot.m_Item ~= nil then
-                if l_Slot.m_Item.m_Definition:Equals(s_AmmoDefinition) then
-                    s_Sum = s_Sum + l_Slot.m_Item.m_Quantity
-                end
+        if l_Slot.m_Item ~= nil then
+            if l_Key >= InventorySlot.Backpack1 and l_Slot.m_Item.m_Definition:Equals(s_AmmoDefinition) then
+                s_Sum = s_Sum + l_Slot.m_Item.m_Quantity
             end
         end
     end
@@ -304,6 +309,22 @@ end
 
 -- @return The number of ammo that was successfully removed
 function BRInventory:RemoveAmmo(p_WeaponName, p_Quantity)
+    -- Handle all the Gadget related code here
+    if self.m_Slots[InventorySlot.Gadget].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.Gadget].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity = self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity - p_Quantity
+            if self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity <= 0 then
+                self:RemoveItem(self.m_Slots[InventorySlot.Gadget].m_Item.m_Id)
+                self:SendState()
+                return 0
+            else
+                self:SendState()
+                return self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity
+            end
+        end
+    end
+
+
     local s_AmmoDefinition = self:GetAmmoDefinition(p_WeaponName)
     if s_AmmoDefinition == nil then
         return 0
@@ -371,6 +392,13 @@ function BRInventory:CreateCustomizeSoldierData()
     if s_SecondaryWeapon ~= nil then
         s_SecondaryWeapon.slot = WeaponSlot.WeaponSlot_1
         s_CustomizeSoldierData.weapons:add(s_SecondaryWeapon)
+    end
+
+    -- Gadget
+    local s_Gadget = self.m_Slots[InventorySlot.Gadget]:GetUnlockWeaponAndSlot()
+    if s_Gadget ~= nil then
+        s_Gadget.slot = WeaponSlot.WeaponSlot_2
+        s_CustomizeSoldierData.weapons:add(s_Gadget)
     end
 
     local s_UnlockWeaponAndSlot = UnlockWeaponAndSlot()

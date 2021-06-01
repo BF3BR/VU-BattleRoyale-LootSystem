@@ -42,8 +42,8 @@ const App: React.FC = () => {
                     UIIcon: "UI/Art/Persistence/Weapons/Fancy/ak74m",
                     UId: "weapon-ak74m",
                 }}
-            />
-            <LootOverlay
+            />*/}
+            {/*<LootOverlay
                 loot={{
                     Description: "A large medkit, it's gonna refill 50% of your health.",
                     Id: "C5318A9E-BCC7-8152-E2F3-8B9C733787EB",

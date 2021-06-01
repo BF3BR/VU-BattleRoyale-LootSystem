@@ -6,6 +6,7 @@ local m_AttachmentDefinitions = require "__shared/Items/Definitions/BRItemAttach
 local m_ConsumableDefinitions = require "__shared/Items/Definitions/BRItemConsumableDefinition"
 local m_HelmetDefinitions = require "__shared/Items/Definitions/BRItemHelmetDefinition"
 local m_WeaponDefinitions = require "__shared/Items/Definitions/BRItemWeaponDefinition"
+local m_GadgetDefinition = require "__shared/Items/Definitions/BRItemGadgetDefinition"
 
 class "BRItemFactory"
 
@@ -18,6 +19,7 @@ function BRItemFactory:__init()
     self:AppendDefinitions(m_ConsumableDefinitions)
     self:AppendDefinitions(m_HelmetDefinitions)
     self:AppendDefinitions(m_WeaponDefinitions)
+    self:AppendDefinitions(m_GadgetDefinition)
 end
 
 function BRItemFactory:AppendDefinitions(p_Definitions)
@@ -51,6 +53,8 @@ function BRItemFactory:CreateFromTable(p_Table)
         return BRItemAttachment:CreateFromTable(p_Table)
     elseif s_Definition.m_Type == ItemType.Weapon then
         return BRItemWeapon:CreateFromTable(p_Table)
+    elseif s_Definition.m_Type == ItemType.Gadget then
+        return BRItemGadget:CreateFromTable(p_Table)
     end
 
     return nil
