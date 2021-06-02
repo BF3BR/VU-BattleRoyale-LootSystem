@@ -260,6 +260,72 @@ function BRInventory:GetAmmoDefinition(p_WeaponName)
     return nil
 end
 
+function BRInventory:GetCurrentPrimaryAmmo(p_WeaponName)
+    if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            return self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_CurrentPrimaryAmmo
+        end
+    end
+
+    -- If we already found the ammo definition we don't need to check the secondary weapon slot
+    if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            return self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_CurrentPrimaryAmmo
+        end
+    end
+
+    if self.m_Slots[InventorySlot.Gadget].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.Gadget].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            return self.m_Slots[InventorySlot.Gadget].m_Item.m_CurrentPrimaryAmmo
+        end
+    end
+
+    return 0
+end
+
+function BRInventory:SetCurrentPrimaryAmmo(p_WeaponName, p_AmmoCount)
+    if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            self.m_Slots[InventorySlot.PrimaryWeapon].m_Item.m_CurrentPrimaryAmmo = p_AmmoCount
+        end
+    end
+
+    -- If we already found the ammo definition we don't need to check the secondary weapon slot
+    if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            self.m_Slots[InventorySlot.SecondaryWeapon].m_Item.m_CurrentPrimaryAmmo = p_AmmoCount
+        end
+    end
+
+    if self.m_Slots[InventorySlot.Gadget].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.Gadget].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            self.m_Slots[InventorySlot.Gadget].m_Item.m_CurrentPrimaryAmmo = p_AmmoCount
+        end
+    end
+end
+
+function BRInventory:ChechIfLastShotForGadget(p_WeaponName)
+    if self.m_Slots[InventorySlot.Gadget].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.Gadget].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity = self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity - 1
+            if self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity <= 0 then
+                self:RemoveItem(self.m_Slots[InventorySlot.Gadget].m_Item.m_Id)
+            end
+            self:SendState()
+        end
+    end
+end
+
+function BRInventory:IsGadget(p_WeaponName)
+    if self.m_Slots[InventorySlot.Gadget].m_Item ~= nil then
+        if self.m_Slots[InventorySlot.Gadget].m_Item.m_Definition.m_EbxName == p_WeaponName then
+            return true
+        end
+    end
+
+    return false
+end
+
 function BRInventory:SendState()
     if self.m_Owner == nil then
         return
@@ -285,7 +351,7 @@ end
 function BRInventory:GetAmmoTypeCount(p_WeaponName)
     if self.m_Slots[InventorySlot.Gadget].m_Item ~= nil then
         if self.m_Slots[InventorySlot.Gadget].m_Item.m_Definition.m_EbxName == p_WeaponName then
-            return self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity - 1
+            return self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity - self.m_Slots[InventorySlot.Gadget].m_Item.m_CurrentPrimaryAmmo
         end
     end
 
@@ -312,15 +378,7 @@ function BRInventory:RemoveAmmo(p_WeaponName, p_Quantity)
     -- Handle all the Gadget related code here
     if self.m_Slots[InventorySlot.Gadget].m_Item ~= nil then
         if self.m_Slots[InventorySlot.Gadget].m_Item.m_Definition.m_EbxName == p_WeaponName then
-            self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity = self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity - p_Quantity
-            if self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity <= 0 then
-                self:RemoveItem(self.m_Slots[InventorySlot.Gadget].m_Item.m_Id)
-                self:SendState()
-                return 0
-            else
-                self:SendState()
-                return self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity
-            end
+            return self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity - 1
         end
     end
 
@@ -370,7 +428,11 @@ function BRInventory:UpdateSoldierCustomization()
     end
 
     self.m_Owner.soldier:ApplyCustomization(self:CreateCustomizeSoldierData())
-    m_InventoryManager:OnPlayerChangingWeapon(self.m_Owner)
+
+    -- Reset primary ammo for each weapon
+    for _, l_Weapon in ipairs(self.m_Owner.soldier.weaponsComponent.weapons) do
+        l_Weapon.primaryAmmo = self:GetCurrentPrimaryAmmo(l_Weapon.name)
+    end
 end
 
 function BRInventory:CreateCustomizeSoldierData()

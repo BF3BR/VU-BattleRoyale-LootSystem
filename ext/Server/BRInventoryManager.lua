@@ -31,8 +31,9 @@ function BRInventoryManager:RegisterEvents()
     NetEvents:Subscribe(InventoryNetEvent.MoveItem, self, self.OnInventoryMoveItem)
     NetEvents:Subscribe(InventoryNetEvent.DropItem, self, self.OnInventoryDropItem)
 
-    Events:Subscribe('Player:ChangingWeapon', self, self.OnPlayerChangingWeapon)
-    Events:Subscribe('Player:PostReload', self, self.OnPlayerPostReload)
+    Events:Subscribe("GunSway:UpdateRecoil", self, self.OnGunSwayUpdateRecoil)
+    Events:Subscribe("Player:ChangingWeapon", self, self.OnPlayerChangingWeapon)
+    Events:Subscribe("Player:PostReload", self, self.OnPlayerPostReload)
 end
 
 function BRInventoryManager:OnPlayerLeft(p_Player)
@@ -40,6 +41,28 @@ function BRInventoryManager:OnPlayerLeft(p_Player)
 
     if self.m_Inventories[p_Player.id] ~= nil then
         self:RemoveInventory(p_Player.id)
+    end
+end
+
+function BRInventoryManager:OnGunSwayUpdateRecoil(p_GunSway, p_Weapon, p_WeaponFiring, p_DeltaTime)
+    if p_GunSway.isFiring and p_GunSway.fireShot then
+        local s_Players = PlayerManager:GetPlayers()
+        for _, l_Player in pairs(s_Players) do
+            if l_Player.soldier.weaponsComponent.currentWeapon.instanceId == p_Weapon.instanceId then
+                local s_Inventory = self.m_Inventories[l_Player.id]
+
+                if s_Inventory == nil then
+                    return
+                end
+
+                s_Inventory:SetCurrentPrimaryAmmo(
+                    l_Player.soldier.weaponsComponent.currentWeapon.name,
+                    l_Player.soldier.weaponsComponent.currentWeapon.primaryAmmo
+                )
+
+                s_Inventory:ChechIfLastShotForGadget(l_Player.soldier.weaponsComponent.currentWeapon.name) 
+            end
+        end
     end
 end
 
@@ -55,9 +78,9 @@ function BRInventoryManager:OnPlayerChangingWeapon(p_Player)
         return
     end
 
-    -- Update secondary ammo count
-    local s_AmmoCount = s_Inventory:GetAmmoTypeCount(s_CurrentWeapon.name)
-    s_CurrentWeapon.secondaryAmmo = s_AmmoCount
+    -- Update primary and secondary ammo count
+    s_CurrentWeapon.primaryAmmo = s_Inventory:GetCurrentPrimaryAmmo(s_CurrentWeapon.name)
+    s_CurrentWeapon.secondaryAmmo = s_Inventory:GetAmmoTypeCount(s_CurrentWeapon.name)
 end
 
 -- Removes a BRInventory
@@ -122,17 +145,24 @@ function BRInventoryManager:OnPlayerPostReload(p_Player, p_PreviousPrimaryAmmo)
     if p_Player == nil or p_Player.soldier == nil then
         return
     end
-
-    local s_CurrentWeapon = p_Player.soldier.weaponsComponent.currentWeapon
+    
     local s_Inventory = self.m_Inventories[p_Player.id]
+    local s_CurrentWeapon = p_Player.soldier.weaponsComponent.currentWeapon
+    if s_Inventory:IsGadget(s_CurrentWeapon.name) then
+        s_Inventory:SetCurrentPrimaryAmmo(s_CurrentWeapon.name, s_CurrentWeapon.primaryAmmo)
+        return
+    end
+
     local s_AmmoDiff = s_CurrentWeapon.primaryAmmo - p_PreviousPrimaryAmmo
 
-    local s_PrimaryAmmo = p_PreviousPrimaryAmmo + s_Inventory:RemoveAmmo(s_CurrentWeapon.name, s_AmmoDiff) 
+    local s_PrimaryAmmo = p_PreviousPrimaryAmmo + s_Inventory:RemoveAmmo(s_CurrentWeapon.name, s_AmmoDiff)
     local s_SecondaryAmmo = s_Inventory:GetAmmoTypeCount(s_CurrentWeapon.name)
 
     -- Update ammo values
     s_CurrentWeapon.primaryAmmo = s_PrimaryAmmo
     s_CurrentWeapon.secondaryAmmo = s_SecondaryAmmo
+
+    s_Inventory:SetCurrentPrimaryAmmo(s_CurrentWeapon.name, s_PrimaryAmmo)
 end
 
 function BRInventoryManager:OnInventoryUseItem(p_Player, p_ItemId)
