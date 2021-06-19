@@ -235,7 +235,7 @@ function BRInventory:GetItemsByDefinition(p_Definition)
     local s_Items = {}
 
     for _, l_Slot in pairs(self.m_Slots) do
-        if l_Slot:Is(p_Definition) then
+        if l_Slot:IsOfDefinition(p_Definition) then
             table.insert(s_Items, l_Slot.m_Item)
         end
     end

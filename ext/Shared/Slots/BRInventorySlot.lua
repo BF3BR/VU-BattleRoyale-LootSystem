@@ -7,7 +7,7 @@ function BRInventorySlot:__init(p_Inventory, p_AcceptedTypes)
 end
 
 -- Checks if the slot contains an item with the specified definition
-function BRInventorySlot:Is(p_Definition)
+function BRInventorySlot:IsOfDefinition(p_Definition)
     if self.m_Item ~= nil and self.m_Item.m_Definition:Equals(p_Definition) then
         return true
     end
