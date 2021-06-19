@@ -15,7 +15,7 @@ function BRInventorySlot:IsOfDefinition(p_Definition)
     return false
 end
 
-function BRInventorySlot:PutItem(p_Item)
+function BRInventorySlot:Put(p_Item)
     -- TODO more checks + swap logic + more...
     if p_Item ~= nil and not self:IsAccepted(p_Item) then
         return false, {}
@@ -27,6 +27,10 @@ function BRInventorySlot:PutItem(p_Item)
     self:OnUpdate()
 
     return true, s_DroppedItems
+end
+
+function BRInventorySlot:Clear()
+    return self:Put(nil)
 end
 
 function BRInventorySlot:IsAccepted(p_Item)

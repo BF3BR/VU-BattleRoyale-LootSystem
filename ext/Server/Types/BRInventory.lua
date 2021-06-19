@@ -95,6 +95,8 @@ function BRInventory:AsTable()
     }
 end
 
+-- Returns the slot of an item or nil if item was not found
+-- in this inventory
 function BRInventory:GetItemSlot(p_ItemId)
     -- TODO maybe keep some inventory index for instant access
     for l_Index, l_Slot in pairs(self.m_Slots) do
@@ -151,7 +153,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
         end
     else
         -- If the slot is empty / nil then we can just put the item there
-        s_Slot:PutItem(s_Item)
+        s_Slot:Put(s_Item)
         m_Logger:Write("Item added to inventory. (" .. s_Item.m_Definition.m_Name .. ")")
     end
 
@@ -163,8 +165,8 @@ function BRInventory:SwapItems(p_ItemId, p_SlotId)
     local s_OldItem = self.m_Slots[p_SlotId].m_Item
     local s_Slot = self:GetItemSlot(p_ItemId)
 
-    if s_Slot ~= nil and self.m_Slots[p_SlotId]:PutItem(s_Slot.m_Item) then
-        s_Slot:PutItem(s_OldItem)
+    if s_Slot ~= nil and self.m_Slots[p_SlotId]:Put(s_Slot.m_Item) then
+        s_Slot:Put(s_OldItem)
 
         m_Logger:Write("Slots swapped.")
         self:SendState()
@@ -188,11 +190,10 @@ function BRInventory:DropItem(p_ItemId, p_Quantity)
 end
 
 function BRInventory:UseItem(p_ItemId)
-    for _, l_Slot in pairs(self.m_Slots) do
-        if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
-            l_Slot:Use()
-            return
-        end
+    local s_Slot = self:GetItemSlot(p_ItemId)
+
+    if s_Slot ~= nil then
+        l_Slot:Use()
     end
 end
 
@@ -204,14 +205,15 @@ function BRInventory:RemoveItem(p_ItemId)
         return false
     end
 
-    for l_Index, l_Slot in pairs(self.m_Slots) do
-        if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
-            l_Slot.m_Item = nil
-            m_ItemDatabase:UnregisterItem(p_ItemId)
-            m_Logger:Write("Item removed from inventory. (" .. s_Item.m_Definition.m_Name .. ")")
-            self:SendState()
-            return true
-        end
+    local s_Slot = self:GetItemSlot(p_ItemId)
+    if s_Slot ~= nil then
+        s_Slot:Clear()
+
+        m_ItemDatabase:UnregisterItem(p_ItemId)
+        self:SendState()
+
+        m_Logger:Write("Item removed from inventory. (" .. s_Item.m_Definition.m_Name .. ")")
+        return true
     end
 
     m_Logger:Write("Item not found in any slot.")
