@@ -17,7 +17,7 @@ end
 
 function BRInventorySlot:PutItem(p_Item)
     -- TODO more checks + swap logic + more...
-    if not self:IsAccepted(p_Item) then
+    if p_Item ~= nil and not self:IsAccepted(p_Item) then
         return false, {}
     end
 
@@ -30,6 +30,10 @@ function BRInventorySlot:PutItem(p_Item)
 end
 
 function BRInventorySlot:IsAccepted(p_Item)
+    if p_Item == nil then
+        return false
+    end
+
     for _, l_Type in ipairs(self.m_AcceptedTypes) do
         if p_Item.m_Definition.m_Type == l_Type then
             return true

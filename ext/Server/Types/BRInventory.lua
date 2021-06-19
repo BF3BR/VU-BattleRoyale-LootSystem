@@ -95,6 +95,17 @@ function BRInventory:AsTable()
     }
 end
 
+function BRInventory:GetItemSlot(p_ItemId)
+    -- TODO maybe keep some inventory index for instant access
+    for l_Index, l_Slot in pairs(self.m_Slots) do
+        if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
+            return l_Slot
+        end
+    end
+
+    return nil
+end
+
 function BRInventory:AddItem(p_ItemId, p_SlotIndex)
     -- Check if item exists
     local s_Item = m_ItemDatabase:GetItem(p_ItemId)
@@ -148,21 +159,18 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
 end
 
 function BRInventory:SwapItems(p_ItemId, p_SlotId)
-    -- TODO: Use slots insted of this also if possible merge items when we can
-    local s_SlotReplaced = self.m_Slots[p_SlotId].m_Item
-    for l_Index, l_Slot in pairs(self.m_Slots) do
-        if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
-            if self.m_Slots[p_SlotId]:IsAccepted(l_Slot.m_Item) then
-                self.m_Slots[p_SlotId].m_Item = l_Slot.m_Item
-                self.m_Slots[l_Index].m_Item = s_SlotReplaced
-                m_Logger:Write("Slots swapped.")
-                self:SendState()
-                return
-            end
-        end
-    end
+    -- TODO: Use slots instead of this also if possible merge items when we can
+    local s_OldItem = self.m_Slots[p_SlotId].m_Item
+    local s_Slot = self:GetItemSlot(p_ItemId)
 
-    m_Logger:Write("Item not found in your inventory.")
+    if s_Slot ~= nil and self.m_Slots[p_SlotId]:PutItem(s_Slot.m_Item) then
+        s_Slot:PutItem(s_OldItem)
+
+        m_Logger:Write("Slots swapped.")
+        self:SendState()
+    else
+        m_Logger:Write("Item not found in your inventory.")
+    end
 end
 
 function BRInventory:DropItem(p_ItemId, p_Quantity)
