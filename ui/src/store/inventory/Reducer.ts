@@ -1,12 +1,16 @@
 import { InventoryState } from "./Types";
-import InventorySlot from "../../helpers/InventoryHelper";
 import { 
     InventoryActionTypes,
-    UPDATE_INVENTORY
+    UPDATE_INVENTORY,
+    UPDATE_OVERLAY_LOOT,
+    UPDATE_OVERLAY_LOOT_BOX
 } from "./ActionTypes";
 
 const initialState: InventoryState = {
     slots: [],
+    overlayLoot: null,
+    overlayLootBox: [],
+    lootId: null,
 };
 
 const InventoryReducer = (
@@ -18,6 +22,17 @@ const InventoryReducer = (
             return {
                 ...state,
                 slots: action.payload.slots,
+            };
+        case UPDATE_OVERLAY_LOOT:
+            return {
+                ...state,
+                overlayLoot: action.payload.overlayLoot,
+            };
+        case UPDATE_OVERLAY_LOOT_BOX:
+            return {
+                ...state,
+                overlayLootBox: action.payload.items,
+                lootId: action.payload.lootId,
             };
         default:
             return state;

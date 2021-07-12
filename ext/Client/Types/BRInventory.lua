@@ -73,14 +73,14 @@ function BRInventory:OnWebUIMoveItem(p_JsonData)
     local s_DecodedData = json.decode(p_JsonData)
 
     -- Load params from the decoded JSON.
-	local p_ItemId = s_DecodedData.item
-	local p_SlotId = tonumber(s_DecodedData.slot) + 1
+	local s_ItemId = s_DecodedData.item
+	local s_SlotId = tonumber(s_DecodedData.slot) + 1
 
-    if p_ItemId == nil or p_SlotId == nil then
+    if s_ItemId == nil or s_SlotId == nil then
         return
     end
 
-    NetEvents:Send(InventoryNetEvent.MoveItem, p_ItemId, p_SlotId)
+    NetEvents:Send(InventoryNetEvent.MoveItem, s_ItemId, s_SlotId)
 end
 
 
@@ -88,25 +88,40 @@ function BRInventory:OnWebUIDropItem(p_JsonData)
     local s_DecodedData = json.decode(p_JsonData)
 
     -- Load params from the decoded JSON.
-	local p_ItemId = s_DecodedData.item
-    local p_Quantity = s_DecodedData.quantity
+	local s_ItemId = s_DecodedData.item
+    local s_Quantity = s_DecodedData.quantity
 
-    if p_ItemId == nil or p_Quantity == nil then
+    if s_ItemId == nil or s_Quantity == nil then
         return
     end
 
-    NetEvents:Send(InventoryNetEvent.DropItem, p_ItemId, p_Quantity)
+    NetEvents:Send(InventoryNetEvent.DropItem, s_ItemId, s_Quantity)
 end
 
 function BRInventory:OnWebUIUseItem(p_JsonData)
     local s_DecodedData = json.decode(p_JsonData)
 
     -- Load params from the decoded JSON.
-	local p_ItemId = s_DecodedData.id
+	local s_ItemId = s_DecodedData.id
 
-    if p_ItemId == nil then
+    if s_ItemId == nil then
         return
     end
 
-    NetEvents:Send(InventoryNetEvent.UseItem, p_ItemId)
+    NetEvents:Send(InventoryNetEvent.UseItem, s_ItemId)
+end
+
+function BRInventory:OnWebUIPickupItem(p_JsonData)
+    local s_DecodedData = json.decode(p_JsonData)
+
+    -- Load params from the decoded JSON.
+    local s_LootPickupId = s_DecodedData.lootPickup
+	local s_ItemId = s_DecodedData.item
+    local s_SlotId = s_DecodedData.slot
+
+    if s_LootPickupId == nil or s_ItemId == nil or s_SlotId == nil then
+        return
+    end
+
+    NetEvents:Send(InventoryNetEvent.PickupItem, s_LootPickupId, s_ItemId, p_SlotId)
 end

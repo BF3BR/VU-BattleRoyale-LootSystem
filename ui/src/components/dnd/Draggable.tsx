@@ -2,10 +2,11 @@ import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 
 export function Draggable(props: any) {
-    const {attributes, listeners, setNodeRef, transform} = useDraggable({
+    const { attributes, listeners, setNodeRef } = useDraggable({
         id: props.id,
         data: {
             currentSlot: props.currentSlot,
+            item: props.item,
         },
     });
     

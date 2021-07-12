@@ -22,7 +22,7 @@ function BRInventoryWeaponSlot:Drop()
         return {}
     end
 
-    local s_DroppedItems = {self.m_Item}
+    local s_DroppedItems = { self.m_Item }
     for _, l_AttachmentSlot in pairs(self.m_AttachmentSlots) do
         local s_Items = l_AttachmentSlot:Drop()
 
@@ -33,6 +33,8 @@ function BRInventoryWeaponSlot:Drop()
     end
 
     self.m_Item = nil
+
+    self.m_Inventory:UpdateSoldierCustomization()
 
     return s_DroppedItems
 end

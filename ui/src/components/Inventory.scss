@@ -68,6 +68,22 @@
             background: transparent;
         }
 
+        &.LootBox {
+            position: absolute;
+            bottom: 5vh;
+            left: 32vw;
+            width: 25vw;
+            height: 30vh;
+            background: rgba(36, 36, 36, 1);
+
+            .backpack-grid {
+                padding: 0;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-gap: .1vw;
+            }
+        }
+
         &.BackpackBox {
             margin: 1vw 0 0;
 

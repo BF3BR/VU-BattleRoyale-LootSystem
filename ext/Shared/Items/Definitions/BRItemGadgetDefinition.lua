@@ -12,7 +12,8 @@ function BRItemGadgetDefinition:__init(
     p_UIIcon,
     p_MaxStack,
     p_SoldierWeaponBlueprint,
-    p_EbxName
+    p_EbxName,
+    p_Transform
 )
     BRItemDefinition.__init(self)
 
@@ -26,6 +27,7 @@ function BRItemGadgetDefinition:__init(
     self.m_Stackable = true
     self.m_MaxStack = p_MaxStack
     self.m_Price = 0
+    self.m_Transform = p_Transform
 
     self.m_SoldierWeaponBlueprint = p_SoldierWeaponBlueprint
     self.m_EbxName = p_EbxName
@@ -41,6 +43,12 @@ return {
         "UI/Art/Persistence/Weapons/Fancy/m320",
         3,
         DC(Guid("5407475F-7E82-44A8-99D2-8009B925A528"), Guid("2F200B5C-4958-467C-9E12-B99DDADE2332")),
-        "Weapons/Gadgets/M320/M320"
+        "Weapons/Gadgets/M320/M320",
+        LinearTransform(
+            Vec3(0,-1, 0),
+            Vec3(1, 0, 0),
+            Vec3(0, 0, 1),
+            Vec3(-0.5, 0.04, -0.5)
+        )
     ),
 }

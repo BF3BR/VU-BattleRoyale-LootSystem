@@ -6,4 +6,6 @@ InventoryNetEvent = {
 	UseItem = "IV:UI",
 	CreateLootPickup = "IV:CLP",
 	UnregisterLootPickup = "IV:ULP",
+	PickupItem = "IV:PI",
+	UpdateLootPickup = "IV:UPLP",
 }

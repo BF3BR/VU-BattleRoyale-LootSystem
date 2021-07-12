@@ -12,6 +12,7 @@ require "__shared/Slots/BRInventoryBackpackSlot"
 
 local m_ItemDatabase = require "Types/BRItemDatabase"
 local m_InventoryManager = require "BRInventoryManager"
+local m_LootPickupDatabase = require "Types/BRLootPickupDatabase"
 
 class "BRInventory"
 
@@ -123,7 +124,12 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
 
     if s_Slot == nil then
         m_Logger:Write("No available slot in the inventory.")
-        return p_ItemId
+        m_LootPickupDatabase:CreateLootPickup(
+            "Basic",
+            self.m_Owner.soldier.worldTransform,
+            s_Item
+        )
+        return
     end
 
     if s_Slot.m_Item ~= nil then
@@ -176,17 +182,32 @@ function BRInventory:SwapItems(p_ItemId, p_SlotId)
 end
 
 function BRInventory:DropItem(p_ItemId, p_Quantity)
-    -- TODO: Use this later on 
-    --[[for _, l_Slot in pairs(self.m_Slots) do
+    if self.m_Owner == nil then
+        return
+    end
+
+    if self.m_Owner.soldier == nil then
+        return
+    end
+
+    if self.m_Owner.soldier.worldTransform == nil then
+        return
+    end
+
+    for _, l_Slot in pairs(self.m_Slots) do
         if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
-            l_Slot:Drop()
+            local l_DroppedItems = l_Slot:Drop()
+            m_LootPickupDatabase:CreateLootPickup(
+                "Basic",
+                self.m_Owner.soldier.worldTransform,
+                l_DroppedItems
+            )
+            self:SendState()
             return
         end
-    end]]
+    end
 
     --TODO: Use p_Quantity for splitting
-
-    self:RemoveItem(p_ItemId)
 end
 
 function BRInventory:UseItem(p_ItemId)

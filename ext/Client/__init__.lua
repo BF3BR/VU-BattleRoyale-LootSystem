@@ -18,6 +18,7 @@ require "__shared/Items/BRItemConsumable"
 require "__shared/Items/BRItemGadget"
 
 require "Types/BRInventory"
+require "Types/BRLooting"
 
 local m_Logger = Logger("VuBattleRoyaleLootSystemClient", true)
 
@@ -50,19 +51,23 @@ end
 
 function VuBattleRoyaleLootSystemClient:RegisterVars()
 	self.m_Invetnory = BRInventory()
-    self.m_LootPickups = {}
+	self.m_Looting = BRLooting()
 end
 
 function VuBattleRoyaleLootSystemClient:RegisterEvents()
 	NetEvents:Subscribe(InventoryNetEvent.InventoryState, self, self.OnReceiveInventoryState)
     NetEvents:Subscribe(InventoryNetEvent.CreateLootPickup, self, self.OnCreateLootPickup)
     NetEvents:Subscribe(InventoryNetEvent.UnregisterLootPickup, self, self.OnUnregisterLootPickup)
+    NetEvents:Subscribe(InventoryNetEvent.UpdateLootPickup, self, self.OnUpdateLootPickup)
 end
 
 function VuBattleRoyaleLootSystemClient:RegisterWebUIEvents()
 	Events:Subscribe("WebUI:MoveItem", self, self.OnWebUIMoveItem)
     Events:Subscribe("WebUI:DropItem", self, self.OnWebUIDropItem)
     Events:Subscribe("WebUI:UseItem", self, self.OnWebUIUseItem)
+    Events:Subscribe("WebUI:PickupItem", self, self.OnWebUIPickupItem)
+
+	Events:Subscribe("Client:UpdateInput", self, self.OnClientUpdateInput)
 end
 
 function VuBattleRoyaleLootSystemClient:OnWebUIMoveItem(p_JsonData)
@@ -77,26 +82,28 @@ function VuBattleRoyaleLootSystemClient:OnWebUIUseItem(p_JsonData)
     self.m_Invetnory:OnWebUIUseItem(p_JsonData)
 end
 
+function VuBattleRoyaleLootSystemClient:OnWebUIPickupItem(p_JsonData)
+    self.m_Invetnory:OnWebUIPickupItem(p_JsonData)
+end
+
 function VuBattleRoyaleLootSystemClient:OnReceiveInventoryState(p_State)
     self.m_Invetnory:OnReceiveInventoryState(p_State)
 end
 
 function VuBattleRoyaleLootSystemClient:OnCreateLootPickup(p_DataArray)
-    if self.m_LootPickups[p_LootPickupId] ~= nil then
-        return
-    end
-
-    self.m_LootPickups[p_DataArray.Id] = BRLootPickup:CreateFromTable(p_DataArray)
-    self.m_LootPickups[p_DataArray.Id]:Spawn()
+	self.m_Looting:OnCreateLootPickup(p_DataArray)
 end
 
 function VuBattleRoyaleLootSystemClient:OnUnregisterLootPickup(p_LootPickupId)
-    if self.m_LootPickups[p_LootPickupId] == nil then
-        return
-    end
+    self.m_Looting:OnUnregisterLootPickup(p_LootPickupId)
+end
 
-    self.m_LootPickups[p_LootPickupId]:Destroy()
-    self.m_LootPickups[p_LootPickupId] = nil
+function VuBattleRoyaleLootSystemClient:OnUpdateLootPickup(p_DataArray)
+    self.m_Looting:OnUpdateLootPickup(p_DataArray)
+end
+
+function VuBattleRoyaleLootSystemClient:OnClientUpdateInput(p_Delta)
+	self.m_Looting:OnClientUpdateInput(p_Delta)
 end
 
 return VuBattleRoyaleLootSystemClient()

@@ -30,8 +30,7 @@ function BRLootPickupDatabase:CreateLootPickup(p_Type, p_Transform, p_Items)
     -- create item instance and insert it to the items table
     local s_LootPickup = BRLootPickup:CreateFromTable(s_DataArray)
     self.m_LootPickups[s_DataArray.Id] = s_LootPickup
-
-    self.m_LootPickups[s_DataArray.Id]:Spawn()
+    self.m_LootPickups[s_DataArray.Id]:Spawn(s_DataArray.Id)
 
     m_Logger:Write("Loot Pickup added to database.")
 
@@ -53,6 +52,28 @@ function BRLootPickupDatabase:UnregisterLootPickup(p_LootPickupId)
     NetEvents:BroadcastLocal(InventoryNetEvent.UnregisterLootPickup, p_LootPickupId)
 
     m_Logger:Write("Loot Pickup removed from database.")
+end
+
+function BRLootPickupDatabase:RemoveItemFromLootPickup(p_LootPickupId, p_ItemId)
+    if self.m_LootPickups[p_LootPickupId] == nil then
+        return
+    end
+
+    for l_Index, l_Item in pairs(self.m_LootPickups[p_LootPickupId].m_Items) do
+        if p_ItemId == l_Item.m_Id then
+            self.m_LootPickups[p_LootPickupId].m_Items[l_Index] = nil
+
+            m_Logger:Write("Loot Pickup item removed from database.")
+        end
+    end
+
+    if #self.m_LootPickups[p_LootPickupId].m_Items > 0 then
+        local s_DataArray = self.m_LootPickups[p_LootPickupId]:AsTable()
+        NetEvents:BroadcastLocal(InventoryNetEvent.UpdateLootPickup, s_DataArray)
+    else
+        -- Remove loot pickup if all the item got picked up
+        self:UnregisterLootPickup(p_LootPickupId)
+    end
 end
 
 function BRLootPickupDatabase:GetRandomId()

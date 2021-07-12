@@ -8,20 +8,24 @@ import { Draggable } from './dnd/Draggable';
 import { Droppable } from './dnd/Droppable';
 
 import InventoryTooltip from "./tooltip/InventoryTooltip";
+import InventoryTimer from "./InventoryTimer";
 
 import { sendToLua } from "../Helpers";
 
 import "./Inventory.scss";
-import InventoryTimer from "./InventoryTimer";
 
 interface StateFromReducer {
-    slots: any
+    slots: any;
+    overlayLootBox: any;
+    lootId: string|null;
 }
 
 type Props = StateFromReducer;
 
 const Inventory: React.FC<Props> = ({
-    slots
+    slots,
+    overlayLootBox,
+    lootId
 }) => {
     const [isHoldingCtrl, setIsHoldingCtrl] = useState<boolean>(false);
 
@@ -67,7 +71,7 @@ const Inventory: React.FC<Props> = ({
 
     function handleDragStart(event: any) {
         const { active } = event;
-        setIsDragging(active.data.current.currentSlot);
+        setIsDragging(active.data.current.item);
     }
 
     function handleDragEnd(event: any) {
@@ -76,7 +80,16 @@ const Inventory: React.FC<Props> = ({
 
         if (over !== null) {
             const slot = over.id;
-            if (active.data.current.currentSlot.toString() !== slot) {
+            if (active.data.current.currentSlot === undefined) {
+                // When you pick up from a loot box
+                if (lootId !== null) {
+                    sendToLua('WebUI:PickupItem', JSON.stringify({ 
+                        item: active.id, 
+                        slot: slot,
+                        lootPickup: lootId,
+                    }));
+                }
+            } else if (active.data.current.currentSlot.toString() !== slot) {
                 if (slot === "item-drop") {
                     sendToLua('WebUI:DropItem', JSON.stringify({ item: active.id, quantity: slots[active.data.current.currentSlot].Quantity }));
                 } else if(slot === "item-drop-split") {
@@ -129,7 +142,7 @@ const Inventory: React.FC<Props> = ({
         }
 
         return (
-            <Draggable id={slot.Id} currentSlot={key}>
+            <Draggable id={slot.Id} item={slot} currentSlot={key}>
                 {getSlotDrag(slot)}
             </Draggable>
         )
@@ -150,7 +163,7 @@ const Inventory: React.FC<Props> = ({
                     }
                 >
                     {slot.UIIcon !== null &&
-                        <img src={"fb://" + slot.UIIcon} />
+                        <img src={"fb://" + slot.UIIcon} alt="" />
                     }
                     <div className="information">
                         <span className="name">{slot.Name ?? ""}</span>
@@ -169,13 +182,13 @@ const Inventory: React.FC<Props> = ({
                     {slot.Tier !== undefined &&
                         <span className="tier">
                             {slot.Tier === 1 &&
-                                <img src="fb://UI/Art/Persistence/Ranks/Rank001" />
+                                <img src="fb://UI/Art/Persistence/Ranks/Rank001" alt="" />
                             }
                             {slot.Tier === 2 &&
-                                <img src="fb://UI/Art/Persistence/Ranks/Rank002" />
+                                <img src="fb://UI/Art/Persistence/Ranks/Rank002" alt="" />
                             }
                             {slot.Tier === 3 &&
-                                <img src="fb://UI/Art/Persistence/Ranks/Rank003" />
+                                <img src="fb://UI/Art/Persistence/Ranks/Rank003" alt="" />
                             }
                         </span>
                     }
@@ -418,6 +431,24 @@ const Inventory: React.FC<Props> = ({
                         <Droppable id="item-drop"></Droppable>
                         <Droppable id="item-drop-split"></Droppable>
                     </div>
+                    {overlayLootBox.length > 0 &&
+                        <div className="card LootBox">
+                            <div className="card-header">
+                                <h1>
+                                    Loot box
+                                </h1>
+                            </div>
+                            <div className="card-content backpack-grid">
+                                {overlayLootBox.map((slot: any, key: number) => (
+                                    <div className="item-slot" key={key}>
+                                        <Draggable id={slot.Id} item={slot}>
+                                            {getSlotDrag(slot)}
+                                        </Draggable>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    }
                 </div>
                 <DragOverlay 
                     dropAnimation={null}
@@ -428,7 +459,7 @@ const Inventory: React.FC<Props> = ({
                 >
                     {isDragging !== null && 
                         <div className="dragoverlay-object">
-                            {getSlotDrag(slots[isDragging])}
+                            {getSlotDrag(isDragging)}
                         </div>
                     }
                 </DragOverlay>
@@ -459,6 +490,8 @@ const mapStateToProps = (state: RootState) => {
     return {
         // InventoryReducer
         slots: state.InventoryReducer.slots,
+        overlayLootBox: state.InventoryReducer.overlayLootBox,
+        lootId: state.InventoryReducer.lootId,
     };
 }
 const mapDispatchToProps = (dispatch: any) => {

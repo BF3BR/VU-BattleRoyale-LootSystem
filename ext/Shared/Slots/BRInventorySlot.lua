@@ -73,13 +73,15 @@ function BRInventorySlot:OnUpdate()
 end
 
 function BRInventorySlot:Drop()
-    -- TODO
-    return {}
+    -- Override (if needed)
+    if self.m_Item == nil then
+        return {}
+    end
 
-    -- local s_Item = self.m_Item
-    -- self.m_Item = nil
+    local s_Item = self.m_Item
+    self.m_Item = nil
 
-    -- return {s_Item}
+    return { s_Item }
 end
 
 function BRInventorySlot:Use()

@@ -12,6 +12,12 @@ function BRItemDefinition:__init()
     self.m_MaxStack = nil
     self.m_Price = 0
     self.m_Mesh = nil
+    self.m_Transform = LinearTransform(
+        Vec3(1, 0, 0),
+        Vec3(0, 1, 0),
+        Vec3(0, 0, 1),
+        Vec3(0, 0, 0)
+    )
     self.m_HasAction = false
     self.m_UIIcon = nil
 end

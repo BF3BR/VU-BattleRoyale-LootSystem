@@ -38,10 +38,31 @@ end
 function VuBattleRoyaleLootSystemServer:OnExtensionLoaded()
     Events:Subscribe("Player:SpawnOnSelectedSpawnPoint", self, self.OnPlayerAuthenticated)
     Events:Subscribe("Player:Left", self, self.OnPlayerLeft)
+
+    NetEvents:Subscribe(InventoryNetEvent.PickupItem, self, self.OnInventoryPickupItem)
 end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerLeft(p_Player)
     m_InventoryManager:OnPlayerLeft(p_Player)
+end
+
+function VuBattleRoyaleLootSystemServer:OnInventoryPickupItem(p_Player, p_LootPickupId, p_ItemId, p_SlotId)
+    local s_Inventory = m_InventoryManager.m_Inventories[p_Player.id]
+    if s_Inventory == nil then
+        return
+    end
+
+    if m_LootPickupDatabase.m_LootPickups[p_LootPickupId] == nil then
+        return
+    end
+
+    for _, l_Item in pairs(m_LootPickupDatabase.m_LootPickups[p_LootPickupId].m_Items) do
+        if p_ItemId == l_Item.m_Id then
+            s_Inventory:AddItem(p_ItemId, p_SlotId)
+            m_LootPickupDatabase:RemoveItemFromLootPickup(p_LootPickupId, p_ItemId)
+            return
+        end
+    end
 end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
@@ -84,19 +105,63 @@ function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
 
 
     ------------------
-    --[[local s_ItemAKSpawned = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-ak74m"])
+    local s_ItemAKSpawned = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-ak74m"])
     m_LootPickupDatabase:CreateLootPickup(
         "Basic",
         LinearTransform(
             Vec3(1.0, 0.0, 0.0), 
             Vec3(0.0, 1.0, 0.0), 
             Vec3(0.0, 0.0, 1.0), 
-            Vec3(487.717773, 149.940231, -428.448242)
+            Vec3(21.276367, 10.880676, 3.685547)
         ),
         {
             s_ItemAKSpawned,
         }
-    )]]
+    )
+
+    local s_ItemAcogSpawned = m_ItemDatabase:CreateItem(m_AttachmentDefinitions["attachment-acog"])
+    local s_ItemHoloSpawned = m_ItemDatabase:CreateItem(m_AttachmentDefinitions["attachment-holo"])
+    m_LootPickupDatabase:CreateLootPickup(
+        "Basic",
+        LinearTransform(
+            Vec3(1.0, 0.0, 0.0), 
+            Vec3(0.0, 1.0, 0.0), 
+            Vec3(0.0, 0.0, 1.0), 
+            Vec3(20.837891, 10.881640, 7.938477)
+        ),
+        {
+            s_ItemAcogSpawned,
+            s_ItemHoloSpawned
+        }
+    )
+
+    local s_ItemHoloSpawned2 = m_ItemDatabase:CreateItem(m_AttachmentDefinitions["attachment-holo"])
+    m_LootPickupDatabase:CreateLootPickup(
+        "Basic",
+        LinearTransform(
+            Vec3(1.0, 0.0, 0.0), 
+            Vec3(0.0, 1.0, 0.0), 
+            Vec3(0.0, 0.0, 1.0), 
+            Vec3(21.837891, 10.881640, 7.938477)
+        ),
+        {
+            s_ItemHoloSpawned2,
+        }
+    )
+
+    local s_ItemM98b = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-m98b"])
+    m_LootPickupDatabase:CreateLootPickup(
+        "Basic",
+        LinearTransform(
+            Vec3(1.0, 0.0, 0.0), 
+            Vec3(0.0, 1.0, 0.0), 
+            Vec3(0.0, 0.0, 1.0), 
+            Vec3(21.047852, 10.881640, -0.941406)
+        ),
+        {
+            s_ItemM98b,
+        }
+    )
 end
 
 return VuBattleRoyaleLootSystemServer()

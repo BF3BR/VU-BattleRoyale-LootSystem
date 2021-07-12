@@ -20,21 +20,45 @@ LootPickupType = {
         Name = "Basic",
         Mesh = DC(Guid("6519E1BF-BB39-8B7F-47D9-1B4C365318D9"), Guid("BC6154A0-CDFC-D402-ECCA-444811062765")),
         CheckPrice = false,
+        Transform = LinearTransform(
+            Vec3(1, 0, 0),
+            Vec3(0, 1, 0),
+            Vec3(0, 0, 1),
+            Vec3(0, 0, 0)
+        )
     },
     Chest = {
         Name = "Chest",
         Mesh = DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
         CheckPrice = false,
+        Transform = LinearTransform(
+            Vec3(1, 0, 0),
+            Vec3(0, 1, 0),
+            Vec3(0, 0, 1),
+            Vec3(0, 0, 0)
+        )
     },
     Airdrop = {
         Name = "Airdrop",
         Mesh = nil,
         CheckPrice = false,
+        Transform = LinearTransform(
+            Vec3(1, 0, 0),
+            Vec3(0, 1, 0),
+            Vec3(0, 0, 1),
+            Vec3(0, 0, 0)
+        )
     },
     Shop = {
         Name = "Shop",
         Mesh = nil,
         CheckPrice = true,
+        Transform = LinearTransform(
+            Vec3(1, 0, 0),
+            Vec3(0, 1, 0),
+            Vec3(0, 0, 1),
+            Vec3(0, 0, 0)
+        )
     },
 }
 
