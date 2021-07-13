@@ -5,9 +5,10 @@ local m_Logger = Logger("BRInventoryWeaponSlot", true)
 
 class("BRInventoryWeaponSlot", BRInventorySlot)
 
-function BRInventoryWeaponSlot:__init(p_Inventory)
+function BRInventoryWeaponSlot:__init(p_Inventory, p_UnlockWeaponSlot)
     BRInventorySlot.__init(self, p_Inventory, { ItemType.Weapon })
 
+    self.m_UnlockWeaponSlot = p_UnlockWeaponSlot
     self.m_AttachmentSlots = {
         OpticsSlot = nil,
         BarrelSlot = nil,
@@ -46,6 +47,7 @@ function BRInventoryWeaponSlot:GetUnlockWeaponAndSlot()
 
     -- Create weapon unlock
     local s_Weapon = UnlockWeaponAndSlot()
+    s_Weapon.slot = self.m_UnlockWeaponSlot
     s_Weapon.weapon = SoldierWeaponUnlockAsset(
         self.m_Item.m_Definition.m_SoldierWeaponBlueprint:GetInstance()
     )

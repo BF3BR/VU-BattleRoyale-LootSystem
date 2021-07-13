@@ -25,12 +25,12 @@ function BRInventory:__init(p_Owner)
     -- A table of slots
     self.m_Slots = {
         -- PrimaryWeapon slots
-        [InventorySlot.PrimaryWeapon] = BRInventoryWeaponSlot(self),
+        [InventorySlot.PrimaryWeapon] = BRInventoryWeaponSlot(self, WeaponSlot.WeaponSlot_0),
         [InventorySlot.PrimaryWeaponAttachmentOptics] = BRInventoryAttachmentSlot(self, AttachmentType.Optics),
         [InventorySlot.PrimaryWeaponAttachmentBarrel] = BRInventoryAttachmentSlot(self, AttachmentType.Barrel),
         [InventorySlot.PrimaryWeaponAttachmentOther] = BRInventoryAttachmentSlot(self, AttachmentType.Other),
         -- SecondaryWeapon slots
-        [InventorySlot.SecondaryWeapon] = BRInventoryWeaponSlot(self),
+        [InventorySlot.SecondaryWeapon] = BRInventoryWeaponSlot(self, WeaponSlot.WeaponSlot_1),
         [InventorySlot.SecondaryWeaponAttachmentOptics] = BRInventoryAttachmentSlot(self, AttachmentType.Optics),
         [InventorySlot.SecondaryWeaponAttachmentBarrel] = BRInventoryAttachmentSlot(self, AttachmentType.Barrel),
         [InventorySlot.SecondaryWeaponAttachmentOther] = BRInventoryAttachmentSlot(self, AttachmentType.Other),
@@ -476,21 +476,18 @@ function BRInventory:CreateCustomizeSoldierData()
     -- Primary weapon
     local s_PrimaryWeapon = self.m_Slots[InventorySlot.PrimaryWeapon]:GetUnlockWeaponAndSlot()
     if s_PrimaryWeapon ~= nil then
-        s_PrimaryWeapon.slot = WeaponSlot.WeaponSlot_0
         s_CustomizeSoldierData.weapons:add(s_PrimaryWeapon)
     end
 
     -- Secondary weapon
     local s_SecondaryWeapon = self.m_Slots[InventorySlot.SecondaryWeapon]:GetUnlockWeaponAndSlot()
     if s_SecondaryWeapon ~= nil then
-        s_SecondaryWeapon.slot = WeaponSlot.WeaponSlot_1
         s_CustomizeSoldierData.weapons:add(s_SecondaryWeapon)
     end
 
     -- Gadget
     local s_Gadget = self.m_Slots[InventorySlot.Gadget]:GetUnlockWeaponAndSlot()
     if s_Gadget ~= nil then
-        s_Gadget.slot = WeaponSlot.WeaponSlot_2
         s_CustomizeSoldierData.weapons:add(s_Gadget)
     end
 

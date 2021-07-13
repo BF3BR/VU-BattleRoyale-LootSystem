@@ -16,6 +16,7 @@ function BRInventoryGadgetSlot:GetUnlockWeaponAndSlot()
 
     -- Create gadget unlock
     local s_Gadget = UnlockWeaponAndSlot()
+    s_Gadget.slot = WeaponSlot.WeaponSlot_2
     s_Gadget.weapon = SoldierWeaponUnlockAsset(
         self.m_Item.m_Definition.m_SoldierWeaponBlueprint:GetInstance()
     )
