@@ -30,3 +30,7 @@ end
 function BRItem:CreateFromTable(p_Table)
     return g_BRItemFactory:CreateFromTable(p_Table)
 end
+
+function BRItem:Equals(p_Item)
+    return p_Item ~= nil and p_Item.m_Id == self.m_Id
+end

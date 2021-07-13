@@ -4,6 +4,7 @@ function BRInventorySlot:__init(p_Inventory, p_AcceptedTypes)
     self.m_Item = nil
     self.m_Inventory = p_Inventory
     self.m_AcceptedTypes = p_AcceptedTypes or {}
+    self.m_IsUpdated = true
 end
 
 -- Checks if the slot contains an item with the specified definition
@@ -15,15 +16,27 @@ function BRInventorySlot:IsOfDefinition(p_Definition)
     return false
 end
 
+-- Puts an item into the slot
 function BRInventorySlot:Put(p_Item)
     -- TODO more checks + swap logic + more...
+    -- check if invalid item for this slot
     if p_Item ~= nil and not self:IsAccepted(p_Item) then
         return false, {}
     end
 
-    local s_DroppedItems = self:Drop()
-    self.m_Item = p_Item
+    -- check if the item is already equipped
+    if p_Item ~= nil and p_Item:Equals(self.m_Item) then
+        return true, {}
+    end
 
+    -- drop old stuff
+    local s_DroppedItems = self:Drop()
+
+    -- set new item
+    self.m_Item = p_Item
+    self.m_IsUpdated = true
+
+    -- trigger the update event
     self:OnUpdate()
 
     return true, s_DroppedItems

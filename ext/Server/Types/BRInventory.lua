@@ -72,28 +72,22 @@ function BRInventory:__init(p_Owner)
 end
 
 function BRInventory:AsTable()
-    return {
-        self.m_Slots[InventorySlot.PrimaryWeapon]:AsTable(),
-        self.m_Slots[InventorySlot.PrimaryWeaponAttachmentOptics]:AsTable(),
-        self.m_Slots[InventorySlot.PrimaryWeaponAttachmentBarrel]:AsTable(),
-        self.m_Slots[InventorySlot.PrimaryWeaponAttachmentOther]:AsTable(),
-        self.m_Slots[InventorySlot.SecondaryWeapon]:AsTable(),
-        self.m_Slots[InventorySlot.SecondaryWeaponAttachmentOptics]:AsTable(),
-        self.m_Slots[InventorySlot.SecondaryWeaponAttachmentBarrel]:AsTable(),
-        self.m_Slots[InventorySlot.SecondaryWeaponAttachmentOther]:AsTable(),
-        self.m_Slots[InventorySlot.Armor]:AsTable(),
-        self.m_Slots[InventorySlot.Helmet]:AsTable(),
-        self.m_Slots[InventorySlot.Gadget]:AsTable(),
-        self.m_Slots[InventorySlot.Backpack1]:AsTable(),
-        self.m_Slots[InventorySlot.Backpack2]:AsTable(),
-        self.m_Slots[InventorySlot.Backpack3]:AsTable(),
-        self.m_Slots[InventorySlot.Backpack4]:AsTable(),
-        self.m_Slots[InventorySlot.Backpack5]:AsTable(),
-        self.m_Slots[InventorySlot.Backpack6]:AsTable(),
-        self.m_Slots[InventorySlot.Backpack7]:AsTable(),
-        self.m_Slots[InventorySlot.Backpack8]:AsTable(),
-        self.m_Slots[InventorySlot.Backpack9]:AsTable(),
-    }
+    local s_Data = {}
+
+    -- Add only updated slots into the data that 
+    -- will be sent to the client
+    for l_SlotIndex = 1, 20 do
+        local s_Slot = self.m_Slots[l_SlotIndex]
+        if s_Slot.m_IsUpdated then
+            s_Data[l_SlotIndex] = s_Slot:AsTable()
+
+            -- TODO
+            -- for now dont turn it to false
+            -- s_Slot.m_IsUpdated = false
+        end
+    end
+
+    return s_Data
 end
 
 -- Returns the slot of an item or nil if item was not found
