@@ -351,6 +351,7 @@ function BRInventory:IsGadget(p_WeaponName)
     return false
 end
 
+-- Sends the state of the inventory to its owner
 function BRInventory:SendState()
     if self.m_Owner == nil then
         return

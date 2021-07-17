@@ -20,6 +20,7 @@ function BRItem:AsTable()
         UId = self.m_Definition.m_UId,
     }
 
+    -- add quantity if item is stackable
     if self.m_Definition.m_Stackable then
         s_Table.Quantity = self.m_Quantity
     end
@@ -33,4 +34,8 @@ end
 
 function BRItem:Equals(p_Item)
     return p_Item ~= nil and p_Item.m_Id == self.m_Id
+end
+
+function BRItem:Destroy()
+    
 end

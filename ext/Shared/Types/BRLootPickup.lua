@@ -63,6 +63,16 @@ function BRLootPickup:AsTable()
     }
 end
 
+function BRLootPickup:RemoveItem(p_Id)
+    for l_Index, l_Item in pairs(self.m_Items) do
+        if l_Item.m_Id == p_Id then
+            self.m_Items[l_Index] = nil
+
+            m_Logger:Write("Loot Pickup item removed from database.")
+        end
+    end
+end
+
 function BRLootPickup:CreateFromTable(p_Table)
     local s_Items = {}
     for _, l_Item in pairs(p_Table.Items) do
@@ -76,7 +86,6 @@ function BRLootPickup:CreateFromTable(p_Table)
         s_Items
     )
 end
-
 
 --==============================
 -- Spawn / Destroy functions
@@ -136,16 +145,15 @@ function BRLootPickup:Spawn(p_Id)
             s_Color = Vec3(1, 0.6, 0)
         end
     end
-    
 
     local s_SpotLightEntityData = SpotLightEntityData()
     local left, up, forward = m_RotationHelper:GetLUFfromYPR(0, 1.57079633, 0)
     s_SpotLightEntityData.transform = LinearTransform(
-		left,
-		up,
-		forward,
-		Vec3(0, 1.2, 0)
-	)
+        left,
+        up,
+        forward,
+        Vec3(0, 1.2, 0)
+    )
     s_SpotLightEntityData.color = s_Color
     s_SpotLightEntityData.radius = 6.5
     s_SpotLightEntityData.intensity = 3.5
@@ -165,13 +173,13 @@ function BRLootPickup:Spawn(p_Id)
     s_SpotLightEntityData.orthoHeight = 0.5
     s_SpotLightEntityData.castShadowsEnable = false
     s_SpotLightEntityData.castShadowsMinLevel = QualityLevel.QualityLevel_Low
-    
-	local s_BusStaticModel = EntityManager:CreateEntity(s_StaticModelEntityData, self.m_Transform)
+
+    local s_BusStaticModel = EntityManager:CreateEntity(s_StaticModelEntityData, self.m_Transform)
     local s_BusSpotLight = EntityManager:CreateEntity(s_SpotLightEntityData, self.m_Transform)
 
-	if s_BusStaticModel == nil or s_BusSpotLight == nil then
-		return
-	end
+    if s_BusStaticModel == nil or s_BusSpotLight == nil then
+        return
+    end
 
     if self.m_Entities == nil then
         self.m_Entities = {}
@@ -188,11 +196,11 @@ function BRLootPickup:Destroy()
     if self.m_Entities == nil then
         return
     end
-    
-	for l_Index, l_Entity in ipairs(self.m_Entities) do
+
+    for l_Index, l_Entity in ipairs(self.m_Entities) do
         l_Entity:FireEvent("Disable")
         l_Entity:FireEvent("Destroy")
-		l_Entity:Destroy()
+        l_Entity:Destroy()
         self.m_Entities[l_Index] = nil
-	end
+    end
 end

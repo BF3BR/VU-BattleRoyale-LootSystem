@@ -55,21 +55,16 @@ function BRLootPickupDatabase:UnregisterLootPickup(p_LootPickupId)
 end
 
 function BRLootPickupDatabase:RemoveItemFromLootPickup(p_LootPickupId, p_ItemId)
-    if self.m_LootPickups[p_LootPickupId] == nil then
+    local s_LootPickup = self.m_LootPickups[p_LootPickupId]
+    if s_LootPickup == nil then
         return
     end
 
-    for l_Index, l_Item in pairs(self.m_LootPickups[p_LootPickupId].m_Items) do
-        if p_ItemId == l_Item.m_Id then
-            self.m_LootPickups[p_LootPickupId].m_Items[l_Index] = nil
+    s_LootPickup:RemoveItem(p_ItemId)
 
-            m_Logger:Write("Loot Pickup item removed from database.")
-        end
-    end
-
-    if #self.m_LootPickups[p_LootPickupId].m_Items > 0 then
-        local s_DataArray = self.m_LootPickups[p_LootPickupId]:AsTable()
-        NetEvents:BroadcastLocal(InventoryNetEvent.UpdateLootPickup, s_DataArray)
+    if #s_LootPickup.m_Items > 0 then
+        -- Broadcast updated lootPickup
+        NetEvents:BroadcastLocal(InventoryNetEvent.UpdateLootPickup, s_LootPickup:AsTable())
     else
         -- Remove loot pickup if all the item got picked up
         self:UnregisterLootPickup(p_LootPickupId)

@@ -37,11 +37,14 @@ function BRItemDatabase:UnregisterItem(p_Id)
         return
     end
 
-    if self.m_Items[p_Id] == nil then
+    local s_Item = self.m_Items[p_Id]
+    if s_Item == nil then
         return
     end
 
+    -- clear reference and destroy
     self.m_Items[p_Id] = nil
+    s_Item:Destroy()
 
     m_Logger:Write("Item removed from database. (" .. tostring(p_Id) .. ")")
 end

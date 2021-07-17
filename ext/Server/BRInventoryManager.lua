@@ -34,6 +34,7 @@ function BRInventoryManager:RegisterEvents()
     Events:Subscribe("GunSway:UpdateRecoil", self, self.OnGunSwayUpdateRecoil)
     Events:Subscribe("Player:ChangingWeapon", self, self.OnPlayerChangingWeapon)
     Events:Subscribe("Player:PostReload", self, self.OnPlayerPostReload)
+    Events:Subscribe("BRItem:DestroyItem", self, self.OnItemDestroy)
 end
 
 function BRInventoryManager:OnPlayerLeft(p_Player)
@@ -172,6 +173,26 @@ function BRInventoryManager:OnInventoryUseItem(p_Player, p_ItemId)
     end
 
     s_Inventory:UseItem(p_ItemId)
+end
+
+-- ugly solution for now
+-- BRItemDatabase should know where each item resides and
+-- destroy it and remove any references when needed
+function BRInventoryManager:OnItemDestroy(p_ItemId)
+    -- search for the item
+    for _, l_Inventory in pairs(self.m_Inventories) do
+        local s_Slot = l_Inventory:GetSlot(p_ItemId)
+
+        -- clear slot and send the updated inventory state
+        if s_Slot ~= nil then
+            s_Slot:Clear()
+            l_Inventory:SendState()
+            break
+        end
+    end
+
+    -- remove item from database
+    m_ItemDatabase:UnregisterItem(p_ItemId)
 end
 
 -- define global
