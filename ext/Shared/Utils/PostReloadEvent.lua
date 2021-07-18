@@ -3,8 +3,8 @@ class "PostReloadEvent"
 function PostReloadEvent:__init()
   self.m_WeaponAmmo = {}
 
-  Events:Subscribe('Player:Reload', self, self.OnPlayerReload)
-  Events:Subscribe('WeaponFiring:Update', self, self.OnWeaponFiring)
+  Events:Subscribe("Player:Reload", self, self.OnPlayerReload)
+  Events:Subscribe("WeaponFiring:Update", self, self.OnWeaponFiring)
 end
 
 function PostReloadEvent:OnPlayerReload(p_Player, p_WeaponName, p_Position)
@@ -36,7 +36,7 @@ function PostReloadEvent:OnWeaponFiring(p_WeaponFiring)
   local s_PreviousPrimaryAmmo = s_Data.Ammo
 
   -- Dispatch custom post reload event
-  Events:Dispatch('Player:PostReload', s_Player, s_PreviousPrimaryAmmo)
+  Events:Dispatch("Player:PostReload", s_Player, s_PreviousPrimaryAmmo)
 end
 
 PostReloadEvent()

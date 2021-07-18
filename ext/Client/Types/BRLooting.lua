@@ -122,10 +122,8 @@ function BRLooting:GetLootPickup(p_Entity)
 
 	for _, l_LootPickup in pairs(self.m_LootPickups) do
 		if l_LootPickup ~= nil and l_LootPickup.m_Entities ~= nil then
-			for _, l_Entity in pairs(l_LootPickup.m_Entities) do
-				if l_Entity.instanceId == p_Entity.instanceId then
-					return l_LootPickup
-				end
+			if l_LootPickup.m_Entities[p_Entity.instanceId] ~= nil then
+				return l_LootPickup
 			end
 		end
 	end

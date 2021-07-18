@@ -16,7 +16,7 @@ function BRLootPickup:__init(p_Id, p_Type, p_Transform, p_Items)
     -- A table of items
     self.m_Items = p_Items
 
-    -- Client only
+    -- [Client] Contains spawned entities {instanceId -> Entity}
     self.m_Entities = nil
 end
 
@@ -196,10 +196,12 @@ function BRLootPickup:Spawn(p_Id)
     end
 
     s_BusStaticModel:Init(Realm.Realm_ClientAndServer, true, false)
-    table.insert(self.m_Entities, s_BusStaticModel)
+    self.m_Entities[s_BusStaticModel.instanceId] = s_BusStaticModel
+    -- table.insert(self.m_Entities, s_BusStaticModel)
 
     s_BusSpotLight:Init(Realm.Realm_ClientAndServer, true, false)
-    table.insert(self.m_Entities, s_BusSpotLight)
+    self.m_Entities[s_BusSpotLight.instanceId] = s_BusSpotLight
+    -- table.insert(self.m_Entities, s_BusSpotLight)
 end
 
 function BRLootPickup:Destroy()
@@ -207,10 +209,11 @@ function BRLootPickup:Destroy()
         return
     end
 
-    for l_Index, l_Entity in ipairs(self.m_Entities) do
+    for l_InstanceId, l_Entity in pairs(self.m_Entities) do
         l_Entity:FireEvent("Disable")
         l_Entity:FireEvent("Destroy")
         l_Entity:Destroy()
-        self.m_Entities[l_Index] = nil
+
+        self.m_Entities[l_InstanceId] = nil
     end
 end
