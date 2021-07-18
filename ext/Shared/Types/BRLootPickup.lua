@@ -73,6 +73,16 @@ function BRLootPickup:RemoveItem(p_Id)
     end
 end
 
+function BRLootPickup:ContainsItem(p_Id)
+    for _, l_Item in pairs(self.m_Items) do
+        if l_Item.m_Id == p_Id then
+            return true
+        end
+    end
+
+    return false
+end
+
 function BRLootPickup:CreateFromTable(p_Table)
     local s_Items = {}
     for _, l_Item in pairs(p_Table.Items) do

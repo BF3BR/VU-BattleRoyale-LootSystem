@@ -33,6 +33,15 @@ function BRItem:AsTable()
     return s_Table
 end
 
+function BRItem:GetParentLootPickup()
+    if self.m_Owner == nil or self.m_Owner.m_Items == nil then
+        return nil
+    end
+
+    -- make sure the loot pickup contains this item
+    return self.m_Owner:ContainsItem(self.m_Id) and self.m_Owner or nil
+end
+
 function BRItem:GetParentSlot()
     if self.m_Owner == nil or self.m_Owner.m_Item == nil then
         return nil
@@ -56,10 +65,6 @@ function BRItem:GetParentPlayer()
     if s_Inventory ~= nil then
         return s_Inventory.m_Owner
     end
-end
-
-function BRItem:GetParentLootPickup()
-    return (self.m_Owner ~= nil and self.m_Owner.m_Items ~= nil and self.m_Owner) or nil
 end
 
 function BRItem:CreateFromTable(p_Table)
