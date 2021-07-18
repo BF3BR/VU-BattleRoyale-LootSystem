@@ -47,6 +47,13 @@ function BRInventorySlot:Put(p_Item)
     return true, s_DroppedItems
 end
 
+function BRInventorySlot:PutWithRelated(p_Items)
+    -- default behavior is to :Put only the first item
+    if #p_Items > 0 then
+        return self:Put(p_Items[1])
+    end
+end
+
 function BRInventorySlot:Clear()
     return self:Put(nil)
 end

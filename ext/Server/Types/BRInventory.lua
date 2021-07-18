@@ -161,18 +161,23 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
 end
 
 function BRInventory:SwapItems(p_ItemId, p_SlotId)
-    -- TODO: Use slots instead of this also if possible merge items when we can
-    local s_OldItem = self.m_Slots[p_SlotId].m_Item
-    local s_Slot = self:GetItemSlot(p_ItemId)
+    local s_NewSlot = self.m_Slots[p_SlotId]
+    local s_OldSlot = self:GetItemSlot(p_ItemId)
 
-    if s_Slot ~= nil and self.m_Slots[p_SlotId]:Put(s_Slot.m_Item) then
-        s_Slot:Put(s_OldItem)
-
-        m_Logger:Write("Slots swapped.")
-        self:SendState()
-    else
+    -- check if item isn't in the inventory
+    if s_OldSlot == nil then
         m_Logger:Write("Item not found in your inventory.")
+        return
     end
+
+    -- empty slots and keep dropped items
+    local s_ReplacedItems = s_NewSlot:Drop()
+    local s_NewItems = s_OldSlot:Drop()
+
+    s_NewSlot:PutWithRelated(s_NewItems)
+    s_OldSlot:PutWithRelated(s_ReplacedItems)
+
+    self:SendState()
 end
 
 function BRInventory:DropItem(p_ItemId, p_Quantity)

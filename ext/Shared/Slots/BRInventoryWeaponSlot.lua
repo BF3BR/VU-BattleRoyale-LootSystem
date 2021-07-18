@@ -40,6 +40,32 @@ function BRInventoryWeaponSlot:Drop()
     return s_DroppedItems
 end
 
+function BRInventoryWeaponSlot:PutWithRelated(p_Items)
+    for _, l_Item in ipairs(p_Items) do
+        local s_Def = l_Item.m_Definition
+
+        -- put weapon
+        if s_Def.m_Type == ItemType.Weapon then
+            self:Put(l_Item)
+        end
+
+        -- put optics attachment
+        if s_Def.m_Type == ItemType.Attachment and s_Def.m_AttachmentType == AttachmentType.Optics then
+            self.m_AttachmentSlots.OpticsSlot:Put(l_Item)
+        end
+
+        -- put barrel attachment
+        if s_Def.m_Type == ItemType.Attachment and s_Def.m_AttachmentType == AttachmentType.Barrel then
+            self.m_AttachmentSlots.BarrelSlot:Put(l_Item)
+        end
+
+        -- put other attachment
+        if s_Def.m_Type == ItemType.Attachment and s_Def.m_AttachmentType == AttachmentType.Other then
+            self.m_AttachmentSlots.OtherSlot:Put(l_Item)
+        end
+    end
+end
+
 function BRInventoryWeaponSlot:GetUnlockWeaponAndSlot()
     if self.m_Item == nil then
         return nil
