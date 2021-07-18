@@ -19,14 +19,19 @@ end
 -- Puts an item into the slot
 function BRInventorySlot:Put(p_Item)
     -- TODO more checks + swap logic + more...
-    -- check if invalid item for this slot
-    if p_Item ~= nil and not self:IsAccepted(p_Item) then
-        return false, {}
-    end
+    if p_Item ~= nil then
+        -- check if invalid item for this slot
+        if not self:IsAccepted(p_Item) then
+            return false, {}
+        end
 
-    -- check if the item is already equipped
-    if p_Item ~= nil and p_Item:Equals(self.m_Item) then
-        return true, {}
+        -- check if the item is already equipped
+        if p_Item:Equals(self.m_Item) then
+            return true, {}
+        end
+
+        -- update item's owner
+        p_Item.m_Owner = self
     end
 
     -- drop old stuff
@@ -94,14 +99,16 @@ function BRInventorySlot:Drop()
     local s_Item = self.m_Item
     self.m_Item = nil
 
+    s_Item.m_Owner = nil
+
     return { s_Item }
 end
 
-function BRInventorySlot:Use()
-    -- TODO
-    print("TODO: Item used...")
-    return {}
-end
+-- function BRInventorySlot:Use()
+--     -- TODO
+--     print("TODO: Item used...")
+--     return {}
+-- end
 
 function BRInventorySlot:AsTable()
     return {Item = self.m_Item ~= nil and self.m_Item:AsTable() or nil}

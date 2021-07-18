@@ -204,13 +204,13 @@ function BRInventory:DropItem(p_ItemId, p_Quantity)
     --TODO: Use p_Quantity for splitting
 end
 
-function BRInventory:UseItem(p_ItemId)
-    local s_Slot = self:GetItemSlot(p_ItemId)
+-- function BRInventory:UseItem(p_ItemId)
+--     local s_Slot = self:GetItemSlot(p_ItemId)
 
-    if s_Slot ~= nil then
-        l_Slot:Use()
-    end
-end
+--     if s_Slot ~= nil then
+--         s_Slot:Use()
+--     end
+-- end
 
 function BRInventory:RemoveItem(p_ItemId)
     -- Check if item exists

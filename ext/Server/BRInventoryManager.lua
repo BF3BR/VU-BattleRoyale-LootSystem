@@ -167,12 +167,10 @@ function BRInventoryManager:OnPlayerPostReload(p_Player, p_PreviousPrimaryAmmo)
 end
 
 function BRInventoryManager:OnInventoryUseItem(p_Player, p_ItemId)
-    local s_Inventory = self.m_Inventories[p_Player.id]
-    if s_Inventory == nil then
-        return
+    local s_Item = m_ItemDatabase:GetItem(p_ItemId)
+    if s_Item ~= nil then
+        s_Item:Use()
     end
-
-    s_Inventory:UseItem(p_ItemId)
 end
 
 -- ugly solution for now
@@ -181,7 +179,7 @@ end
 function BRInventoryManager:OnItemDestroy(p_ItemId)
     -- search for the item
     for _, l_Inventory in pairs(self.m_Inventories) do
-        local s_Slot = l_Inventory:GetSlot(p_ItemId)
+        local s_Slot = l_Inventory:GetItemSlot(p_ItemId)
 
         -- clear slot and send the updated inventory state
         if s_Slot ~= nil then

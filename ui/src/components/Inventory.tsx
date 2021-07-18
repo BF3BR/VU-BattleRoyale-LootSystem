@@ -121,6 +121,7 @@ const Inventory: React.FC<Props> = ({
 
     const handleRightClick = (slot: any) => {
         if (slot.TimeToApply !== undefined) {
+            handleUseItem(slot.Id);
             setProgress({
                 slot: slot,
                 time: slot.TimeToApply,
@@ -469,7 +470,7 @@ const Inventory: React.FC<Props> = ({
                     <InventoryTimer
                         slot={progress.slot}
                         onComplete={(slot: any) => {
-                            handleUseItem(slot.Id);
+                            // handleUseItem(slot.Id);
                             setProgress({
                                 slot: null,
                                 time: null

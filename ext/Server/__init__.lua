@@ -40,6 +40,14 @@ function VuBattleRoyaleLootSystemServer:OnExtensionLoaded()
     Events:Subscribe("Player:Left", self, self.OnPlayerLeft)
 
     NetEvents:Subscribe(InventoryNetEvent.PickupItem, self, self.OnInventoryPickupItem)
+
+    -- TODO remove, just for reloading while testing
+    local s_Players = PlayerManager:GetPlayers()
+    for _, l_Player in ipairs(s_Players) do
+        if l_Player ~= nil and l_Player.soldier ~= nil then
+            self:OnPlayerAuthenticated(l_Player)
+        end
+    end
 end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerLeft(p_Player)
