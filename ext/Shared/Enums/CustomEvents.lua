@@ -8,4 +8,7 @@ InventoryNetEvent = {
 	UnregisterLootPickup = "IV:ULP",
 	PickupItem = "IV:PI",
 	UpdateLootPickup = "IV:UPLP",
+	ItemActionStarted = "IV:ASTRD",
+	ItemActionCompleted = "IV:ACMPL",
+	ItemActionCanceled = "IV:ACNCL"
 }

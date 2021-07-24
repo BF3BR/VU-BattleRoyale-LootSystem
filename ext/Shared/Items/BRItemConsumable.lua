@@ -34,7 +34,7 @@ function BRItemConsumable:Use()
     self:SubscribeToEngineUpdates()
 
     -- inform player that the action started
-    self:SendNetEvent("BRItemConsumable:ActionStarted")
+    self:SendNetEvent(InventoryNetEvent.ItemActionStarted)
 end
 
 function BRItemConsumable:Cancel()
@@ -51,7 +51,7 @@ function BRItemConsumable:Cancel()
     -- self:UnsubscribeFromEngineUpdates() -- I think it causes a crash here...
 
     -- inform player that the action was canceled
-    self:SendNetEvent("BRItemConsumable:ActionCanceled")
+    self:SendNetEvent(InventoryNetEvent.ItemActionCanceled)
 end
 
 function BRItemConsumable:OnComplete()
@@ -65,7 +65,7 @@ function BRItemConsumable:OnComplete()
     self.m_Quantity = self.m_Quantity - 1
 
     -- inform player that the action was completed
-    self:SendNetEvent("BRItemConsumable:ActionCompleted")
+    self:SendNetEvent(InventoryNetEvent.ItemActionCompleted)
 
     -- destroy item if needed
     if self.m_Quantity < 1 then
