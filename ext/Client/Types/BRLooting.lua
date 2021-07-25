@@ -3,10 +3,11 @@ class "BRLooting"
 local m_Debug = require "Debug"
 
 function BRLooting:__init()
-    self.m_LootPickups = {}
-    self.m_LastDelta = 0
+	self.m_LootPickups = {}
+	self.m_LastDelta = 0
 	self.m_LastSelectedLootPickup = nil
 
+	self.m_InstanceIdToLootPickup = {}
 	self.m_TimeToUpdateLootUi = 0.15
 end
 
@@ -66,33 +67,39 @@ function BRLooting:OnCreateLootPickup(p_DataArray)
 		return
 	end
 
-    if self.m_LootPickups[p_DataArray.Id] ~= nil then
-        return
-    end
+	if self.m_LootPickups[p_DataArray.Id] ~= nil then
+			return
+	end
 
-    self.m_LootPickups[p_DataArray.Id] = BRLootPickup:CreateFromTable(p_DataArray)
-    self.m_LootPickups[p_DataArray.Id]:Spawn(p_DataArray.Id)
+	local s_LootPickup = BRLootPickup:CreateFromTable(p_DataArray)
+	self.m_LootPickups[p_DataArray.Id] = s_LootPickup
+	s_LootPickup:Spawn(p_DataArray.Id)
+
+	for l_InstanceId, _ in pairs(s_LootPickup.m_Entities) do
+		self.m_InstanceIdToLootPickup[l_InstanceId] = s_LootPickup
+	end
 end
 
 function BRLooting:OnUnregisterLootPickup(p_LootPickupId)
-	if p_LootPickupId == nil then
+	-- check if lootPickup exists in the table
+	if p_LootPickupId == nil or self.m_LootPickups[p_LootPickupId] == nil then
 		return
 	end
 
-    if self.m_LootPickups[p_LootPickupId] == nil then
-        return
-    end
+	local s_LootPickup = self.m_LootPickups[p_LootPickupId]
 
-	if self.m_LastSelectedLootPickup == nil then
-		return
-	end
-
-	if self.m_LastSelectedLootPickup.m_Id == p_LootPickupId then
+	-- check if it was the last opened lootPickup
+	if self.m_LastSelectedLootPickup ~= nil and self.m_LastSelectedLootPickup.m_Id == p_LootPickupId then
 		self:OnSendOverlayLootBox(nil, nil)
 	end
 
-	self.m_LootPickups[p_LootPickupId]:Destroy()
-    self.m_LootPickups[p_LootPickupId] = nil
+	-- clear references to this lootPickup
+	self.m_LootPickups[p_LootPickupId] = nil
+	for l_InstanceId, _ in pairs(s_LootPickup.m_Entities) do
+		self.m_InstanceIdToLootPickup[l_InstanceId] = nil
+	end
+
+	s_LootPickup:Destroy()
 end
 
 function BRLooting:OnUpdateLootPickup(p_DataArray)
@@ -120,15 +127,7 @@ function BRLooting:GetLootPickup(p_Entity)
 		return nil
 	end
 
-	for _, l_LootPickup in pairs(self.m_LootPickups) do
-		if l_LootPickup ~= nil and l_LootPickup.m_Entities ~= nil then
-			if l_LootPickup.m_Entities[p_Entity.instanceId] ~= nil then
-				return l_LootPickup
-			end
-		end
-	end
-
-	return nil
+	return self.m_InstanceIdToLootPickup[p_Entity.instanceId]
 end
 
 function BRLooting:OnRaycast()
