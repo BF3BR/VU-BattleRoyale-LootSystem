@@ -33,6 +33,7 @@ function BRItem:AsTable()
     return s_Table
 end
 
+-- Returns the LootPickup instance that this item belongs to
 function BRItem:GetParentLootPickup()
     if self.m_Owner == nil or self.m_Owner.m_Items == nil then
         return nil
@@ -42,6 +43,7 @@ function BRItem:GetParentLootPickup()
     return self.m_Owner:ContainsItem(self.m_Id) and self.m_Owner or nil
 end
 
+-- Returns the BRInventorySlot instance that this item belongs to
 function BRItem:GetParentSlot()
     if self.m_Owner == nil or self.m_Owner.m_Item == nil then
         return nil
@@ -51,6 +53,7 @@ function BRItem:GetParentSlot()
     return self:Equals(self.m_Owner.m_Item) and self.m_Owner or nil
 end
 
+-- Returns the BRInventory instance that this item belongs to
 function BRItem:GetParentInventory()
     local s_Slot = self:GetParentSlot()
 
@@ -59,11 +62,23 @@ function BRItem:GetParentInventory()
     end
 end
 
+-- Returns the Player instance that this item belongs to
 function BRItem:GetParentPlayer()
     local s_Inventory = self:GetParentInventory()
 
     if s_Inventory ~= nil then
         return s_Inventory.m_Owner
+    end
+end
+
+-- Updates the quantity value for this item 
+function BRItem:SetQuantity(p_Quantity)
+    self.m_Quantity = p_Quantity
+
+    -- mark item's slot as updated
+    local s_Slot = self:GetParentSlot()
+    if s_Slot ~= nil then
+        s_Slot.m_IsUpdated = true
     end
 end
 

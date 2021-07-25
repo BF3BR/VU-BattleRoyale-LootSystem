@@ -81,9 +81,7 @@ function BRInventory:AsTable()
         if s_Slot.m_IsUpdated then
             s_Data[l_SlotIndex] = s_Slot:AsTable()
 
-            -- TODO
-            -- for now dont turn it to false
-            -- s_Slot.m_IsUpdated = false
+            s_Slot.m_IsUpdated = false
         end
     end
 
@@ -131,13 +129,11 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
         local s_NewQuantity = s_CurrentSlotItem.m_Quantity + s_Item.m_Quantity
 
         if s_NewQuantity <= s_Item.m_Definition.m_MaxStack then
-            s_CurrentSlotItem.m_Quantity = s_NewQuantity
-            s_Slot.m_Item.m_Quantity = s_NewQuantity
+            s_CurrentSlotItem:SetQuantity(s_NewQuantity)
             m_Logger:Write("(Less than maxstack) Item quantity updated to: " .. s_NewQuantity .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
         else
             -- Set the current one to max stack
-            s_CurrentSlotItem.m_Quantity = s_Item.m_Definition.m_MaxStack
-            s_Slot.m_Item.m_Quantity = s_Item.m_Definition.m_MaxStack
+            s_CurrentSlotItem:SetQuantity(s_Item.m_Definition.m_MaxStack)
             m_Logger:Write("(More than maxstack) Item quantity updated to: " .. s_Item.m_Definition.m_MaxStack .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
 
             s_NewQuantity = math.abs(s_NewQuantity - s_Item.m_Definition.m_MaxStack)
@@ -209,13 +205,6 @@ function BRInventory:DropItem(p_ItemId, p_Quantity)
     --TODO: Use p_Quantity for splitting
 end
 
--- function BRInventory:UseItem(p_ItemId)
---     local s_Slot = self:GetItemSlot(p_ItemId)
-
---     if s_Slot ~= nil then
---         s_Slot:Use()
---     end
--- end
 
 function BRInventory:RemoveItem(p_ItemId)
     -- Check if item exists
@@ -334,15 +323,17 @@ function BRInventory:SetCurrentPrimaryAmmo(p_WeaponName, p_AmmoCount)
     end
 end
 
-function BRInventory:ChechIfLastShotForGadget(p_WeaponName)
-    if self.m_Slots[InventorySlot.Gadget].m_Item ~= nil then
-        if self.m_Slots[InventorySlot.Gadget].m_Item.m_Definition.m_EbxName == p_WeaponName then
-            self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity = self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity - 1
-            if self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity <= 0 then
-                self:RemoveItem(self.m_Slots[InventorySlot.Gadget].m_Item.m_Id)
-            end
-            self:SendState()
+function BRInventory:CheckIfLastShotForGadget(p_WeaponName)
+    local s_GadgetSlot = self.m_Slots[InventorySlot.Gadget]
+
+    if s_GadgetSlot.m_Item ~= nil and s_GadgetSlot.m_Item.m_Definition.m_EbxName == p_WeaponName then
+        s_GadgetSlot.m_Item:SetQuantity(s_GadgetSlot.m_Item.m_Quantity - 1)
+
+        if s_GadgetSlot.m_Item.m_Quantity <= 0 then
+            self:RemoveItem(s_GadgetSlot.m_Item.m_Id)
         end
+
+        self:SendState()
     end
 end
 
@@ -407,13 +398,13 @@ end
 -- @return The number of ammo that was successfully removed
 function BRInventory:RemoveAmmo(p_WeaponName, p_Quantity)
     -- Handle all the Gadget related code here
-    if self.m_Slots[InventorySlot.Gadget].m_Item ~= nil then
-        if self.m_Slots[InventorySlot.Gadget].m_Item.m_Definition.m_EbxName == p_WeaponName then
-            return self.m_Slots[InventorySlot.Gadget].m_Item.m_Quantity - 1
-        end
+    local s_GadgetSlot = self.m_Slots[InventorySlot.Gadget]
+    if s_GadgetSlot.m_Item ~= nil and s_GadgetSlot.m_Item.m_Definition.m_EbxName == p_WeaponName then
+        s_GadgetSlot.m_IsUpdated = true
+        return s_GadgetSlot.m_Item.m_Quantity - 1
     end
 
-
+    -- Get ammo definition for this weapon
     local s_AmmoDefinition = self:GetAmmoDefinition(p_WeaponName)
     if s_AmmoDefinition == nil then
         return 0
@@ -432,7 +423,9 @@ function BRInventory:RemoveAmmo(p_WeaponName, p_Quantity)
         local s_QuantityRemoved = math.min(l_AmmoItem.m_Quantity, s_QuantityLeftToRemove)
 
         -- Update ammo item state
-        l_AmmoItem.m_Quantity = l_AmmoItem.m_Quantity - s_QuantityRemoved
+        -- l_AmmoItem.m_Quantity = l_AmmoItem.m_Quantity - s_QuantityRemoved
+        -- l_AmmoItem:GetParentSlot().m_IsUpdated = true
+        l_AmmoItem:SetQuantity(l_AmmoItem.m_Quantity - s_QuantityRemoved)
         if l_AmmoItem.m_Quantity <= 0 then
             self:RemoveItem(l_AmmoItem.m_Id)
         end
@@ -450,11 +443,7 @@ function BRInventory:RemoveAmmo(p_WeaponName, p_Quantity)
 end
 
 function BRInventory:UpdateSoldierCustomization()
-    if self.m_Owner == nil then
-        return
-    end
-
-    if self.m_Owner.soldier == nil then
+    if self.m_Owner == nil or self.m_Owner.soldier == nil then
         return
     end
 

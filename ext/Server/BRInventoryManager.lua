@@ -61,7 +61,7 @@ function BRInventoryManager:OnGunSwayUpdateRecoil(p_GunSway, p_Weapon, p_WeaponF
                     l_Player.soldier.weaponsComponent.currentWeapon.primaryAmmo
                 )
 
-                s_Inventory:ChechIfLastShotForGadget(l_Player.soldier.weaponsComponent.currentWeapon.name) 
+                s_Inventory:CheckIfLastShotForGadget(l_Player.soldier.weaponsComponent.currentWeapon.name) 
             end
         end
     end

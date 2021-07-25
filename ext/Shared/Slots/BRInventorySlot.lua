@@ -49,7 +49,7 @@ end
 
 function BRInventorySlot:PutWithRelated(p_Items)
     -- default behavior is to :Put only the first item
-    if #p_Items > 0 then
+    if p_Items ~= nil and #p_Items > 0 then
         return self:Put(p_Items[1])
     end
 end
@@ -103,19 +103,15 @@ function BRInventorySlot:Drop()
         return {}
     end
 
+    -- remove item from the slot
     local s_Item = self.m_Item
     self.m_Item = nil
+    self.m_IsUpdated = true
 
     s_Item.m_Owner = nil
 
     return { s_Item }
 end
-
--- function BRInventorySlot:Use()
---     -- TODO
---     print("TODO: Item used...")
---     return {}
--- end
 
 function BRInventorySlot:AsTable()
     return {Item = self.m_Item ~= nil and self.m_Item:AsTable() or nil}
