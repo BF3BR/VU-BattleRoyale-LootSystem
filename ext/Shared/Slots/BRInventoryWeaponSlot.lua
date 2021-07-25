@@ -90,6 +90,10 @@ function BRInventoryWeaponSlot:GetUnlockWeaponAndSlot()
     return s_Weapon
 end
 
+function BRInventoryWeaponSlot:HasWeapon(p_WeaponName)
+    return self.m_Item ~= nil and self.m_Item.m_Definition.m_EbxName == p_WeaponName
+end
+
 function BRInventoryWeaponSlot:OnUpdate()
     m_Logger:Write("Weapon slot updated")
     self.m_Inventory:UpdateSoldierCustomization()
