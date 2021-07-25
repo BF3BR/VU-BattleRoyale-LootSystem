@@ -84,7 +84,8 @@ function BRInventorySlot:IsAvailable(p_Item)
     end
 
     -- Check if item is stackable and slot contains same item type and has space
-    if p_Item.m_Definition.m_Stackable and p_Item.m_Definition.m_MaxStack ~= nil and
+    if p_Item.m_Definition.m_Stackable and
+        p_Item.m_Definition.m_MaxStack ~= nil and
         self.m_Item.m_Definition:Equals(p_Item.m_Definition) and
         self.m_Item.m_Quantity < p_Item.m_Definition.m_MaxStack then
         return true

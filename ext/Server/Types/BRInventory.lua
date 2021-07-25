@@ -230,17 +230,6 @@ function BRInventory:RemoveItem(p_ItemId)
 end
 
 function BRInventory:GetAvailableSlot(p_Item)
-    -- If the item is stackable then search for an existing item with same
-    -- definition and available space first
-    if p_Item.m_Definition.m_Stackable and p_Item.m_Definition.m_MaxStack ~= nil then
-        for _, l_Slot in pairs(self.m_Slots) do
-            if l_Slot.m_Item ~= nil and l_Slot:IsAvailable(p_Item) then
-                return l_Slot
-            end
-        end
-    end
-
-    -- If we found a slot with the matching type and it is empty
     for _, l_Slot in pairs(self.m_Slots) do
         if l_Slot:IsAvailable(p_Item) then
             return l_Slot
@@ -264,7 +253,7 @@ end
 
 -- Returns the first weapon slot item with the specified weapon name
 -- if it exists in the inventory
--- TODO not sure if good way to search for items cause we may have a duplicate weapon
+-- TODO not sure if good way to search for weapons cause we may have duplicates
 function BRInventory:GetWeaponItemByName(p_WeaponName)
     for _, l_SlotIndex in pairs({InventorySlot.PrimaryWeapon, InventorySlot.SecondaryWeapon, InventorySlot.Gadget}) do
         local s_Slot = self.m_Slots[l_SlotIndex]
