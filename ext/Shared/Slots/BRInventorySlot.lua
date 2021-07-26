@@ -51,6 +51,8 @@ function BRInventorySlot:PutWithRelated(p_Items)
     -- default behavior is to :Put only the first item
     if p_Items ~= nil and #p_Items > 0 then
         return self:Put(p_Items[1])
+    else
+        return self:Clear()
     end
 end
 

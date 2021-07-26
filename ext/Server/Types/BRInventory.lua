@@ -166,6 +166,11 @@ function BRInventory:SwapItems(p_ItemId, p_SlotId)
         return
     end
 
+    -- check if item can be put into the new slot
+    if not s_NewSlot:IsAccepted(s_OldSlot.m_Item) then
+        return
+    end
+
     -- empty slots and keep dropped items
     local s_ReplacedItems = s_NewSlot:Drop()
     local s_NewItems = s_OldSlot:Drop()
