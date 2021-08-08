@@ -1,7 +1,7 @@
 import React from "react";
 import { Tooltip } from "react-lightweight-tooltip";
 
-const InventoryTooltip: React.FC<any> = ({ children, content }) => {
+const InventoryTooltip: React.FC<any> = ({ children, content, right }) => {
     return (
         <Tooltip
             content={content}
@@ -19,7 +19,7 @@ const InventoryTooltip: React.FC<any> = ({ children, content }) => {
                     zIndex: 99,
                     top: "0",
                     bottom: "auto",
-                    left: 'calc(100% + .5vw)',
+                    left: right ? 'calc(100% + 0.5vw)' : '-12.5vw',
                     marginBottom: '0',
                     padding: '1vw',
                     textAlign: "left",
@@ -42,11 +42,12 @@ const InventoryTooltip: React.FC<any> = ({ children, content }) => {
                     width: '0',
                     height: '0',
                     bottom: 'auto',
-                    top: "1vw",
-                    left: '0',
-                    marginLeft: '-1vw',
-                    borderLeft: 'solid transparent .5vw',
-                    borderRight: '0.5vw solid rgb(0, 0, 0)',
+                    top: '1vw',
+                    left: right ? '0' : 'auto',
+                    right: right ? 'auto' : '-1vw',
+                    marginLeft: right ? '-1vw' : '0',
+                    borderLeft: right ? 'solid transparent .5vw' : '0.5vw solid rgb(0, 0, 0)',
+                    borderRight: right ? '0.5vw solid rgb(0, 0, 0)' : 'solid transparent .5vw',
                     borderTop: 'solid transparent .5vw',
                     borderBottom: 'solid transparent .5vw',
                 },

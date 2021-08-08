@@ -1,9 +1,9 @@
 .lootOverlay {
     position: absolute;
-    bottom: 52.5%;
-    left: 52.5%;
-    height: 6.5vw;
-    width: 21vw;
+    bottom: 54.5%;
+    left: 54.5%;
+    height: 4.5vw;
+    width: 15vw;
     background: rgba(0, 0, 0, .65);
     z-index: 999999;
     box-sizing: border-box;
@@ -38,7 +38,7 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        width: 9vw;
+        width: 5.5vw;
         pointer-events: none;
     }
 
@@ -47,7 +47,7 @@
         margin: 0;
         font-style: normal;
         font-weight: 600;
-        font-size: 1vw;
+        font-size: .8vw;
         line-height: 1vw;
         color: #d5dde5;
 
@@ -56,8 +56,8 @@
             position: absolute;
             bottom: 0.55vw;
             left: 0.85vw;
-            font-size: 1.25vw;
-            height: 1.25vw;
+            font-size: .75vw;
+            height: 1vw;
             text-shadow: 0 0 .75vw rgba(255, 255, 255, 0.45);
         }
 
@@ -70,16 +70,16 @@
             position: absolute;
             bottom: 0.55vw;
             right: 0.55vw;
-            font-size: 0.85vw;
+            font-size: 0.65vw;
             text-shadow: 0 0 .75vw rgba(255, 255, 255, 0.45);
         }
 
         &.tier {
             position: absolute;
             top: .55vw;
-            right: -.45vw;
+            right: -.15vw;
             left: auto;
-            width: 4vw;
+            width: 3vw;
 
             img {
                 transform: translate(0, 0);
@@ -92,13 +92,13 @@
 
     .keyinfo {
         background: rgba(0, 0, 0, .45);
-        padding: .45vw .75vw;
+        padding: .25vw .75vw;
 
         h4 {
             text-shadow: 0 0 0.5vw rgba(255, 255, 255, 0.4);
-            line-height: 1vw;
+            line-height: .75vw;
             color: #d5dde5;
-            font-size: 0.85vw;
+            font-size: 0.75vw;
             text-transform: uppercase;
             margin: 0;
             font-style: normal;

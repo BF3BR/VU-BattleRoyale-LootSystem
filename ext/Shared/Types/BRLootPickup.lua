@@ -1,7 +1,10 @@
 class "BRLootPickup"
 
+require "__shared/Utils/ArmorSkeletonHelper"
+
 local m_Logger = Logger("BRLootPickup", true)
 local m_RotationHelper = require "__shared/Utils/RotationHelper"
+
 
 function BRLootPickup:__init(p_Id, p_Type, p_Transform, p_Items)
     -- Unique Id for each loot pickup
@@ -128,22 +131,32 @@ function BRLootPickup:Spawn(p_Id)
         return
     end
 
-    --[[local s_ChairStaticModelEntityData = ResourceManager:FindInstanceByGuid(
-        Guid("576E0991-650B-4785-935D-716C809FE8AF"),
-        Guid("51E640B7-43E8-4136-A2D8-36951EB71771")
-    )
-    local s_StaticModelEntityData = s_ChairStaticModelEntityData:Clone()]]
     s_StaticModelEntityData = StaticModelEntityData()
     s_StaticModelEntityData.mesh = s_Asset
     s_StaticModelEntityData.transform = s_LinearTransform
 
     -- We need to set the bone transforms if we want to spawn a weapon mesh for the loot pickup
-    if #self.m_Items == 1 and self.m_Items[1].m_Definition.m_SoldierWeaponBlueprint ~= nil then
-        local s_SoldierWeaponUnlockAsset = self.m_Items[1].m_Definition.m_SoldierWeaponBlueprint:GetInstance()
-        local s_SoldierWeaponData = SoldierWeaponData(s_SoldierWeaponUnlockAsset.weapon.object)
-        s_StaticModelEntityData.basePoseTransforms:clear()
-        for _, l_LinearTransform in pairs(s_SoldierWeaponData.weaponStates[1].mesh3pTransforms) do        
-            s_StaticModelEntityData.basePoseTransforms:add(l_LinearTransform)
+    if #self.m_Items == 1 then
+        if self.m_Items[1].m_Definition.m_Type == ItemType.Weapon and self.m_Items[1].m_Definition.m_SoldierWeaponBlueprint ~= nil then
+            local s_SoldierWeaponUnlockAsset = self.m_Items[1].m_Definition.m_SoldierWeaponBlueprint:GetInstance()
+            local s_SoldierWeaponData = SoldierWeaponData(s_SoldierWeaponUnlockAsset.weapon.object)
+            s_StaticModelEntityData.basePoseTransforms:clear()
+            for _, l_LinearTransform in pairs(s_SoldierWeaponData.weaponStates[1].mesh3pTransforms) do        
+                s_StaticModelEntityData.basePoseTransforms:add(l_LinearTransform)
+            end
+        elseif self.m_Items[1].m_Definition.m_Type == ItemType.Helmet then
+            --[[
+            s_StaticModelEntityData.basePoseTransforms:clear()
+            for _, l_LinearTransform in pairs(s_VeniceAntSke01.localPose) do
+                s_StaticModelEntityData.basePoseTransforms:add(l_LinearTransform)
+            end
+            ]]
+            s_StaticModelEntityData = MeshProxyEntityData()
+            s_StaticModelEntityData.mesh = s_Asset
+            s_StaticModelEntityData.transform = s_LinearTransform
+            for index, point in pairs(ArmorSkeletonHelper) do
+                s_StaticModelEntityData.basePoseTransforms:add(point)
+            end
         end
     end
 

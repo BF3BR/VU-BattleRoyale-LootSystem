@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { connect } from "react-redux";
 import { RootState } from "../store/RootReducer";
@@ -27,8 +27,6 @@ const Inventory: React.FC<Props> = ({
     overlayLootBox,
     lootId
 }) => {
-    const [isHoldingCtrl, setIsHoldingCtrl] = useState<boolean>(false);
-
     const [splitModal, setSplitModal] = useState({
         id: null,
         show: false,
@@ -45,29 +43,6 @@ const Inventory: React.FC<Props> = ({
         slot: null,
         time: null
     });
-
-    const handleUserKeyDown = (event: any) => {
-        if (event.keyCode === 17) {
-            setIsHoldingCtrl(true);
-        }
-    }
-
-    const handleUserKeyUp = (event: any) => {
-        if (event.keyCode === 17) {
-            setIsHoldingCtrl(false);
-        }
-    }
-
-    useEffect(() => {
-        document.addEventListener('keydown', handleUserKeyDown);
-        document.addEventListener('keyup', handleUserKeyUp);
-
-        return () => {
-            document.removeEventListener('keydown', handleUserKeyDown);
-            document.removeEventListener('keyup', handleUserKeyUp);
-        };
-    });
-
 
     function handleDragStart(event: any) {
         const { active } = event;
@@ -149,7 +124,7 @@ const Inventory: React.FC<Props> = ({
         )
     }
 
-    const getSlotDrag = (slot: any) => {
+    const getSlotDrag = (slot: any, right?: boolean) => {
         return (
             <div 
                 className={(slot.Tier !== undefined ? "tier-" + slot.Tier : "")}
@@ -162,14 +137,21 @@ const Inventory: React.FC<Props> = ({
                             <p>{slot.Description ?? ""}</p>,
                         ]
                     }
+                    right={right}
                 >
                     {slot.UIIcon !== null &&
-                        <img src={"fb://" + slot.UIIcon} alt="" />
+                        <>
+                            {slot.UIIcon.startsWith("__") ?
+                                <img src={"/img/" + slot.UIIcon + ".png"} alt="" />
+                            :
+                                <img src={"fb://" + slot.UIIcon} alt="" />
+                            }
+                        </>
                     }
                     <div className="information">
                         <span className="name">{slot.Name ?? ""}</span>
                         {slot.Quantity > 1 &&
-                            <span className="count">{slot.Quantity ?? 1}</span>
+                            <span className="count">x{slot.Quantity ?? 1}</span>
                         }
                         <span className="ammoType">{slot.AmmoName ?? "-"}</span>
                         {(slot.CurrentDurability !== undefined && slot.Durability !== undefined) &&
@@ -351,7 +333,7 @@ const Inventory: React.FC<Props> = ({
                         <div className="card SecondaryWeaponBox">
                             <div className="card-header">
                                 <h1>
-                                    Secondary Weapon - {JSON.stringify(isHoldingCtrl)}
+                                    Secondary Weapon
                                 </h1>
                             </div>
                             <div className="card-content weapon-grid">
@@ -429,27 +411,30 @@ const Inventory: React.FC<Props> = ({
                         </div>
                     </div>
                     <div className="itemDrop">
-                        <Droppable id="item-drop"></Droppable>
-                        <Droppable id="item-drop-split"></Droppable>
+                        <Droppable id="item-drop" />
                     </div>
-                    {overlayLootBox.length > 0 &&
-                        <div className="card LootBox">
+                    <div className="ProximityWrapper">
+                        <div className="card proximity-card">
                             <div className="card-header">
                                 <h1>
-                                    Loot box
+                                    Near you
                                 </h1>
                             </div>
-                            <div className="card-content backpack-grid">
-                                {overlayLootBox.map((slot: any, key: number) => (
-                                    <div className="item-slot" key={key}>
-                                        <Draggable id={slot.Id} item={slot}>
-                                            {getSlotDrag(slot)}
-                                        </Draggable>
-                                    </div>
-                                ))}
+                            <div className="card-content near-grid">
+                                {overlayLootBox.length > 0 &&
+                                    <>
+                                        {overlayLootBox.map((slot: any, key: number) => (
+                                            <div className="item-slot" key={key}>
+                                                <Draggable id={slot.Id} item={slot}>
+                                                    {getSlotDrag(slot, true)}
+                                                </Draggable>
+                                            </div>
+                                        ))}
+                                    </>
+                                }
                             </div>
                         </div>
-                    }
+                    </div>
                 </div>
                 <DragOverlay 
                     dropAnimation={null}

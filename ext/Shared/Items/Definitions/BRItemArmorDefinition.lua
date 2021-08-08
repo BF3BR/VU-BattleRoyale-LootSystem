@@ -35,7 +35,7 @@ return {
         "armor-tier-1",
         "Armor - Tier 1",
         "Adds +50 armor.",
-        "UI/art/Persistence/Specializations/Fancy/Suppression", -- TODO: Swap this out
+        "__armor",
         Tier.Tier1,
         50,
         1
@@ -44,7 +44,7 @@ return {
         "armor-tier-2",
         "Armor - Tier 2",
         "Adds +75 armor.",
-        "UI/art/Persistence/Specializations/Fancy/Suppression", -- TODO: Swap this out
+        "__armor",
         Tier.Tier2,
         75,
         1
@@ -53,7 +53,7 @@ return {
         "armor-tier-3",
         "Armor - Tier 3",
         "Adds +100 armor.",
-        "UI/art/Persistence/Specializations/Fancy/Suppression", -- TODO: Swap this out
+        "__armor",
         Tier.Tier3,
         100,
         1

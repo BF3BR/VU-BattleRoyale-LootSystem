@@ -170,6 +170,34 @@ function VuBattleRoyaleLootSystemServer:OnPlayerAuthenticated(p_Player)
             s_ItemM98b,
         }
     )
+
+    local s_ItemHelmetSpawned = m_ItemDatabase:CreateItem(m_HelmetDefinitions["helmet-tier-3"])
+    m_LootPickupDatabase:CreateLootPickup(
+        "Basic",
+        LinearTransform(
+            Vec3(1.0, 0.0, 0.0), 
+            Vec3(0.0, 1.0, 0.0), 
+            Vec3(0.0, 0.0, 1.0), 
+            Vec3(22.199219, 10.881640, -5.093750)
+        ),
+        {
+            s_ItemHelmetSpawned,
+        }
+    )
+
+    --[[local s_ItemHelmetSpawned2 = m_ItemDatabase:CreateItem(m_HelmetDefinitions["helmet-tier-2"])
+    m_LootPickupDatabase:CreateLootPickup(
+        "Basic",
+        LinearTransform(
+            Vec3(1.0, 0.0, 0.0), 
+            Vec3(0.0, 1.0, 0.0), 
+            Vec3(0.0, 0.0, 1.0), 
+            Vec3(25.504883, 10.881640, -7.313477)
+        ),
+        {
+            s_ItemHelmetSpawned2,
+        }
+    )]]
 end
 
 return VuBattleRoyaleLootSystemServer()
