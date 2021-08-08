@@ -3,6 +3,8 @@ class "BRLootPickup"
 local m_Logger = Logger("BRLootPickup", true)
 local m_RotationHelper = require "__shared/Utils/RotationHelper"
 
+local m_FlashlightTexture = DC(Guid("04C62561-2236-11DF-A528-EA655525F02D"), Guid("2EE018E8-1451-908C-0974-DB7676407D61"))
+
 function BRLootPickup:__init(p_Id, p_Type, p_Transform, p_Items)
     -- Unique Id for each loot pickup
     self.m_Id = p_Id ~= nil and p_Id or tostring(MathUtils:RandomGuid())
@@ -128,14 +130,18 @@ function BRLootPickup:Spawn(p_Id)
         return
     end
 
-    --[[local s_ChairStaticModelEntityData = ResourceManager:FindInstanceByGuid(
-        Guid("576E0991-650B-4785-935D-716C809FE8AF"),
-        Guid("51E640B7-43E8-4136-A2D8-36951EB71771")
-    )
-    local s_StaticModelEntityData = s_ChairStaticModelEntityData:Clone()]]
     s_StaticModelEntityData = StaticModelEntityData()
     s_StaticModelEntityData.mesh = s_Asset
-    s_StaticModelEntityData.transform = s_LinearTransform
+    s_StaticModelEntityData.transform = LinearTransform(
+        s_LinearTransform.left,
+        s_LinearTransform.up,
+        s_LinearTransform.forward,
+        Vec3(
+            s_LinearTransform.trans.x,
+            s_LinearTransform.trans.y + 0.4,
+            s_LinearTransform.trans.z
+        )
+    )
 
     -- We need to set the bone transforms if we want to spawn a weapon mesh for the loot pickup
     if #self.m_Items == 1 and self.m_Items[1].m_Definition.m_SoldierWeaponBlueprint ~= nil then
@@ -165,25 +171,26 @@ function BRLootPickup:Spawn(p_Id)
         Vec3(0, 1.2, 0)
     )
     s_SpotLightEntityData.color = s_Color
-    s_SpotLightEntityData.radius = 6.5
-    s_SpotLightEntityData.intensity = 3.5
-    s_SpotLightEntityData.attenuationOffset = 0
-    s_SpotLightEntityData.specularEnable = false
+    s_SpotLightEntityData.radius = 40.0
+    s_SpotLightEntityData.intensity = 15.0
+    s_SpotLightEntityData.attenuationOffset = 50.0
+    s_SpotLightEntityData.specularEnable = true
     s_SpotLightEntityData.enlightenColorMode = EnlightenColorMode.EnlightenColorMode_Multiply
-    s_SpotLightEntityData.enlightenEnable = false
-    s_SpotLightEntityData.enlightenColorScale = Vec3(5, 5, 5)
-    s_SpotLightEntityData.particleColorScale = Vec3(1, 1, 1)
+    s_SpotLightEntityData.enlightenEnable = true
+    s_SpotLightEntityData.enlightenColorScale = Vec3(1.3, 1.3, 1.3)
+    s_SpotLightEntityData.particleColorScale = Vec3(0.2, 0.2, 0.2)
     s_SpotLightEntityData.visible = true
-    s_SpotLightEntityData.shape = SpotLightShape.SpotLightShape_Cone
+    s_SpotLightEntityData.shape = SpotLightShape.SpotLightShape_Frustum
     s_SpotLightEntityData.coneInnerAngle = 0.0
-    s_SpotLightEntityData.coneOuterAngle = 60.0
-    s_SpotLightEntityData.frustumFov = 60.0
+    s_SpotLightEntityData.coneOuterAngle = 32.3720016479
+    s_SpotLightEntityData.frustumFov = 55.0
     s_SpotLightEntityData.frustumAspect = 1.0
     s_SpotLightEntityData.orthoWidth = 5.0
-    s_SpotLightEntityData.orthoHeight = 0.5
+    s_SpotLightEntityData.orthoHeight = 5.0
     s_SpotLightEntityData.castShadowsEnable = false
     s_SpotLightEntityData.castShadowsMinLevel = QualityLevel.QualityLevel_Low
-
+    s_SpotLightEntityData.texture = m_FlashlightTexture:GetInstance()
+    
     local s_BusStaticModel = EntityManager:CreateEntity(s_StaticModelEntityData, self.m_Transform)
     local s_BusSpotLight = EntityManager:CreateEntity(s_SpotLightEntityData, self.m_Transform)
 

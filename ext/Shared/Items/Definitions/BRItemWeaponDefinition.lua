@@ -163,10 +163,10 @@ return {
         "UI/Art/Persistence/Weapons/Fancy/m98b",
         DC(Guid("4167372B-8261-610E-464F-E3666AF6DFF7"), Guid("7FC60BE5-28DC-F4A4-4176-508F73727830")),
         LinearTransform(
-            Vec3(0,-1, 0),
             Vec3(1, 0, 0),
+            Vec3(0, 1, 0),
             Vec3(0, 0, 1),
-            Vec3(0, 0.04, -0.5)
+            Vec3(0, 0.04, -0.65)
         ),
         DC(Guid("D61A38DA-17D0-4146-9305-100183EB3E5F"), Guid("05EB2892-8B51-488E-8956-4350C3D2BA27")),
         m_AmmoDefinitions["ammo-762mm"],
