@@ -113,6 +113,8 @@ function BRInventorySlot:Drop()
 
     s_Item.m_Owner = nil
 
+    self:OnUpdate()
+
     return { s_Item }
 end
 

@@ -1,6 +1,8 @@
 require "__shared/Enums/ItemEnums"
 require "__shared/Slots/BRInventorySlot"
 
+local m_Logger = Logger("BRInventoryBackpackSlot", true)
+
 class("BRInventoryBackpackSlot", BRInventorySlot)
 
 function BRInventoryBackpackSlot:__init(p_Inventory)
@@ -10,4 +12,9 @@ function BRInventoryBackpackSlot:__init(p_Inventory)
         ItemType.Consumable,
         ItemType.Gadget
     })
+end
+
+function BRInventoryBackpackSlot:OnUpdate()
+    m_Logger:Write("Backpack slot updated")
+    self.m_Inventory:UpdateWeaponSecondaryAmmo()
 end

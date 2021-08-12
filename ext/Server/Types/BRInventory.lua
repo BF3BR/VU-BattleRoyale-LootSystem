@@ -421,6 +421,15 @@ function BRInventory:UpdateSoldierCustomization()
     end
 end
 
+function BRInventory:UpdateWeaponSecondaryAmmo()
+    if self.m_Owner == nil or self.m_Owner.soldier == nil then
+        return
+    end
+    for _, l_Weapon in ipairs(self.m_Owner.soldier.weaponsComponent.weapons) do
+        l_Weapon.secondaryAmmo = self:GetAmmoTypeCount(l_Weapon.name)
+    end
+end
+
 function BRInventory:CreateCustomizeSoldierData()
     local s_CustomizeSoldierData = CustomizeSoldierData()
     s_CustomizeSoldierData.restoreToOriginalVisualState = false
