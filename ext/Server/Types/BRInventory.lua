@@ -119,7 +119,9 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
         m_LootPickupDatabase:CreateLootPickup(
             "Basic",
             self.m_Owner.soldier.worldTransform,
-            s_Item
+            {
+                s_Item
+            }
         )
         return
     end
@@ -415,6 +417,7 @@ function BRInventory:UpdateSoldierCustomization()
     -- Reset primary ammo for each weapon
     for _, l_Weapon in ipairs(self.m_Owner.soldier.weaponsComponent.weapons) do
         l_Weapon.primaryAmmo = self:GetCurrentPrimaryAmmo(l_Weapon.name)
+        l_Weapon.secondaryAmmo = self:GetAmmoTypeCount(l_Weapon.name)
     end
 end
 

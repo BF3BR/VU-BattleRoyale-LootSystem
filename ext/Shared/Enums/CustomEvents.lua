@@ -1,6 +1,7 @@
 InventoryNetEvent = {
 	InventoryState = "IV:IS",
 	InventoryGiveCommand = "IV:GC",
+	InventorySpawnCommand = "IV:SC",
 	MoveItem = "IV:MI",
 	DropItem = "IV:DI",
 	UseItem = "IV:UI",

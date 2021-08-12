@@ -1,7 +1,5 @@
 class "VuBattleRoyaleLootSystemClient"
 
-require "ClientCommands"
-
 require "__shared/Types/DataContainer"
 require "__shared/Types/BRLootPickup"
 
@@ -19,6 +17,8 @@ require "__shared/Items/BRItemGadget"
 
 require "Types/BRInventory"
 require "Types/BRLooting"
+
+require "ClientCommands"
 
 local m_Logger = Logger("VuBattleRoyaleLootSystemClient", true)
 
@@ -43,10 +43,14 @@ end
 
 function VuBattleRoyaleLootSystemClient:RegisterCommands()
     Console:Register("give", "Gives player items", ClientCommands.Give)
+    Console:Register("spawn", "Spawns items under the player", ClientCommands.Spawn)
+    Console:Register("list", "List all the items", ClientCommands.List)
 end
 
 function VuBattleRoyaleLootSystemClient:UnregisterCommands()
     Console:Deregister("give")
+    Console:Deregister("spawn")
+    Console:Deregister("list")
 end
 
 function VuBattleRoyaleLootSystemClient:RegisterVars()
