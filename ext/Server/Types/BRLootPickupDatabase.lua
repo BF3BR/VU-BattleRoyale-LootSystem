@@ -14,6 +14,11 @@ function BRLootPickupDatabase:__init()
     self.m_LootPickups = {}
 end
 
+-- 
+function BRLootPickupDatabase:GetLootPickup(p_LootPickupId)
+    return self.m_LootPickups[p_LootPickupId]
+end
+
 function BRLootPickupDatabase:CreateLootPickup(p_Type, p_Transform, p_Items)
     local s_Items = {}
     for _, l_Item in pairs(p_Items) do

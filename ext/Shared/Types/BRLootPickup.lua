@@ -190,11 +190,12 @@ function BRLootPickup:Spawn(p_Id)
     s_SpotLightEntityData.castShadowsEnable = false
     s_SpotLightEntityData.castShadowsMinLevel = QualityLevel.QualityLevel_Low
     s_SpotLightEntityData.texture = m_FlashlightTexture:GetInstance()
-    
+
     local s_BusStaticModel = EntityManager:CreateEntity(s_StaticModelEntityData, self.m_Transform)
     local s_BusSpotLight = EntityManager:CreateEntity(s_SpotLightEntityData, self.m_Transform)
 
     if s_BusStaticModel == nil or s_BusSpotLight == nil then
+        m_Logger:Write("Models are nil, can't spawn")
         return
     end
 
@@ -204,11 +205,9 @@ function BRLootPickup:Spawn(p_Id)
 
     s_BusStaticModel:Init(Realm.Realm_ClientAndServer, true, false)
     self.m_Entities[s_BusStaticModel.instanceId] = s_BusStaticModel
-    -- table.insert(self.m_Entities, s_BusStaticModel)
 
     s_BusSpotLight:Init(Realm.Realm_ClientAndServer, true, false)
     self.m_Entities[s_BusSpotLight.instanceId] = s_BusSpotLight
-    -- table.insert(self.m_Entities, s_BusSpotLight)
 end
 
 function BRLootPickup:Destroy()

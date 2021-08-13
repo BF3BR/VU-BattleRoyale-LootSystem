@@ -41,8 +41,6 @@ function VuBattleRoyaleLootSystemServer:OnExtensionLoaded()
     Events:Subscribe("Player:Respawn", self, self.OnPlayerRespawn)
     Events:Subscribe("Player:Left", self, self.OnPlayerLeft)
 
-    NetEvents:Subscribe(InventoryNetEvent.PickupItem, self, self.OnInventoryPickupItem)
-
     -- TODO remove, just for reloading while testing
     local s_Players = PlayerManager:GetPlayers()
     for _, l_Player in ipairs(s_Players) do
@@ -54,25 +52,6 @@ end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerLeft(p_Player)
     m_InventoryManager:OnPlayerLeft(p_Player)
-end
-
-function VuBattleRoyaleLootSystemServer:OnInventoryPickupItem(p_Player, p_LootPickupId, p_ItemId, p_SlotId)
-    local s_Inventory = m_InventoryManager.m_Inventories[p_Player.id]
-    if s_Inventory == nil then
-        return
-    end
-
-    if m_LootPickupDatabase.m_LootPickups[p_LootPickupId] == nil then
-        return
-    end
-
-    for _, l_Item in pairs(m_LootPickupDatabase.m_LootPickups[p_LootPickupId].m_Items) do
-        if p_ItemId == l_Item.m_Id then
-            s_Inventory:AddItem(p_ItemId, p_SlotId)
-            m_LootPickupDatabase:RemoveItemFromLootPickup(p_LootPickupId, p_ItemId)
-            return
-        end
-    end
 end
 
 function VuBattleRoyaleLootSystemServer:OnLevelLoaded()
@@ -136,7 +115,14 @@ function VuBattleRoyaleLootSystemServer:OnLevelLoaded()
 end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerRespawn(p_Player)
-    --[[local s_ItemPP2000 = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-pp2000"])
+    if p_Player == nil then
+        return
+    end
+
+    local s_Inventory = m_InventoryManager:GetOrCreateInventory(p_Player)
+
+    -- local s_ItemPP2000 = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-pp2000"])
+    local s_ItemPP2000 = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-r870"])
     local s_ItemAK = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-ak74m"])
     s_Inventory:AddItem(s_ItemPP2000.m_Id)
     s_Inventory:AddItem(s_ItemAK.m_Id)
@@ -150,6 +136,9 @@ function VuBattleRoyaleLootSystemServer:OnPlayerRespawn(p_Player)
     s_Inventory:AddItem(s_ItemAmmo1.m_Id)
     s_Inventory:AddItem(s_ItemAmmo2.m_Id)
     s_Inventory:AddItem(s_ItemAmmo3.m_Id)
+
+    local s_ItemShotgun = m_ItemDatabase:CreateItem(m_AmmoDefinitions["ammo-12-gauge"], 80)
+    s_Inventory:AddItem(s_ItemShotgun.m_Id)
 
     local s_ItemAmmo4 = m_ItemDatabase:CreateItem(m_AmmoDefinitions["ammo-9mm"], 80)
     s_Inventory:AddItem(s_ItemAmmo4.m_Id)
@@ -166,17 +155,8 @@ function VuBattleRoyaleLootSystemServer:OnPlayerRespawn(p_Player)
     local s_ItemSmoke = m_ItemDatabase:CreateItem(m_GadgetDefinitions["gadget-m320-smoke"])
     s_Inventory:AddItem(s_ItemSmoke.m_Id)
 
-    m_Logger:Write(s_Inventory:AsTable())]]
+    -- m_Logger:Write(s_Inventory:AsTable())
 
-    if m_InventoryManager.m_Inventories[p_Player.id] ~= nil then
-        -- If the player already has an inventory attached to him
-        s_Inventory:UpdateSoldierCustomization() -- maybe we don't need this
-        s_Inventory:SendState() -- maybe we don't need this
-        return
-    end
-
-    local s_Inventory = BRInventory(p_Player)
-    m_InventoryManager:AddInventory(s_Inventory, p_Player.id)
     s_Inventory:UpdateSoldierCustomization()
     s_Inventory:SendState()
 end

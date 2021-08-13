@@ -184,34 +184,28 @@ function BRInventory:SwapItems(p_ItemId, p_SlotId)
 end
 
 function BRInventory:DropItem(p_ItemId, p_Quantity)
-    if self.m_Owner == nil then
+    if self.m_Owner == nil or
+       self.m_Owner.soldier == nil or
+       self.m_Owner.soldier.worldTransform == nil then
         return
     end
 
-    if self.m_Owner.soldier == nil then
-        return
-    end
+    p_Quantity = p_Quantity or 0
 
-    if self.m_Owner.soldier.worldTransform == nil then
-        return
-    end
+    local s_Slot = self:GetItemSlot(p_ItemId)
+    if s_Slot ~= nil then
+        --TODO: Add Quantity support fro :Drop()
+        local l_DroppedItems = s_Slot:Drop(p_Quantity)
 
-    for _, l_Slot in pairs(self.m_Slots) do
-        if l_Slot.m_Item ~= nil and l_Slot.m_Item.m_Id == p_ItemId then
-            local l_DroppedItems = l_Slot:Drop()
-            m_LootPickupDatabase:CreateLootPickup(
-                "Basic",
-                self.m_Owner.soldier.worldTransform,
-                l_DroppedItems
-            )
-            self:SendState()
-            return
-        end
-    end
+        m_LootPickupDatabase:CreateLootPickup(
+            "Basic",
+            self.m_Owner.soldier.worldTransform,
+            l_DroppedItems
+        )
 
-    --TODO: Use p_Quantity for splitting
+        self:SendState()
+    end
 end
-
 
 function BRInventory:RemoveItem(p_ItemId)
     -- Check if item exists
@@ -282,8 +276,9 @@ function BRInventory:GetCurrentPrimaryAmmo(p_WeaponName)
     return (s_Item ~= nil and s_Item.m_CurrentPrimaryAmmo) or 0
 end
 
-function BRInventory:SetCurrentPrimaryAmmo(p_WeaponName, p_AmmoCount)
+function BRInventory:SavePrimaryAmmo(p_WeaponName, p_AmmoCount)
     local s_Item = self:GetWeaponItemByName(p_WeaponName)
+
     if s_Item ~= nil then
         s_Item.m_CurrentPrimaryAmmo = p_AmmoCount
     end

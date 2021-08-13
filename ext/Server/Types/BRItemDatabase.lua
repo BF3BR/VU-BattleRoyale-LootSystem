@@ -7,6 +7,11 @@ function BRItemDatabase:__init()
     self.m_Items = {}
 end
 
+-- Returns an item from the database, by it's id
+function BRItemDatabase:GetItem(p_Id)
+    return self.m_Items[p_Id]
+end
+
 -- All items should created using this methods from the database
 -- to keep it's integrity
 function BRItemDatabase:CreateItem(p_Definition, p_Quantity, p_Props)
@@ -32,12 +37,9 @@ function BRItemDatabase:CreateItem(p_Definition, p_Quantity, p_Props)
     return s_Item
 end
 
+-- Removes and destroys an item from the item database
 function BRItemDatabase:UnregisterItem(p_Id)
-    if p_Id == nil then
-        return
-    end
-
-    local s_Item = self.m_Items[p_Id]
+    local s_Item = self:GetItem(p_Id)
     if s_Item == nil then
         return
     end
@@ -52,10 +54,6 @@ end
 function BRItemDatabase:GetRandomId()
     -- for now use the guid string
     return tostring(MathUtils:RandomGuid())
-end
-
-function BRItemDatabase:GetItem(p_Id)
-    return self.m_Items[p_Id]
 end
 
 if g_BRItemDatabase == nil then

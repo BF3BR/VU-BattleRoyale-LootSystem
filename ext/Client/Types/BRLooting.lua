@@ -1,6 +1,7 @@
 class "BRLooting"
 
 local m_Debug = require "Debug"
+local m_Logger = Logger("BRLooting", true)
 
 function BRLooting:__init()
 	self.m_LootPickups = {}
