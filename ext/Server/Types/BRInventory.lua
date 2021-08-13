@@ -194,7 +194,6 @@ function BRInventory:DropItem(p_ItemId, p_Quantity)
 
     local s_Slot = self:GetItemSlot(p_ItemId)
     if s_Slot ~= nil then
-        --TODO: Add Quantity support fro :Drop()
         local l_DroppedItems = s_Slot:Drop(p_Quantity)
 
         m_LootPickupDatabase:CreateLootPickup(

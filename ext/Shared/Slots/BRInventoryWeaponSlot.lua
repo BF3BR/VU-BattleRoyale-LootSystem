@@ -16,28 +16,30 @@ function BRInventoryWeaponSlot:__init(p_Inventory, p_UnlockWeaponSlot)
     }
 end
 
--- Drop all attachments too when dropping a weapon
-function BRInventoryWeaponSlot:Drop()
-    -- Check if there is a weapon in the slot
-    if self.m_Item == nil then
+function BRInventoryWeaponSlot:OnBeforeDrop()
+    -- 1. Save primary ammo in item
+    local s_Owner = self:GetOwner()
+    if s_Owner == nil or s_Owner.soldier == nil then
+        m_Logger:Write("Slot owner is undefined")
         return {}
     end
 
-    local s_DroppedItems = { self.m_Item }
+    local s_Weapon = s_Owner.soldier.weaponsComponent.weapons[self.m_UnlockWeaponSlot + 1]
+    self.m_Item.m_CurrentPrimaryAmmo = s_Weapon.primaryAmmo
+
+    -- 2. Drop attachments
+    local s_DroppedAttachments = {}
+
     for _, l_AttachmentSlot in pairs(self.m_AttachmentSlots) do
         local s_Items = l_AttachmentSlot:Drop()
 
         -- attachments only drop one item
         if #s_Items == 1 then
-            table.insert(s_DroppedItems, s_Items[1])
+            table.insert(s_DroppedAttachments, s_Items[1])
         end
     end
 
-    self.m_Item = nil
-
-    self.m_Inventory:UpdateSoldierCustomization()
-
-    return s_DroppedItems
+    return s_DroppedAttachments
 end
 
 function BRInventoryWeaponSlot:PutWithRelated(p_Items)

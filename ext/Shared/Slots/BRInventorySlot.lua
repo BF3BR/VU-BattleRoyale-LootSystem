@@ -47,6 +47,31 @@ function BRInventorySlot:Put(p_Item)
     return true, s_DroppedItems
 end
 
+function BRInventorySlot:Drop(p_Quantity)
+    -- Override (if needed)
+    if self.m_Item == nil then
+        return {}
+    end
+
+    -- TODO add quantity support
+    p_Quantity = p_Quantity or 0
+
+    local s_Items = self:OnBeforeDrop()
+
+    -- remove item from the slot
+    local s_Item = self.m_Item
+    s_Item.m_Owner = nil
+    table.insert(s_Items, s_Item)
+
+    -- update slot state
+    self.m_Item = nil
+    self.m_IsUpdated = true
+
+    self:OnUpdate()
+
+    return s_Items
+end
+
 function BRInventorySlot:PutWithRelated(p_Items)
     -- default behavior is to :Put only the first item
     if p_Items ~= nil and #p_Items > 0 then
@@ -96,26 +121,20 @@ function BRInventorySlot:IsAvailable(p_Item)
     return false
 end
 
+-- @Override
+-- It's called before the item is about to be dropped. It can be used
+-- to trigger related ammo drops. Returns the related items that were dropped
+function BRInventorySlot:OnBeforeDrop()
+    -- Override
+    return {}
+end
+
 function BRInventorySlot:OnUpdate()
     -- Override
 end
 
-function BRInventorySlot:Drop()
-    -- Override (if needed)
-    if self.m_Item == nil then
-        return {}
-    end
-
-    -- remove item from the slot
-    local s_Item = self.m_Item
-    self.m_Item = nil
-    self.m_IsUpdated = true
-
-    s_Item.m_Owner = nil
-
-    self:OnUpdate()
-
-    return { s_Item }
+function BRInventorySlot:GetOwner()
+    return self.m_Inventory.m_Owner
 end
 
 function BRInventorySlot:AsTable()
