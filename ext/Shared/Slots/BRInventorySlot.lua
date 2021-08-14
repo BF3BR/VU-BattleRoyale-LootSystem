@@ -24,7 +24,7 @@ function BRInventorySlot:Put(p_Item)
     if p_Item ~= nil then
         -- check if invalid item for this slot
         if not self:IsAccepted(p_Item) then
-            return false, {}
+            return false, {p_Item}
         end
 
         -- check if the item is already equipped

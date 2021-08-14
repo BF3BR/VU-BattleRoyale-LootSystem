@@ -177,8 +177,14 @@ function BRInventory:SwapItems(p_ItemId, p_SlotId)
     local s_ReplacedItems = s_NewSlot:Drop()
     local s_NewItems = s_OldSlot:Drop()
 
+    -- swap items
     s_NewSlot:PutWithRelated(s_NewItems)
-    s_OldSlot:PutWithRelated(s_ReplacedItems)
+    local _, s_RemainingItems = s_OldSlot:PutWithRelated(s_ReplacedItems)
+
+    -- try to readd all the remaining items
+    for _, l_Item in ipairs(s_RemainingItems) do
+        self:AddItem(l_Item.m_Id)
+    end
 
     self:SendState()
 end

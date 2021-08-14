@@ -59,6 +59,8 @@ function BRInventoryWeaponSlot:PutWithRelated(p_Items)
             self.m_AttachmentSlots.OtherSlot:Put(l_Item)
         end
     end
+
+    return true, {}
 end
 
 function BRInventoryWeaponSlot:GetUnlockWeaponAndSlot()
