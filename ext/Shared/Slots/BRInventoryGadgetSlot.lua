@@ -7,6 +7,49 @@ class("BRInventoryGadgetSlot", BRInventorySlot)
 
 function BRInventoryGadgetSlot:__init(p_Inventory)
     BRInventorySlot.__init(self, p_Inventory, { ItemType.Gadget })
+
+    self.m_UnlockWeaponSlot = WeaponSlot.WeaponSlot_2
+end
+
+function BRInventoryGadgetSlot:OnBeforeDrop()
+    self:UpdateItemPrimaryAmmo()
+
+    return {}
+end
+
+function BRInventoryGadgetSlot:UpdateItemPrimaryAmmo()
+    local s_Owner = self:GetOwner()
+    if s_Owner == nil or s_Owner.soldier == nil then
+        m_Logger:Write("Slot owner is undefined")
+        return
+    end
+
+    -- get current weapon
+    local s_Weapon = s_Owner.soldier.weaponsComponent.weapons[self.m_UnlockWeaponSlot + 1]
+    if s_Weapon == nil or self.m_Item == nil then
+        return
+    end
+
+    self.m_Item:SetPrimaryAmmo(s_Weapon.primaryAmmo)
+end
+
+function BRInventoryGadgetSlot:DestroyIfEmpty()
+    if self.m_Item == nil then
+        return nil
+    end
+
+    local s_Owner = self:GetOwner()
+    if s_Owner == nil or s_Owner.soldier == nil then
+        m_Logger:Write("Slot owner is undefined")
+        return
+    end
+
+    local s_Gadget = s_Owner.soldier.weaponsComponent.weapons[self.m_UnlockWeaponSlot + 1]
+
+    -- check for a specific case after weapon change when gadget is out of ammo
+    if self.m_Item.m_Quantity == 1 and s_Gadget.primaryAmmo == 0 then
+        self.m_Item:SetQuantity(0)
+    end
 end
 
 function BRInventoryGadgetSlot:GetUnlockWeaponAndSlot()

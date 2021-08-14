@@ -88,6 +88,10 @@ function BRInventory:AsTable()
     return s_Data
 end
 
+function BRInventory:GetSlot(p_SlotIndex)
+    return self.m_Slots[p_SlotIndex]
+end
+
 -- Returns the slot of an item or nil if item was not found
 -- in this inventory
 function BRInventory:GetItemSlot(p_ItemId)
@@ -212,7 +216,7 @@ function BRInventory:DropItem(p_ItemId, p_Quantity)
     end
 end
 
-function BRInventory:RemoveItem(p_ItemId)
+function BRInventory:DestroyItem(p_ItemId)
     -- Check if item exists
     local s_Item = m_ItemDatabase:GetItem(p_ItemId)
     if s_Item == nil then
@@ -296,7 +300,7 @@ function BRInventory:CheckIfLastShotForGadget(p_WeaponName)
         s_GadgetSlot.m_Item:SetQuantity(s_GadgetSlot.m_Item.m_Quantity - 1)
 
         if s_GadgetSlot.m_Item.m_Quantity <= 0 then
-            self:RemoveItem(s_GadgetSlot.m_Item.m_Id)
+            self:DestroyItem(s_GadgetSlot.m_Item.m_Id)
         end
 
         self:SendState()
@@ -366,9 +370,18 @@ end
 function BRInventory:RemoveAmmo(p_WeaponName, p_Quantity)
     -- Handle all the Gadget related code here
     local s_GadgetSlot = self.m_Slots[InventorySlot.Gadget]
-    if s_GadgetSlot.m_Item ~= nil and s_GadgetSlot:HasWeapon(p_WeaponName) then
+    local s_GadgetItem = s_GadgetSlot.m_Item
+    if s_GadgetItem ~= nil and s_GadgetSlot:HasWeapon(p_WeaponName) then
+        s_GadgetItem:SetQuantity(s_GadgetItem.m_Quantity - 1)
         s_GadgetSlot.m_IsUpdated = true
-        return s_GadgetSlot.m_Item.m_Quantity - 1
+
+        if s_GadgetItem.m_Quantity == 0 then
+            self:DestroyItem(s_GadgetItem.m_Id)
+        else
+            self:SendState()
+        end
+
+        return s_GadgetItem.m_Quantity - 1
     end
 
     -- Get ammo definition for this weapon
@@ -392,7 +405,7 @@ function BRInventory:RemoveAmmo(p_WeaponName, p_Quantity)
         -- Update ammo item state
         l_AmmoItem:SetQuantity(l_AmmoItem.m_Quantity - s_QuantityRemoved)
         if l_AmmoItem.m_Quantity <= 0 then
-            self:RemoveItem(l_AmmoItem.m_Id)
+            self:DestroyItem(l_AmmoItem.m_Id)
         end
 
         -- Update quantity left to remove

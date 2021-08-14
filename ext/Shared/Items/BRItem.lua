@@ -80,6 +80,12 @@ function BRItem:SetQuantity(p_Quantity)
     if s_Slot ~= nil then
         s_Slot.m_IsUpdated = true
     end
+
+    -- destroy item if quantity is 0
+    if self.m_Quantity <= 0 then
+        local s_Inventory = self:GetParentInventory()
+        return s_Inventory ~= nil and s_Inventory:DestroyItem(self.m_Id)
+    end
 end
 
 function BRItem:CreateFromTable(p_Table)

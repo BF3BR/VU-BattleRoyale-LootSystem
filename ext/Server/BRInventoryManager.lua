@@ -84,8 +84,11 @@ function BRInventoryManager:OnPlayerChangingWeapon(p_Player)
         return
     end
 
-    -- Update primary and secondary ammo count
-    -- s_CurrentWeapon.primaryAmmo = s_Inventory:GetCurrentPrimaryAmmo(s_CurrentWeapon.name)
+    -- destroy gadget if empty
+    local s_GadgetSlot = s_Inventory:GetSlot(InventorySlot.Gadget)
+    s_GadgetSlot:DestroyIfEmpty()
+
+    -- Update secondary ammo count
     s_CurrentWeapon.secondaryAmmo = s_Inventory:GetAmmoTypeCount(s_CurrentWeapon.name)
 end
 
@@ -241,10 +244,6 @@ function BRInventoryManager:OnPlayerPostReload(p_Player, p_AmmoAdded, p_Weapon)
 
     local s_Inventory = self.m_Inventories[p_Player.id]
     local p_Weapon = p_Weapon or p_Player.soldier.weaponsComponent.currentWeapon
-    if s_Inventory:IsGadget(p_Weapon.name) then
-        s_Inventory:SavePrimaryAmmo(p_Weapon.name, p_Weapon.primaryAmmo)
-        return
-    end
 
     -- remove ammo that was added
     s_Inventory:RemoveAmmo(p_Weapon.name, p_AmmoAdded)
