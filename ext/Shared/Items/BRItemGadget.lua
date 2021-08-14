@@ -10,6 +10,10 @@ function BRItemGadget:__init(p_Id, p_Definition, p_Quantity, p_CurrentPrimaryAmm
     self.m_CurrentPrimaryAmmo = p_CurrentPrimaryAmmo or 0
 end
 
+function BRItemGadget:SetPrimaryAmmo(p_AmmoCount)
+    self.m_CurrentPrimaryAmmo = p_AmmoCount
+end
+
 function BRItemGadget:AsTable()
     local s_Table = BRItem.AsTable(self)
 

@@ -10,6 +10,10 @@ function BRItemWeapon:__init(p_Id, p_Definition, p_CurrentPrimaryAmmo)
     self.m_CurrentPrimaryAmmo = p_CurrentPrimaryAmmo or 0
 end
 
+function BRItemWeapon:SetPrimaryAmmo(p_AmmoCount)
+    self.m_CurrentPrimaryAmmo = p_AmmoCount
+end
+
 function BRItemWeapon:AsTable()
     local s_Table = BRItem.AsTable(self)
 

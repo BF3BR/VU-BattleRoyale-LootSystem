@@ -18,14 +18,7 @@ end
 
 function BRInventoryWeaponSlot:OnBeforeDrop()
     -- 1. Save primary ammo in item
-    local s_Owner = self:GetOwner()
-    if s_Owner == nil or s_Owner.soldier == nil then
-        m_Logger:Write("Slot owner is undefined")
-        return {}
-    end
-
-    local s_Weapon = s_Owner.soldier.weaponsComponent.weapons[self.m_UnlockWeaponSlot + 1]
-    self.m_Item.m_CurrentPrimaryAmmo = s_Weapon.primaryAmmo
+    self:UpdateItemPrimaryAmmo()
 
     -- 2. Drop attachments
     local s_DroppedAttachments = {}
@@ -92,6 +85,22 @@ function BRInventoryWeaponSlot:GetUnlockWeaponAndSlot()
     return s_Weapon
 end
 
+function BRInventoryWeaponSlot:UpdateItemPrimaryAmmo()
+    local s_Owner = self:GetOwner()
+    if s_Owner == nil or s_Owner.soldier == nil then
+        m_Logger:Write("Slot owner is undefined")
+        return
+    end
+
+    -- get current weapon
+    local s_Weapon = s_Owner.soldier.weaponsComponent.weapons[self.m_UnlockWeaponSlot + 1]
+    if s_Weapon == nil or self.m_Item == nil then
+        return
+    end
+
+    self.m_Item:SetPrimaryAmmo(s_Weapon.primaryAmmo)
+end
+
 function BRInventoryWeaponSlot:HasWeapon(p_WeaponName)
     return self.m_Item ~= nil and self.m_Item.m_Definition.m_EbxName == p_WeaponName
 end
@@ -106,37 +115,8 @@ function BRInventoryWeaponSlot:BeforeCustomizationApply()
         return
     end
 
-    local s_Owner = self:GetOwner()
-    if s_Owner == nil or s_Owner.soldier == nil then
-        m_Logger:Write("Slot owner is undefined")
-        return {}
-    end
-
-    local s_Weapon = s_Owner.soldier.weaponsComponent.weapons[self.m_UnlockWeaponSlot + 1]
-    if s_Weapon == nil or self.m_Item == nil then
-        return
-    end
-    m_Logger:Write("Saving primary ammo for " .. s_Weapon.name .. " -> " .. s_Weapon.primaryAmmo)
-    self.m_Item.m_CurrentPrimaryAmmo = s_Weapon.primaryAmmo
+    self:UpdateItemPrimaryAmmo()
 end
-
--- function BRInventoryWeaponSlot:AfterCustomizationApply()
---     local s_Owner = self:GetOwner()
---     if s_Owner == nil or s_Owner.soldier == nil then
---         m_Logger:Write("Slot owner is undefined")
---         return {}
---     end
-
---     local s_Weapon = s_Owner.soldier.weaponsComponent.weapons[self.m_UnlockWeaponSlot + 1]
---     if s_Weapon == nil then
---         return
---     end
-
---     m_Logger:Write("Ammo after custom was " .. s_Weapon.primaryAmmo)
---     s_Weapon.primaryAmmo = self.m_Item.m_CurrentPrimaryAmmo
---     m_Logger:Write("Put some ammo back to " .. self.m_Item.m_CurrentPrimaryAmmo)
---     -- self.m_Item.m_CurrentPrimaryAmmo = s_Weapon.primaryAmmo
--- end
 
 function BRInventoryWeaponSlot:SetAttachmentSlots(p_OpticsSlot, p_BarrelSlot, p_OtherSlot)
     self.m_AttachmentSlots = {

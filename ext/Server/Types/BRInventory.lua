@@ -279,7 +279,7 @@ function BRInventory:SavePrimaryAmmo(p_WeaponName, p_AmmoCount)
     local s_Item = self:GetWeaponItemByName(p_WeaponName)
 
     if s_Item ~= nil then
-        s_Item.m_CurrentPrimaryAmmo = p_AmmoCount
+        s_Item:SetPrimaryAmmo(p_AmmoCount)
     end
 end
 
