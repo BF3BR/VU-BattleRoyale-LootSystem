@@ -234,24 +234,24 @@ function BRInventoryManager:OnPlayerSpawnCommand(p_Player, p_Args)
 end
 
 -- TODO move this into BRInventory.UpdateOwnerAmmo
-function BRInventoryManager:OnPlayerPostReload(p_Player, p_PreviousPrimaryAmmo, p_AmmoAdded)
+function BRInventoryManager:OnPlayerPostReload(p_Player, p_AmmoAdded, p_Weapon)
     if p_Player == nil or p_Player.soldier == nil then
         return
     end
 
     local s_Inventory = self.m_Inventories[p_Player.id]
-    local s_CurrentWeapon = p_Player.soldier.weaponsComponent.currentWeapon
-    if s_Inventory:IsGadget(s_CurrentWeapon.name) then
-        s_Inventory:SavePrimaryAmmo(s_CurrentWeapon.name, s_CurrentWeapon.primaryAmmo)
+    local p_Weapon = p_Weapon or p_Player.soldier.weaponsComponent.currentWeapon
+    if s_Inventory:IsGadget(p_Weapon.name) then
+        s_Inventory:SavePrimaryAmmo(p_Weapon.name, p_Weapon.primaryAmmo)
         return
     end
 
     -- remove ammo that was added
-    s_Inventory:RemoveAmmo(s_CurrentWeapon.name, p_AmmoAdded)
+    s_Inventory:RemoveAmmo(p_Weapon.name, p_AmmoAdded)
 
     -- Update ammo values
-    s_CurrentWeapon.secondaryAmmo = s_Inventory:GetAmmoTypeCount(s_CurrentWeapon.name)
-    s_Inventory:SavePrimaryAmmo(s_CurrentWeapon.name, s_CurrentWeapon.primaryAmmo)
+    p_Weapon.secondaryAmmo = s_Inventory:GetAmmoTypeCount(p_Weapon.name)
+    s_Inventory:SavePrimaryAmmo(p_Weapon.name, p_Weapon.primaryAmmo)
 end
 
 -- ugly solution for now
