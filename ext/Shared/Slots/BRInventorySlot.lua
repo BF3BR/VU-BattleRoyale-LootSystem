@@ -1,5 +1,7 @@
 class "BRInventorySlot"
 
+local m_Logger = Logger("BRInventorySlot", true)
+
 function BRInventorySlot:__init(p_Inventory, p_AcceptedTypes)
     self.m_Item = nil
     self.m_Inventory = p_Inventory
@@ -56,12 +58,12 @@ function BRInventorySlot:Drop(p_Quantity)
     -- TODO add quantity support
     p_Quantity = p_Quantity or 0
 
-    local s_Items = self:OnBeforeDrop()
+    local s_DroppedItems = self:OnBeforeDrop()
 
     -- remove item from the slot
     local s_Item = self.m_Item
     s_Item.m_Owner = nil
-    table.insert(s_Items, s_Item)
+    table.insert(s_DroppedItems, 1, s_Item)
 
     -- update slot state
     self.m_Item = nil
@@ -69,7 +71,7 @@ function BRInventorySlot:Drop(p_Quantity)
 
     self:OnUpdate()
 
-    return s_Items
+    return s_DroppedItems
 end
 
 function BRInventorySlot:PutWithRelated(p_Items)
