@@ -121,18 +121,6 @@ function BRInventorySlot:IsAvailable(p_Item)
     return false
 end
 
--- @Override
--- It's called before the item is about to be dropped. It can be used
--- to trigger related ammo drops. Returns the related items that were dropped
-function BRInventorySlot:OnBeforeDrop()
-    -- Override
-    return {}
-end
-
-function BRInventorySlot:OnUpdate()
-    -- Override
-end
-
 function BRInventorySlot:GetOwner()
     return self.m_Inventory.m_Owner
 end
@@ -140,3 +128,24 @@ end
 function BRInventorySlot:AsTable()
     return {Item = self.m_Item ~= nil and self.m_Item:AsTable() or nil}
 end
+
+-- @Override
+-- It's called before the item is about to be dropped. It can be used
+-- to trigger related ammo drops. Returns the related items that were dropped
+function BRInventorySlot:OnBeforeDrop()
+    return {}
+end
+
+-- @Override
+function BRInventorySlot:OnUpdate()
+    -- Empty
+end
+
+-- @Override
+-- It's called before soldier customization starts happening, even
+-- if that was triggered from unrelated slot. It's used to suppress
+-- some side-effects caused by unrelated (to this slot) slot changes
+function BRInventorySlot:BeforeCustomizationApply()
+    -- Empty
+end
+

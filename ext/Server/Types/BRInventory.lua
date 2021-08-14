@@ -406,12 +406,21 @@ function BRInventory:UpdateSoldierCustomization()
         return
     end
 
+    -- This one is called because a change in some slots causes a
+    -- complete change in customization so it may have some side-effects
+    -- to unrelated slots
+    for _, l_Slot in pairs(self.m_Slots) do
+        l_Slot:BeforeCustomizationApply()
+    end
+
     self.m_Owner.soldier:ApplyCustomization(self:CreateCustomizeSoldierData())
 
     -- Reset primary ammo for each weapon
-    for _, l_Weapon in ipairs(self.m_Owner.soldier.weaponsComponent.weapons) do
-        l_Weapon.primaryAmmo = self:GetCurrentPrimaryAmmo(l_Weapon.name)
-        l_Weapon.secondaryAmmo = self:GetAmmoTypeCount(l_Weapon.name)
+    for _, l_Weapon in pairs(self.m_Owner.soldier.weaponsComponent.weapons) do
+        if l_Weapon ~= nil then
+            l_Weapon.primaryAmmo = self:GetCurrentPrimaryAmmo(l_Weapon.name)
+            l_Weapon.secondaryAmmo = self:GetAmmoTypeCount(l_Weapon.name)
+        end
     end
 end
 
@@ -419,8 +428,11 @@ function BRInventory:UpdateWeaponSecondaryAmmo()
     if self.m_Owner == nil or self.m_Owner.soldier == nil then
         return
     end
-    for _, l_Weapon in ipairs(self.m_Owner.soldier.weaponsComponent.weapons) do
-        l_Weapon.secondaryAmmo = self:GetAmmoTypeCount(l_Weapon.name)
+
+    for _, l_Weapon in pairs(self.m_Owner.soldier.weaponsComponent.weapons) do
+        if l_Weapon ~= nil then
+            l_Weapon.secondaryAmmo = self:GetAmmoTypeCount(l_Weapon.name)
+        end
     end
 end
 
