@@ -105,29 +105,37 @@ function BRInventory:GetItemSlot(p_ItemId)
     return nil
 end
 
-function BRInventory:AddItem(p_ItemId, p_SlotIndex)
+-- TODO p_CreateLootPickup wont be needed when we will be sure that each item
+-- will have a link to it's owner. Then we will only need to check if it's owner is
+-- a LootPickup or not
+
+function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
     -- Check if item exists
     local s_Item = m_ItemDatabase:GetItem(p_ItemId)
     if s_Item == nil then
         m_Logger:Write("Invalid item Id.")
-        return p_ItemId
+        return false
     end
 
-    local s_Slot = nil
-    if p_SlotIndex == nil then
+    local s_Slot = self.m_Slots[p_SlotIndex]
+    if s_Slot == nil then
         s_Slot = self:GetAvailableSlot(s_Item)
     end
 
     if s_Slot == nil then
         m_Logger:Write("No available slot in the inventory.")
-        m_LootPickupDatabase:CreateLootPickup(
-            "Basic",
-            self.m_Owner.soldier.worldTransform,
-            {
-                s_Item
-            }
-        )
-        return
+
+        if p_CreateLootPickup then
+            m_LootPickupDatabase:CreateLootPickup(
+                "Basic",
+                self.m_Owner.soldier.worldTransform,
+                {
+                    s_Item
+                }
+            )
+        end
+        
+        return false
     end
 
     if s_Slot.m_Item ~= nil then
@@ -142,14 +150,11 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
             s_CurrentSlotItem:SetQuantity(s_Item.m_Definition.m_MaxStack)
             m_Logger:Write("(More than maxstack) Item quantity updated to: " .. s_Item.m_Definition.m_MaxStack .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
 
-            s_NewQuantity = math.abs(s_NewQuantity - s_Item.m_Definition.m_MaxStack)
-            if s_NewQuantity > s_Item.m_Definition.m_MaxStack then
-                local s_CreatedItem = m_ItemDatabase:CreateItem(s_Item.m_Definition, s_Item.m_Definition.m_MaxStack)
-                self:AddItem(s_CreatedItem.m_Id)
-            else
-                local s_CreatedItem = m_ItemDatabase:CreateItem(s_Item.m_Definition, s_NewQuantity)
-                self:AddItem(s_CreatedItem.m_Id)
-            end
+            -- TODO issue if s_NewQuantity bigger than MaxStack, it will only create one new item
+            -- (although i guess, it shouldn't be)
+            s_NewQuantity = math.min(math.abs(s_NewQuantity - s_Item.m_Definition.m_MaxStack), s_Item.m_Definition.m_MaxStack)
+            local s_CreatedItem = m_ItemDatabase:CreateItem(s_Item.m_Definition, s_NewQuantity)
+            self:AddItem(s_CreatedItem.m_Id, nil, true)
 
             m_ItemDatabase:UnregisterItem(p_ItemId)
         end
@@ -160,6 +165,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex)
     end
 
     self:SendState()
+    return true
 end
 
 function BRInventory:SwapItems(p_ItemId, p_SlotId)

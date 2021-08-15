@@ -114,8 +114,9 @@ function BRInventoryManager:OnInventoryPickupItem(p_Player, p_LootPickupId, p_It
 
     -- add item to player and remove it from lootpickup
     if s_LootPickup:ContainsItem(p_ItemId) then
-        s_Inventory:AddItem(p_ItemId, p_SlotId)
-        m_LootPickupDatabase:RemoveItemFromLootPickup(p_LootPickupId, p_ItemId)
+        if s_Inventory:AddItem(p_ItemId, p_SlotId) then
+            m_LootPickupDatabase:RemoveItemFromLootPickup(p_LootPickupId, p_ItemId)
+        end
     end
 end
 
