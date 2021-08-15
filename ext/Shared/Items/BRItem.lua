@@ -89,6 +89,11 @@ function BRItem:SetQuantity(p_Quantity)
 end
 
 function BRItem:IncreaseQuantityBy(p_Count)
+    -- check if already is full
+    if self.m_Quantity >= self.m_Definition.m_MaxStack then
+        return s_Remaining
+    end
+
     local s_NewQuantity = math.min(self.m_Quantity + p_Count, self.m_Definition.m_MaxStack)
     local s_Remaining = p_Count - (s_NewQuantity - self.m_Quantity)
     self:SetQuantity(s_NewQuantity)
@@ -97,6 +102,11 @@ function BRItem:IncreaseQuantityBy(p_Count)
 end
 
 function BRItem:DecreaseQuantityBy(p_Count)
+    -- check if item is empty
+    if self.m_Quantity <= 0 then
+        return
+    end
+
     local s_NewQuantity = math.max(self.m_Quantity - p_Count, 0)
     self:SetQuantity(s_NewQuantity)
 end
