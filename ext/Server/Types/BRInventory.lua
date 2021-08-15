@@ -342,10 +342,8 @@ end
 --==============================
 function BRInventory:GetAmmoTypeCount(p_WeaponName)
     local s_GadgetSlot = self.m_Slots[InventorySlot.Gadget]
-    if s_GadgetSlot.m_Item ~= nil then
-        if s_GadgetSlot:HasWeapon(p_WeaponName) then
-            return s_GadgetSlot.m_Item.m_Quantity - s_GadgetSlot.m_Item.m_CurrentPrimaryAmmo
-        end
+    if s_GadgetSlot.m_Item ~= nil and s_GadgetSlot:HasWeapon(p_WeaponName) then
+        return s_GadgetSlot.m_Item.m_Quantity - s_GadgetSlot.m_Item.m_CurrentPrimaryAmmo
     end
 
     local s_AmmoDefinition = self:GetAmmoDefinition(p_WeaponName)

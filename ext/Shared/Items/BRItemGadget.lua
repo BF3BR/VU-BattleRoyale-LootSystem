@@ -14,6 +14,20 @@ function BRItemGadget:SetPrimaryAmmo(p_AmmoCount)
     self.m_CurrentPrimaryAmmo = p_AmmoCount
 end
 
+-- Updates the quantity value for this item 
+function BRItemGadget:SetQuantity(p_Quantity)
+    -- fix for gadgets because m_Quantity contains both primary and secondary
+    -- ammo, compared to other ammo items that m_Quantity is only the secondary ammo.
+    -- After first reload (when self.m_CurrentPrimaryAmmo will be zero), quantity
+    -- should stay the same.
+    -- !!! :SetQuantity should be called before updating m_CurrentPrimaryAmmo
+    if self.m_CurrentPrimaryAmmo == 0 then
+        return
+    end
+
+    return BRItem.SetQuantity(self, p_Quantity)
+end
+
 function BRItemGadget:AsTable()
     local s_Table = BRItem.AsTable(self)
 
