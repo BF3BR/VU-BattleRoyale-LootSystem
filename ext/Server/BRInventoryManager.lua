@@ -110,6 +110,8 @@ function BRInventoryManager:OnInventoryPickupItem(p_Player, p_LootPickupId, p_It
         return
     end
 
+    -- TODO get item (validate item exists)
+
     -- TODO check player and lootpickup distance
 
     -- add item to player and remove it from lootpickup

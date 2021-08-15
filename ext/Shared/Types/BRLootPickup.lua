@@ -70,7 +70,7 @@ function BRLootPickup:RemoveItem(p_Id)
         if l_Item.m_Id == p_Id then
             self.m_Items[l_Index] = nil
 
-            m_Logger:Write("Loot Pickup item removed from database.")
+            m_Logger:Write("Item removed from LootPickup.")
         end
     end
 end

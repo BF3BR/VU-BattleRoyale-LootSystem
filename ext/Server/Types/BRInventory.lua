@@ -135,27 +135,23 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
     end
 
     local s_Slot = self.m_Slots[p_SlotIndex]
+
+    -- check if there's a free slot
     if s_Slot == nil then
-        s_Slot = self:GetAvailableSlot(s_Item)
+        s_Slot = self:GetFirstAvailableSlot(s_Item)
     end
 
+    -- get current weapon slot if item is weapon and no other slot
+    -- is available
     if s_Slot == nil and s_Item:IsOfType(ItemType.Weapon) then
         s_Slot = self:GetCurrentWeaponSlot()
 
-        if s_Slot ~= nil and s_Slot:IsAccepted(s_Item) then
-            m_Logger:Write("Replacing current weapon")
-            local s_DroppedItems = s_Slot:Drop()
-
-            m_LootPickupDatabase:CreateLootPickup(
-                "Basic",
-                self.m_Owner.soldier.worldTransform,
-                s_DroppedItems
-            )
-        else
+        if s_Slot ~= nil and not s_Slot:IsAccepted(s_Item) then
             s_Slot = nil
         end
     end
 
+    -- check if no slot is found
     if s_Slot == nil then
         m_Logger:Write("No available slot in the inventory.")
 
@@ -172,7 +168,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
         return false
     end
 
-    if s_Slot.m_Item ~= nil then
+    if s_Slot.m_Item ~= nil and s_Item.m_Definition.m_Stackable then
         local s_CurrentSlotItem = s_Slot.m_Item
         local s_NewQuantity = s_CurrentSlotItem.m_Quantity + s_Item.m_Quantity
 
@@ -193,8 +189,16 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
             m_ItemDatabase:UnregisterItem(p_ItemId)
         end
     else
-        -- If the slot is empty / nil then we can just put the item there
-        s_Slot:Put(s_Item)
+        local _, s_DroppedItems = s_Slot:Put(s_Item)
+
+        if #s_DroppedItems > 0 then
+            m_LootPickupDatabase:CreateLootPickup(
+                "Basic",
+                self.m_Owner.soldier.worldTransform,
+                s_DroppedItems
+            )
+        end
+
         m_Logger:Write("Item added to inventory. (" .. s_Item.m_Definition.m_Name .. ")")
     end
 
@@ -279,7 +283,7 @@ function BRInventory:DestroyItem(p_ItemId)
     return false
 end
 
-function BRInventory:GetAvailableSlot(p_Item)
+function BRInventory:GetFirstAvailableSlot(p_Item)
     for _, l_Slot in pairs(self.m_Slots) do
         if l_Slot:IsAvailable(p_Item) then
             return l_Slot
