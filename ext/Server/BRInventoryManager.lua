@@ -32,10 +32,6 @@ function BRInventoryManager:RegisterEvents()
     NetEvents:Subscribe(InventoryNetEvent.UseItem, self, self.OnInventoryUseItem)
     NetEvents:Subscribe(InventoryNetEvent.DropItem, self, self.OnInventoryDropItem)
 
-    -- commands
-    NetEvents:Subscribe(InventoryNetEvent.InventoryGiveCommand, self, self.OnPlayerGiveCommand)
-    NetEvents:Subscribe(InventoryNetEvent.InventorySpawnCommand, self, self.OnPlayerSpawnCommand)
-
     -- Events:Subscribe("GunSway:UpdateRecoil", self, self.OnGunSwayUpdateRecoil)
     Events:Subscribe("Player:ChangingWeapon", self, self.OnPlayerChangingWeapon)
     Events:Subscribe("Player:PostReload", self, self.OnPlayerPostReload)
@@ -49,28 +45,6 @@ function BRInventoryManager:OnPlayerLeft(p_Player)
         self:RemoveInventory(p_Player.id)
     end
 end
-
--- function BRInventoryManager:OnGunSwayUpdateRecoil(p_GunSway, p_Weapon, p_WeaponFiring, p_DeltaTime)
---     if p_GunSway.isFiring and p_GunSway.fireShot then
---         local s_Players = PlayerManager:GetPlayers()
---         for _, l_Player in pairs(s_Players) do
---             if l_Player.soldier.weaponsComponent.currentWeapon.instanceId == p_Weapon.instanceId then
---                 local s_Inventory = self.m_Inventories[l_Player.id]
-
---                 if s_Inventory == nil then
---                     return
---                 end
-
---                 s_Inventory:SavePrimaryAmmo(
---                     l_Player.soldier.weaponsComponent.currentWeapon.name,
---                     l_Player.soldier.weaponsComponent.currentWeapon.primaryAmmo
---                 )
-
---                 s_Inventory:CheckIfLastShotForGadget(l_Player.soldier.weaponsComponent.currentWeapon.name) 
---             end
---         end
---     end
--- end
 
 function BRInventoryManager:OnPlayerChangingWeapon(p_Player)
     if p_Player == nil or p_Player.soldier == nil then
@@ -174,64 +148,6 @@ function BRInventoryManager:OnInventoryUseItem(p_Player, p_ItemId)
     if s_Item ~= nil then
         s_Item:Use()
     end
-end
-
---============================================================
--- Custom debug commands
---============================================================
-
-function BRInventoryManager:OnPlayerGiveCommand(p_Player, p_Args)
-    if p_Player == nil then
-        m_Logger:Error("Invalid player.")
-        return
-    end
-
-    if #p_Args == 0 then
-        m_Logger:Error("Invalid command.")
-        return
-    end
-
-    local s_Definition = g_BRItemFactory:FindDefinitionByUId(p_Args[1])
-
-    if s_Definition == nil then
-        m_Logger:Error("Invalid item definition UId: " .. p_Args[1])
-        return
-    end
-
-    local s_Inventory = self.m_Inventories[p_Player.id]
-    local s_CreatedItem = m_ItemDatabase:CreateItem(s_Definition, p_Args[2] ~= nil and tonumber(p_Args[2]) or 1)
-
-    s_Inventory:AddItem(s_CreatedItem.m_Id)
-    m_Logger:Write(s_Definition.m_Name .. " - Item given to player: " .. p_Player.name)
-end
-
-function BRInventoryManager:OnPlayerSpawnCommand(p_Player, p_Args)
-    if p_Player == nil then
-        m_Logger:Error("Invalid player.")
-        return
-    end
-
-    if #p_Args == 0 then
-        m_Logger:Error("Invalid command.")
-        return
-    end
-
-    local s_Definition = g_BRItemFactory:FindDefinitionByUId(p_Args[1])
-
-    if s_Definition == nil then
-        m_Logger:Error("Invalid item definition UId: " .. p_Args[1])
-        return
-    end
-
-    local s_CreatedItem = m_ItemDatabase:CreateItem(s_Definition, p_Args[2] ~= nil and tonumber(p_Args[2]) or 1)
-    m_LootPickupDatabase:CreateLootPickup(
-        "Basic",
-        p_Player.soldier.worldTransform,
-        {
-            s_CreatedItem,
-        }
-    )
-    m_Logger:Write(s_Definition.m_Name .. " - Item spawned for player: " .. p_Player.name)
 end
 
 -- TODO move this into BRInventory.UpdateOwnerAmmo

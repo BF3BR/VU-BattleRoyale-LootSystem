@@ -280,17 +280,14 @@ function BRInventory:GetAmmoDefinition(p_WeaponName)
     return (s_Item ~= nil and s_Item.m_Definition.m_AmmoDefinition) or nil
 end
 
-function BRInventory:GetCurrentPrimaryAmmo(p_WeaponName)
+function BRInventory:GetSavedPrimaryAmmo(p_WeaponName)
     local s_Item = self:GetWeaponItemByName(p_WeaponName)
     return (s_Item ~= nil and s_Item.m_CurrentPrimaryAmmo) or 0
 end
 
 function BRInventory:SavePrimaryAmmo(p_WeaponName, p_AmmoCount)
     local s_Item = self:GetWeaponItemByName(p_WeaponName)
-
-    if s_Item ~= nil then
-        s_Item:SetPrimaryAmmo(p_AmmoCount)
-    end
+    return s_Item ~= nil and s_Item:SetPrimaryAmmo(p_AmmoCount)
 end
 
 function BRInventory:CheckIfLastShotForGadget(p_WeaponName)
@@ -328,6 +325,7 @@ end
 
 -- Destroys the `BRInventory` instance
 function BRInventory:Destroy()
+    -- TODO probably needs some more things to cleanup
     self.m_Owner = nil
     self.m_Slots = {}
 end
@@ -435,7 +433,7 @@ function BRInventory:UpdateSoldierCustomization()
     -- Reset primary ammo for each weapon
     for _, l_Weapon in pairs(self.m_Owner.soldier.weaponsComponent.weapons) do
         if l_Weapon ~= nil then
-            l_Weapon.primaryAmmo = self:GetCurrentPrimaryAmmo(l_Weapon.name)
+            l_Weapon.primaryAmmo = self:GetSavedPrimaryAmmo(l_Weapon.name)
             l_Weapon.secondaryAmmo = self:GetAmmoTypeCount(l_Weapon.name)
         end
     end
