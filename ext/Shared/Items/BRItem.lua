@@ -88,6 +88,23 @@ function BRItem:SetQuantity(p_Quantity)
     end
 end
 
+function BRItem:IncreaseQuantityBy(p_Count)
+    local s_NewQuantity = math.min(self.m_Quantity + p_Count, self.m_Definition.m_MaxStack)
+    local s_Remaining = p_Count - (s_NewQuantity - self.m_Quantity)
+    self:SetQuantity(s_NewQuantity)
+
+    return s_Remaining
+end
+
+function BRItem:DecreaseQuantityBy(p_Count)
+    local s_NewQuantity = math.max(self.m_Quantity - p_Count, 0)
+    self:SetQuantity(s_NewQuantity)
+end
+
+function BRItem:IsOfType(p_Type)
+    return self.m_Definition.m_Type == p_Type
+end
+
 function BRItem:CreateFromTable(p_Table)
     return g_BRItemFactory:CreateFromTable(p_Table)
 end

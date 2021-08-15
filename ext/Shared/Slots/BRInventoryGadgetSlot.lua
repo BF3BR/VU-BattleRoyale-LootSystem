@@ -30,6 +30,11 @@ function BRInventoryGadgetSlot:UpdateItemPrimaryAmmo()
         return
     end
 
+    -- when it was about to reload but dropped
+    if s_Weapon.primaryAmmo == 0 and self.m_Item.m_CurrentPrimaryAmmo > 0 then
+        self.m_Item:DecreaseQuantityBy(1)
+    end
+
     self.m_Item:SetPrimaryAmmo(s_Weapon.primaryAmmo)
 end
 
