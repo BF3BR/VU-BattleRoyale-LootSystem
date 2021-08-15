@@ -73,7 +73,12 @@ end
 
 -- Updates the quantity value for this item 
 function BRItem:SetQuantity(p_Quantity)
-    self.m_Quantity = p_Quantity
+    local s_NewQuantity = math.max(0, math.min(self.m_Definition.m_MaxStack, p_Quantity))
+    if not self.m_Definition.m_Stackable or self.m_Quantity == s_NewQuantity then
+        return math.abs(p_Quantity)
+    end
+
+    self.m_Quantity = s_NewQuantity
 
     -- mark item's slot as updated
     local s_Slot = self:GetParentSlot()
@@ -84,31 +89,20 @@ function BRItem:SetQuantity(p_Quantity)
     -- destroy item if quantity is 0
     if self.m_Quantity <= 0 then
         local s_Inventory = self:GetParentInventory()
-        return s_Inventory ~= nil and s_Inventory:DestroyItem(self.m_Id)
+        if s_Inventory ~= nil then
+            s_Inventory:DestroyItem(self.m_Id)
+        end
     end
+
+    return math.abs(self.m_Quantity - p_Quantity)
 end
 
 function BRItem:IncreaseQuantityBy(p_Count)
-    -- check if already is full
-    if self.m_Quantity >= self.m_Definition.m_MaxStack then
-        return s_Remaining
-    end
-
-    local s_NewQuantity = math.min(self.m_Quantity + p_Count, self.m_Definition.m_MaxStack)
-    local s_Remaining = p_Count - (s_NewQuantity - self.m_Quantity)
-    self:SetQuantity(s_NewQuantity)
-
-    return s_Remaining
+    return self:SetQuantity(self.m_Quantity + p_Count)
 end
 
 function BRItem:DecreaseQuantityBy(p_Count)
-    -- check if item is empty
-    if self.m_Quantity <= 0 then
-        return
-    end
-
-    local s_NewQuantity = math.max(self.m_Quantity - p_Count, 0)
-    self:SetQuantity(s_NewQuantity)
+    return self:SetQuantity(self.m_Quantity - p_Count)
 end
 
 function BRItem:IsOfType(p_Type)

@@ -108,7 +108,6 @@ function BRInventoryWeaponSlot:HasWeapon(p_WeaponName)
 end
 
 function BRInventoryWeaponSlot:OnUpdate()
-    m_Logger:Write("Weapon slot updated")
     self.m_Inventory:UpdateSoldierCustomization()
 end
 

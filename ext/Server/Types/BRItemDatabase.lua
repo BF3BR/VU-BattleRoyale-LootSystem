@@ -22,7 +22,7 @@ function BRItemDatabase:CreateItem(p_Definition, p_Quantity, p_Props)
     local s_Table = {
         Id = self:GetRandomId(),
         UId = p_Definition.m_UId,
-        Quantity = p_Quantity
+        Quantity = math.max(1, math.min(p_Definition.m_MaxStack or 1, p_Quantity))
     }
 
     -- extend and overwrite p_Props with s_Table data
