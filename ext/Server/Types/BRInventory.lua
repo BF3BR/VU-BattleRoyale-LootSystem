@@ -105,6 +105,23 @@ function BRInventory:GetItemSlot(p_ItemId)
     return nil
 end
 
+-- Returns the inventory slot of the currently equipped weapon
+function BRInventory:GetCurrentWeaponSlot()
+    if self.m_Owner == nil or self.m_Owner.soldier == nil then
+        return
+    end
+
+    local s_WeaponSlot = self.m_Owner.soldier.weaponsComponent.currentWeaponSlot
+
+    if s_WeaponSlot == WeaponSlot.WeaponSlot_0 then
+        return self.m_Slots[InventorySlot.PrimaryWeapon]
+    elseif s_WeaponSlot == WeaponSlot.WeaponSlot_1 then
+        return self.m_Slots[InventorySlot.SecondaryWeapon]
+    end
+
+    return nil
+end
+
 -- TODO p_CreateLootPickup wont be needed when we will be sure that each item
 -- will have a link to it's owner. Then we will only need to check if it's owner is
 -- a LootPickup or not
@@ -120,6 +137,23 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
     local s_Slot = self.m_Slots[p_SlotIndex]
     if s_Slot == nil then
         s_Slot = self:GetAvailableSlot(s_Item)
+    end
+
+    if s_Slot == nil and s_Item:IsOfType(ItemType.Weapon) then
+        s_Slot = self:GetCurrentWeaponSlot()
+
+        if s_Slot ~= nil and s_Slot:IsAccepted(s_Item) then
+            m_Logger:Write("Replacing current weapon")
+            local s_DroppedItems = s_Slot:Drop()
+
+            m_LootPickupDatabase:CreateLootPickup(
+                "Basic",
+                self.m_Owner.soldier.worldTransform,
+                s_DroppedItems
+            )
+        else
+            s_Slot = nil
+        end
     end
 
     if s_Slot == nil then

@@ -97,7 +97,7 @@ end
 --============================================================
 
 -- Responds to the request of a player to pickup an item from a specified lootpickup
-function BRInventoryManager:OnInventoryPickupItem(p_Player, p_LootPickupId, p_ItemId, p_SlotId)
+function BRInventoryManager:OnInventoryPickupItem(p_Player, p_LootPickupId, p_ItemId, p_SlotIndex)
     -- get inventory
     local s_Inventory = self:GetOrCreateInventory(p_Player)
     if s_Inventory == nil then
@@ -114,7 +114,7 @@ function BRInventoryManager:OnInventoryPickupItem(p_Player, p_LootPickupId, p_It
 
     -- add item to player and remove it from lootpickup
     if s_LootPickup:ContainsItem(p_ItemId) then
-        if s_Inventory:AddItem(p_ItemId, p_SlotId) then
+        if s_Inventory:AddItem(p_ItemId, p_SlotIndex) then
             m_LootPickupDatabase:RemoveItemFromLootPickup(p_LootPickupId, p_ItemId)
         end
     end
