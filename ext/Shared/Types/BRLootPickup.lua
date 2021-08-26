@@ -143,13 +143,21 @@ function BRLootPickup:Spawn(p_Id)
         )
     )
 
-    -- We need to set the bone transforms if we want to spawn a weapon mesh for the loot pickup
-    if #self.m_Items == 1 and self.m_Items[1].m_Definition.m_SoldierWeaponBlueprint ~= nil then
-        local s_SoldierWeaponUnlockAsset = self.m_Items[1].m_Definition.m_SoldierWeaponBlueprint:GetInstance()
-        local s_SoldierWeaponData = SoldierWeaponData(s_SoldierWeaponUnlockAsset.weapon.object)
-        s_StaticModelEntityData.basePoseTransforms:clear()
-        for _, l_LinearTransform in pairs(s_SoldierWeaponData.weaponStates[1].mesh3pTransforms) do        
-            s_StaticModelEntityData.basePoseTransforms:add(l_LinearTransform)
+    if #self.m_Items == 1 then
+        -- We need to set the bone transforms if we want to spawn a weapon or helmet
+        if (self.m_Items[1].m_Definition.m_Type == ItemType.Weapon or 
+        self.m_Items[1].m_Definition.m_Type == ItemType.Gadget) and 
+        self.m_Items[1].m_Definition.m_SoldierWeaponBlueprint ~= nil then
+            local s_SoldierWeaponUnlockAsset = self.m_Items[1].m_Definition.m_SoldierWeaponBlueprint:GetInstance()
+            local s_SoldierWeaponData = SoldierWeaponData(s_SoldierWeaponUnlockAsset.weapon.object)
+            s_StaticModelEntityData.basePoseTransforms:clear()
+            for _, l_LinearTransform in pairs(s_SoldierWeaponData.weaponStates[1].mesh3pTransforms) do        
+                s_StaticModelEntityData.basePoseTransforms:add(l_LinearTransform)
+            end
+        elseif self.m_Items[1].m_Definition.m_Type == ItemType.Helmet or self.m_Items[1].m_Definition.m_Type == ItemType.Armor then
+            for i = 1, 213 do
+                s_StaticModelEntityData.basePoseTransforms:add(LinearTransform())
+            end
         end
     end
 
@@ -203,10 +211,10 @@ function BRLootPickup:Spawn(p_Id)
         self.m_Entities = {}
     end
 
-    s_BusStaticModel:Init(Realm.Realm_ClientAndServer, true, false)
+    s_BusStaticModel:Init(Realm.Realm_Client, true, false)
     self.m_Entities[s_BusStaticModel.instanceId] = s_BusStaticModel
 
-    s_BusSpotLight:Init(Realm.Realm_ClientAndServer, true, false)
+    s_BusSpotLight:Init(Realm.Realm_Client, true, false)
     self.m_Entities[s_BusSpotLight.instanceId] = s_BusSpotLight
 end
 

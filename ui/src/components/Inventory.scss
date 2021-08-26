@@ -14,21 +14,35 @@
         display: block;
 
         .InventoryWrapper {
-            width: 25vw;
-            background: rgba(36, 36, 36, 1);
+            position: absolute;
+            right: 0;
+            width: 26vw;
             height: 100vh;
-            padding: 4vw 2vw;
+            padding: 4vw 2vw 4vw 0;
+            background: linear-gradient(90deg, rgba(0,0,0,0) 2%, rgba(0,0,0,0.8) 100%);
+        }
+
+        .ProximityWrapper {
+            position: absolute;
+            right: 30vw;
+            width: 13vw;
+            height: 100vh;
+            padding: 4vw 0;
+            //background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 98%);
+
+            .item-slot {
+                height: 5.25vw;
+            }
         }
 
         .itemDrop {
             position: absolute;
             top: 0;
-            right: 0;
-            width: 71vw;
+            left: 0;
+            right: 43vw;
             background: transparent;
             height: 100vh;
-            display: grid;
-            grid-template-columns: 65% 35%;
+            display: flex;
 
             .item-slot {
                 position: relative;
@@ -68,18 +82,11 @@
             background: transparent;
         }
 
-        &.LootBox {
-            position: absolute;
-            bottom: 5vh;
-            left: 32vw;
-            width: 25vw;
-            height: 30vh;
-            background: rgba(36, 36, 36, 1);
-
-            .backpack-grid {
+        &.proximity-card {
+            .near-grid {
                 padding: 0;
                 display: grid;
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(1, 1fr);
                 grid-gap: .1vw;
             }
         }
@@ -116,7 +123,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: rgba(7, 7, 7, 0.5);
+        background-color: rgba(7, 7, 7, 0.65);
         padding: 0;
         height: 4vw;
         font-size: 1vw;
@@ -139,22 +146,22 @@
             margin: 0;
             font-style: normal;
             font-weight: 600;
-            font-size: .75vw;
+            font-size: .625vw;
             line-height: 1vw;
             position: absolute;
-            bottom: 0.5vw;
+            bottom: 0.25vw;
             color: #d5dde5;
 
             &.name {
                 left: 0.5vw;
-                display: none;
+                font-weight: 600;
+                line-height: 1vw;
             }
 
             &.count {
                 right: 0.5vw;
                 font-style: normal;
                 font-weight: 600;
-                font-size: .95vw;
                 line-height: 1vw;
             }
 
@@ -179,7 +186,7 @@
 
         div {
             &.progressWrapper {
-                width: .35vw;
+                width: .3vw;
                 background: transparent;
                 position: absolute;
                 right: .75vw;
@@ -201,6 +208,7 @@
                     transition: height 0.1s ease;
                     background-color: #fff;
                     box-shadow: 0 0 0.2vw 0.05vw #fff inset, 0 0 0.15vw 0.05vw rgba(255, 255, 255, 0.5);
+                    opacity: .75;
             
                     &::after {
                         content: "";

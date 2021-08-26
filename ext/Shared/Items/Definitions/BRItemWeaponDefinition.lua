@@ -49,8 +49,8 @@ return {
         "UI/Art/Persistence/Weapons/Fancy/ak74m",
         DC(Guid("F365F081-D11B-B278-F6E3-062116758181"), Guid("8940BC20-0F27-1C19-58E6-CB07E1ADA643")),
         LinearTransform(
-            Vec3(0,-1, 0),
             Vec3(1, 0, 0),
+            Vec3(0, 1, 0),
             Vec3(0, 0, 1),
             Vec3(0, 0.04, -0.5)
         ),
@@ -87,10 +87,10 @@ return {
         "UI/Art/Persistence/Weapons/Fancy/pp2000",
         DC(Guid("BCAF822E-48AA-055F-E617-ECDD89799E22"), Guid("BE6743C4-8558-52DA-3AFE-5D5EAA7E188F")),
         LinearTransform(
-            Vec3(0,-1, 0),
             Vec3(1, 0, 0),
+            Vec3(0, 1, 0),
             Vec3(0, 0, 1),
-            Vec3(0, 0.025, -0.35)
+            Vec3(0, 0.04, -0.5)
         ),
         DC(Guid("E104EF1F-807C-4576-A22A-CC849AE3EDB9"), Guid("50849B49-F3DA-4C92-9830-D4A2932BC9E7")),
         m_AmmoDefinitions["ammo-9mm"],
@@ -121,10 +121,10 @@ return {
         "UI/Art/Persistence/Weapons/Fancy/remington870",
         DC(Guid("244BD656-B62A-715A-FC6E-BCE517D4CE95"), Guid("B72B2A83-8B14-F5B3-3A31-844B2EC15EB6")),
         LinearTransform(
-            Vec3(0,-1, 0),
             Vec3(1, 0, 0),
+            Vec3(0, 1, 0),
             Vec3(0, 0, 1),
-            Vec3(-0.5, 0.04, -0.5)
+            Vec3(0, 0.04, -0.5)
         ),
         DC(Guid("0B1B0AF6-75F5-4CA4-A945-372090333A83"), Guid("07A4C87A-D325-4A73-8C5A-C001ACD13334")),
         m_AmmoDefinitions["ammo-12-gauge"],
@@ -166,7 +166,7 @@ return {
             Vec3(1, 0, 0),
             Vec3(0, 1, 0),
             Vec3(0, 0, 1),
-            Vec3(0, 0.04, -0.65)
+            Vec3(0, 0.04, -0.6)
         ),
         DC(Guid("D61A38DA-17D0-4146-9305-100183EB3E5F"), Guid("05EB2892-8B51-488E-8956-4350C3D2BA27")),
         m_AmmoDefinitions["ammo-762mm"],

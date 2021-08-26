@@ -13,14 +13,18 @@ const LootOverlay: React.FC<Props> = ({ loot }) => {
             <div className={"tier " + (loot.Tier !== undefined ? "tier-" + loot.Tier : "tier-1")}>
                 {loot.UIIcon &&
                     <div className="image">
-                        <img src={"fb://" + loot.UIIcon} alt="" />
+                        {loot.UIIcon.startsWith("__") ?
+                            <img src={"/img/" + loot.UIIcon + ".png"} alt="" />
+                        :
+                            <img src={"fb://" + loot.UIIcon} alt="" />
+                        }
                     </div>
                 }
-                {loot === "Basic" &&
+                {/*loot === "Basic" &&
                     <div className="image">
                         <img src="fb://UI/Art/Persistence/Award/Ribbons/Fancy/gunmaster3d" alt="" />
                     </div>
-                }
+                */}
 
                 <div className="information">
                     {loot.Name &&

@@ -35,7 +35,9 @@ function BRLootPickupDatabase:CreateLootPickup(p_Type, p_Transform, p_Items)
     -- create item instance and insert it to the items table
     local s_LootPickup = BRLootPickup:CreateFromTable(s_DataArray)
     self.m_LootPickups[s_DataArray.Id] = s_LootPickup
-    self.m_LootPickups[s_DataArray.Id]:Spawn(s_DataArray.Id)
+
+    -- I don't think we need to spawn the entity server side
+    -- self.m_LootPickups[s_DataArray.Id]:Spawn(s_DataArray.Id)
 
     m_Logger:Write("Loot Pickup added to database.")
 

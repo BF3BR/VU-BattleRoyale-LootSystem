@@ -74,14 +74,17 @@ function BRLooting:OnCreateLootPickup(p_DataArray)
 
 	local s_LootPickup = BRLootPickup:CreateFromTable(p_DataArray)
 	self.m_LootPickups[p_DataArray.Id] = s_LootPickup
-	s_LootPickup:Spawn(p_DataArray.Id)
 
-	if s_LootPickup.m_Entities == nil then
-		return
-	end
+	if SharedUtils:IsClientModule() then
+		s_LootPickup:Spawn(p_DataArray.Id)
 
-	for l_InstanceId, _ in pairs(s_LootPickup.m_Entities) do
-		self.m_InstanceIdToLootPickup[l_InstanceId] = s_LootPickup
+		if s_LootPickup.m_Entities == nil then
+			return
+		end
+
+		for l_InstanceId, _ in pairs(s_LootPickup.m_Entities) do
+			self.m_InstanceIdToLootPickup[l_InstanceId] = s_LootPickup
+		end
 	end
 end
 

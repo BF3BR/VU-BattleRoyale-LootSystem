@@ -33,7 +33,7 @@ return {
         "The 5.56mm ammo is used for ARs.",
         0.25,
         DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
-        "UI/Art/Persistence/KitItem/Fancy/ammobag",
+        "__ammo_556mm",
         60
     ),
     ["ammo-9mm"] = BRItemAmmoDefinition(
@@ -42,7 +42,7 @@ return {
         "The 9mm ammo is used for SMGs and Pistols.",
         0.1,
         DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
-        "UI/Art/Persistence/KitItem/Fancy/ammobag",
+        "__ammo_9mm",
         90
     ),
     ["ammo-762mm"] = BRItemAmmoDefinition(
@@ -51,7 +51,7 @@ return {
         "The 7.62mm ammo is used for Snipers.",
         0.1,
         DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
-        "UI/Art/Persistence/KitItem/Fancy/ammobag",
+        "__ammo_762mm",
         15
     ),
     ["ammo-12-gauge"] = BRItemAmmoDefinition(
@@ -60,7 +60,7 @@ return {
         "The 7.62mm ammo is used for Snipers.",
         0.1,
         DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
-        "UI/Art/Persistence/KitItem/Fancy/ammobag",
+        "__ammo_12-gauge",
         30
     ),
 }

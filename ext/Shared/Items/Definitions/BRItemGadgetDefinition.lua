@@ -45,10 +45,10 @@ return {
         DC(Guid("5407475F-7E82-44A8-99D2-8009B925A528"), Guid("2F200B5C-4958-467C-9E12-B99DDADE2332")),
         "Weapons/Gadgets/M320/M320",
         LinearTransform(
-            Vec3(0,-1, 0),
             Vec3(1, 0, 0),
+            Vec3(0, 1, 0),
             Vec3(0, 0, 1),
-            Vec3(-0.5, 0.04, -0.5)
+            Vec3(0, 0, -0.35)
         )
     ),
 }
