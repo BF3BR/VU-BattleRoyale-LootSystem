@@ -31,7 +31,7 @@ end
 function BRItemHelmet:ApplyDamage(p_Damage)
     -- check if armor is fully damaged
     if self.m_CurrentDurability <= 0 then
-        return p_Damage
+        return p_Damage, false
     end
 
     -- calculate damage
@@ -45,7 +45,7 @@ function BRItemHelmet:ApplyDamage(p_Damage)
         self.m_CurrentDurability = 0
     end
 
-    return s_DamagePassed
+    return s_DamagePassed, true
 end
 
 -- Returns the current percentage of the armor

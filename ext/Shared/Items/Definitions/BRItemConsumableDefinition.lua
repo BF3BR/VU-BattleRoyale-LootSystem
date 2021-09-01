@@ -3,58 +3,49 @@ require "__shared/Enums/ItemEnums"
 
 class("BRItemConsumableDefinition", BRItemDefinition)
 
-function BRItemConsumableDefinition:__init(
-    p_UId,
-    p_Name,
-    p_Description,
-    p_Weight,
-    p_UIIcon,
-    p_Stackable,
-    p_MaxStack,
-    p_HealthToRegen,
-    p_TimeToApply
-)
-    BRItemDefinition.__init(self)
+function BRItemConsumableDefinition:__init(p_UId, p_Name, p_Options)
+    p_Options = p_Options or {}
 
-    self.m_Type = ItemType.Consumable
-    self.m_UId = p_UId
-    self.m_Name = p_Name
-    self.m_Description = p_Description
-    self.m_Weight = p_Weight
-    self.m_Mesh = nil--DC(Guid("6519E1BF-BB39-8B7F-47D9-1B4C365318D9"), Guid("BC6154A0-CDFC-D402-ECCA-444811062765")),
-    self.m_UIIcon = p_UIIcon
-    self.m_Stackable = p_Stackable
-    self.m_MaxStack = p_MaxStack
-    self.m_Price = 0
+    -- set fixed shared option values for consumables
+    p_Options.Type = ItemType.Consumable
+    p_Options.Mesh = nil--DC(Guid("6519E1BF-BB39-8B7F-47D9-1B4C365318D9"), Guid("BC6154A0-CDFC-D402-ECCA-444811062765")),
+    p_Options.Price = 0
+
+    -- call super's constructor and set shared options
+    BRItemDefinition.__init(self, p_UId, p_Name, p_Options)
 
     -- The ammount of health you regenerate after using this item
-    self.m_HealthToRegen = p_HealthToRegen
+    self.m_HealthToRegen = p_Options.HealthToRegen
 
     -- The time it takes to regenerate your health / use the item
-    self.m_TimeToApply = p_TimeToApply
+    self.m_TimeToApply = p_Options.TimeToApply
 end
 
 return {
     ["consumable-small-medkit"] = BRItemConsumableDefinition(
         "consumable-small-medkit",
         "Small Medkit", 
-        "A small medkit, it's gonna refill 25% of your health.",
-        15,
-        "UI/Art/Persistence/KitItem/Fancy/medkit",
-        true,
-        5,
-        25, 
-        3
+        {
+            Description = "A small medkit, it's gonna refill 25% of your health.",
+            UIIcon = "UI/Art/Persistence/KitItem/Fancy/medkit",
+            Weight = 15,
+            Stackable = true,
+            MaxStack = 5,
+            HealthToRegen = 25,
+            TimeToApply = 3
+        }
     ),
     ["consumable-large-medkit"] = BRItemConsumableDefinition(
         "consumable-large-medkit",
         "Large Medkit", 
-        "A large medkit, it's gonna refill 50% of your health.",
-        25,
-        "UI/Art/Persistence/KitItem/Fancy/medkit",
-        true,
-        3,
-        50, 
-        5
+        {
+            Description = "A large medkit, it's gonna refill 50% of your health.",
+            UIIcon = "UI/Art/Persistence/KitItem/Fancy/medkit",
+            Weight = 25,
+            Stackable = true,
+            MaxStack = 3,
+            HealthToRegen = 50,
+            TimeToApply = 5
+        }
     ),
 }

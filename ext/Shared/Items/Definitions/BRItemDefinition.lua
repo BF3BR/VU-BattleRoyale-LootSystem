@@ -2,30 +2,28 @@ require "__shared/Enums/ItemEnums"
 
 class "BRItemDefinition"
 
-function BRItemDefinition:__init()
-    self.m_UId = nil
-    self.m_Name = "Unnamed item"
-    self.m_Description = ""
-    self.m_Type = ItemType.Default
-    self.m_Weight = 0.0
-    self.m_Stackable = false
-    self.m_MaxStack = nil
-    self.m_Price = 0
-    self.m_Mesh = nil
-    self.m_Transform = LinearTransform(
+function BRItemDefinition:__init(p_UId, p_Name, p_Options)
+    p_Options = p_Options or {}
+
+    self.m_UId = p_UId
+    self.m_Name = p_Name
+    self.m_Description = p_Options.Description or ""
+    self.m_UIIcon = p_Options.UIIcon
+    self.m_Type = p_Options.Type or ItemType.Default
+    self.m_Weight = p_Options.Weight or 0.0
+    self.m_Stackable = p_Options.Stackable or false
+    self.m_MaxStack = p_Options.MaxStack
+    self.m_Price = p_Options.Price or 0
+    self.m_HasAction = p_Options.HasAction or false
+    self.m_Mesh = p_Options.Mesh
+    self.m_Transform = p_Options.Transform or LinearTransform(
         Vec3(1, 0, 0),
         Vec3(0, 1, 0),
         Vec3(0, 0, 1),
         Vec3(0, 0, 0)
     )
-    self.m_HasAction = false
-    self.m_UIIcon = nil
-end
-
-function BRItemDefinition:GetDefinitionId()
-    return string.format("%s:%s", self.m_Type, self.m_UId)
 end
 
 function BRItemDefinition:Equals(p_Other)
-    return self:GetDefinitionId() == p_Other:GetDefinitionId()
+    return self.m_UId == p_Other.m_UId
 end

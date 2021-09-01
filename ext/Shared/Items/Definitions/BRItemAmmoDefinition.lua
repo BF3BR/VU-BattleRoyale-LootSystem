@@ -3,64 +3,61 @@ require "__shared/Enums/ItemEnums"
 
 class("BRItemAmmoDefinition", BRItemDefinition)
 
-function BRItemAmmoDefinition:__init(
-    p_UId,
-    p_Name, 
-    p_Description,
-    p_Weight,
-    p_Mesh,
-    p_UIIcon,
-    p_MaxStack
-)
-    BRItemDefinition.__init(self)
+function BRItemAmmoDefinition:__init(p_UId, p_Name, p_Options)
+    p_Options = p_Options or {}
 
-    self.m_Type = ItemType.Ammo
-    self.m_UId = p_UId
-    self.m_Name = p_Name
-    self.m_Description = p_Description
-    self.m_Weight = p_Weight
-    self.m_Mesh = p_Mesh
-    self.m_UIIcon = p_UIIcon
-    self.m_Stackable = true
-    self.m_MaxStack = p_MaxStack
-    self.m_Price = 0
+    -- set fixed shared option values for ammo
+    p_Options.Type = ItemType.Ammo
+    p_Options.Stackable = true
+    p_Options.Price = 0
+
+    -- call super's constructor and set shared options
+    BRItemDefinition.__init(self, p_UId, p_Name, p_Options)
 end
 
 return {
     ["ammo-556mm"] = BRItemAmmoDefinition(
         "ammo-556mm",
-        "5.56mm", 
-        "The 5.56mm ammo is used for ARs.",
-        0.25,
-        DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
-        "__ammo_556mm",
-        60
+        "5.56mm",
+        {
+            Description = "The 5.56mm ammo is used for ARs.",
+            Weight = 0.25,
+            Mesh = DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
+            UIIcon = "__ammo_556mm",
+            MaxStack = 60,
+        }
     ),
     ["ammo-9mm"] = BRItemAmmoDefinition(
         "ammo-9mm",
-        "9mm", 
-        "The 9mm ammo is used for SMGs and Pistols.",
-        0.1,
-        DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
-        "__ammo_9mm",
-        90
+        "9mm",
+        {
+            Description = "The 9mm ammo is used for SMGs and Pistols.",
+            Weight = 0.1,
+            Mesh = DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
+            UIIcon = "__ammo_9mm",
+            MaxStack = 90,
+        }
     ),
     ["ammo-762mm"] = BRItemAmmoDefinition(
         "ammo-762mm",
-        "7.62mm", 
-        "The 7.62mm ammo is used for Snipers.",
-        0.1,
-        DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
-        "__ammo_762mm",
-        15
+        "7.62mm",
+        {
+            Description = "The 7.62mm ammo is used for Snipers.",
+            Weight = 0.1,
+            Mesh = DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
+            UIIcon = "__ammo_762mm",
+            MaxStack = 15,
+        }
     ),
     ["ammo-12-gauge"] = BRItemAmmoDefinition(
         "ammo-12-gauge",
         "12 Gauge", 
-        "The 7.62mm ammo is used for Snipers.",
-        0.1,
-        DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
-        "__ammo_12-gauge",
-        30
+        {
+            Description = "The 7.62mm ammo is used for Snipers.",
+            Weight = 0.1,
+            Mesh = DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
+            UIIcon = "__ammo_12-gauge",
+            MaxStack = 30,
+        }
     ),
 }
