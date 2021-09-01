@@ -8,8 +8,8 @@ function BRItemGadgetDefinition:__init(p_UId, p_Name, p_Options)
 
     -- set fixed shared option values for gadgets
     p_Options.Type = ItemType.Gadget
-    p_Options.m_Stackable = true
-    p_Options.m_Price = 0
+    p_Options.Stackable = true
+    p_Options.Price = 0
 
     -- call super's constructor and set shared options
     BRItemDefinition.__init(self, p_UId, p_Name, p_Options)
