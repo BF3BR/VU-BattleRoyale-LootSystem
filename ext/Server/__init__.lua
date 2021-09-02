@@ -155,9 +155,7 @@ function VuBattleRoyaleLootSystemServer:OnPlayerRespawn(p_Player)
     local s_ItemSmoke = m_ItemDatabase:CreateItem(m_GadgetDefinitions["gadget-m320-smoke"])
     s_Inventory:AddItem(s_ItemSmoke.m_Id)
 
-    -- m_Logger:Write(s_Inventory:AsTable())
-
-    s_Inventory:UpdateSoldierCustomization()
+    s_Inventory:DeferUpdateSoldierCustomization()
     s_Inventory:SendState()
 end
 

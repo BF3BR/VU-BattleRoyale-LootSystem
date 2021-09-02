@@ -78,5 +78,5 @@ end
 
 function BRInventoryGadgetSlot:OnUpdate()
     m_Logger:Write("Gadget slot updated")
-    self.m_Inventory:UpdateSoldierCustomization()
+    self.m_Inventory:DeferUpdateSoldierCustomization()
 end

@@ -96,7 +96,9 @@ function BRInventoryWeaponSlot:UpdateItemPrimaryAmmo()
 
     -- get current weapon
     local s_Weapon = s_Owner.soldier.weaponsComponent.weapons[self.m_UnlockWeaponSlot + 1]
-    if s_Weapon == nil or self.m_Item == nil then
+    if s_Weapon == nil or
+       self.m_Item == nil or
+       self.m_Item.m_Definition.m_EbxName ~= s_Weapon.name then
         return
     end
 
@@ -108,7 +110,7 @@ function BRInventoryWeaponSlot:HasWeapon(p_WeaponName)
 end
 
 function BRInventoryWeaponSlot:OnUpdate()
-    self.m_Inventory:UpdateSoldierCustomization()
+    self.m_Inventory:DeferUpdateSoldierCustomization()
 end
 
 function BRInventoryWeaponSlot:BeforeCustomizationApply()

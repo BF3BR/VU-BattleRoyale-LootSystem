@@ -69,6 +69,8 @@ function BRInventory:__init(p_Owner)
         self.m_Slots[InventorySlot.SecondaryWeaponAttachmentBarrel],
         self.m_Slots[InventorySlot.SecondaryWeaponAttachmentOther]
     )
+
+    self.m_UpdateCustomizationTimer = nil
 end
 
 function BRInventory:AsTable()
@@ -80,7 +82,6 @@ function BRInventory:AsTable()
         local s_Slot = self.m_Slots[l_SlotIndex]
         if s_Slot.m_IsUpdated then
             s_Data[l_SlotIndex] = s_Slot:AsTable()
-
             s_Slot.m_IsUpdated = false
         end
     end
@@ -164,7 +165,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
                 }
             )
         end
-        
+
         return false
     end
 
@@ -460,6 +461,15 @@ function BRInventory:RemoveAmmo(p_WeaponName, p_Quantity)
     return p_Quantity - s_QuantityLeftToRemove
 end
 
+function BRInventory:DeferUpdateSoldierCustomization()
+    if self.m_UpdateCustomizationTimer ~= nil then
+        self.m_UpdateCustomizationTimer:Destroy()
+        self.m_UpdateCustomizationTimer = nil
+    end
+
+    self.m_UpdateCustomizationTimer = g_Timers:Timeout(0.12, self, self.UpdateSoldierCustomization)
+end
+
 function BRInventory:UpdateSoldierCustomization()
     if self.m_Owner == nil or self.m_Owner.soldier == nil then
         return
@@ -530,4 +540,11 @@ function BRInventory:CreateCustomizeSoldierData()
     s_CustomizeSoldierData.disableDeathPickup = false
 
     return s_CustomizeSoldierData
+end
+
+function BRInventory:Destroy()
+    if self.m_UpdateCustomizationTimer ~= nil then
+        self.m_UpdateCustomizationTimer:Destroy()
+        self.m_UpdateCustomizationTimer = nil
+    end
 end
