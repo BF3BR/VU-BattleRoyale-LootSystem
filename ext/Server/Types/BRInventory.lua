@@ -335,30 +335,6 @@ function BRInventory:SavePrimaryAmmo(p_WeaponName, p_AmmoCount)
     return s_Item ~= nil and s_Item:SetPrimaryAmmo(p_AmmoCount)
 end
 
-function BRInventory:CheckIfLastShotForGadget(p_WeaponName)
-    local s_GadgetSlot = self.m_Slots[InventorySlot.Gadget]
-
-    if s_GadgetSlot.m_Item ~= nil and s_GadgetSlot:HasWeapon(p_WeaponName) then
-        s_GadgetSlot.m_Item:SetQuantity(s_GadgetSlot.m_Item.m_Quantity - 1)
-
-        if s_GadgetSlot.m_Item.m_Quantity <= 0 then
-            self:DestroyItem(s_GadgetSlot.m_Item.m_Id)
-        end
-
-        self:SendState()
-    end
-end
-
-function BRInventory:IsGadget(p_WeaponName)
-    if self.m_Slots[InventorySlot.Gadget].m_Item ~= nil then
-        if self.m_Slots[InventorySlot.Gadget]:HasWeapon(p_WeaponName) then
-            return true
-        end
-    end
-
-    return false
-end
-
 -- Sends the state of the inventory to its owner
 function BRInventory:SendState()
     if self.m_Owner == nil then
