@@ -14,34 +14,46 @@ function BRLootPickupDatabase:__init()
     self.m_LootPickups = {}
 end
 
--- 
 function BRLootPickupDatabase:GetLootPickup(p_LootPickupId)
     return self.m_LootPickups[p_LootPickupId]
 end
 
+---@param p_Transform Vec3|LinearTransform
+---@param p_Items BRItem[]
+function BRLootPickupDatabase:CreateBasicLootPickup(p_Transform, p_Items)
+    self:CreateLootPickup(LootPickupType.Basic.Name, p_Transform, p_Items)
+end
+
 function BRLootPickupDatabase:CreateLootPickup(p_Type, p_Transform, p_Items)
-    local s_Items = {}
-    for _, l_Item in pairs(p_Items) do
-        table.insert(s_Items, l_Item:AsTable())
+    if p_Type == nil or p_Transform == nil or p_Items == nil then
+        m_Logger:Error("Invalid CreateLootPickup parameters")
+        return
     end
 
-    local s_DataArray = {
-        Id = self:GetRandomId(),
-        Type = p_Type,
-        Transform = p_Transform,
-        Items = s_Items
-    }
+    -- if p_Transform is Vec3, use it as the .trans of a LinearTransform
+    if type(p_Transform.z) == "number" then
+        local s_Trans = p_Transform
+        p_Transform = LinearTransform()
+        p_Transform.trans = s_Trans
+    end
+
+    -- convert items array to map
+    local s_Items = {}
+    for _, l_Item in pairs(p_Items) do
+        s_Items[l_Item.m_Id] = l_Item
+    end
 
     -- create item instance and insert it to the items table
-    local s_LootPickup = BRLootPickup:CreateFromTable(s_DataArray)
-    self.m_LootPickups[s_DataArray.Id] = s_LootPickup
+    local s_LootPickupId = self:GetRandomId()
+    local s_LootPickup = BRLootPickup(s_LootPickupId, p_Type, p_Transform, s_Items)
+    self.m_LootPickups[s_LootPickupId] = s_LootPickup
 
     -- I don't think we need to spawn the entity server side
     -- self.m_LootPickups[s_DataArray.Id]:Spawn(s_DataArray.Id)
 
-    m_Logger:Write("Loot Pickup added to database.")
+    m_Logger:Write(string.format("LootPickup #%s was added", s_LootPickupId))
 
-    NetEvents:BroadcastLocal(InventoryNetEvent.CreateLootPickup, s_DataArray)
+    NetEvents:BroadcastLocal(InventoryNetEvent.CreateLootPickup, s_LootPickup:AsTable())
 end
 
 function BRLootPickupDatabase:UnregisterLootPickup(p_LootPickupId)
@@ -83,11 +95,6 @@ function BRLootPickupDatabase:GetRandomId()
     return tostring(MathUtils:RandomGuid())
 end
 
-
 -- TODO: OnPlayerJoin send the whole self.m_LootPickups to that player
 
-if g_BRLootPickupDatabase == nil then
-    g_BRLootPickupDatabase = BRLootPickupDatabase()
-end
-
-return g_BRLootPickupDatabase
+return BRLootPickupDatabase()

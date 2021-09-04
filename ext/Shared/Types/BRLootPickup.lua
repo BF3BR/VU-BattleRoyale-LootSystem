@@ -2,30 +2,50 @@ class "BRLootPickup"
 
 local m_Logger = Logger("BRLootPickup", true)
 local m_RotationHelper = require "__shared/Utils/RotationHelper"
+local m_MapHelper = require "__shared/Utils/MapHelper"
 
 local m_FlashlightTexture = DC(Guid("04C62561-2236-11DF-A528-EA655525F02D"), Guid("2EE018E8-1451-908C-0974-DB7676407D61"))
 
-function BRLootPickup:__init(p_Id, p_Type, p_Transform, p_Items)
+function BRLootPickup:__init(p_Id, p_TypeName, p_Transform, p_Items)
     -- Unique Id for each loot pickup
     self.m_Id = p_Id ~= nil and p_Id or tostring(MathUtils:RandomGuid())
 
     -- ItemEnums - LootPickupType
-    self.m_Type = p_Type
+    self.m_Type = LootPickupType[p_TypeName]
 
     -- Transform of the pickup
     self.m_Transform = p_Transform
 
-    -- A table of items
+    -- A map of LootPickups {id -> LootPickup}
     self.m_Items = p_Items
 
     -- [Client] Contains spawned entities {instanceId -> Entity}
     self.m_Entities = nil
 end
 
+function BRLootPickup:AddItem(p_Item)
+    if p_Item == nil or self:ContainsItem(p_Item.m_Id) then
+        return
+    end
+
+    self.m_Items[p_Item.m_Id] = p_Item
+end
+
+function BRLootPickup:RemoveItem(p_Id)
+    if self.m_Items[p_Id] ~= nil then
+        self.m_Items[p_Id] = nil
+        m_Logger:Write("Item removed from LootPickup.")
+    end
+end
+
+function BRLootPickup:ContainsItem(p_Id)
+    return self.m_Items[p_Id] ~= nil
+end
+
 function BRLootPickup:GetMesh()
-    if #self.m_Items == 1 then
+    if m_MapHelper:HasSingleItem(self.m_Items) then
         -- If there is only one item then use its mesh
-        return self.m_Items[1].m_Definition.m_Mesh
+        return m_MapHelper:Item(self.m_Items).m_Definition.m_Mesh
     elseif self.m_Type.Mesh ~= nil then
         -- If there is a mesh set to the current type
         return self.m_Type.Mesh
@@ -35,9 +55,9 @@ function BRLootPickup:GetMesh()
 end
 
 function BRLootPickup:GetLinearTransform()
-    if #self.m_Items == 1 then
+    if m_MapHelper:HasSingleItem(self.m_Items) then
         -- If there is only one item then use its LT
-        return self.m_Items[1].m_Definition.m_Transform
+        return m_MapHelper:Item(self.m_Items).m_Definition.m_Transform
     elseif self.m_Type.Mesh ~= nil then
         -- If there is a LT set to the current type
         return self.m_Type.Transform
@@ -51,59 +71,11 @@ function BRLootPickup:GetLinearTransform()
     )
 end
 
-function BRLootPickup:AsTable()
-    local s_Items = {}
-    for _, l_Item in pairs(self.m_Items) do
-        table.insert(s_Items, l_Item:AsTable())
-    end
-
-    return {
-        Id = self.m_Id,
-        Type = self.m_Type.Name,
-        Transform = self.m_Transform,
-        Items = s_Items,
-    }
-end
-
-function BRLootPickup:RemoveItem(p_Id)
-    for l_Index, l_Item in pairs(self.m_Items) do
-        if l_Item.m_Id == p_Id then
-            self.m_Items[l_Index] = nil
-
-            m_Logger:Write("Item removed from LootPickup.")
-        end
-    end
-end
-
-function BRLootPickup:ContainsItem(p_Id)
-    for _, l_Item in pairs(self.m_Items) do
-        if l_Item.m_Id == p_Id then
-            return true
-        end
-    end
-
-    return false
-end
-
-function BRLootPickup:CreateFromTable(p_Table)
-    local s_Items = {}
-    for _, l_Item in pairs(p_Table.Items) do
-        table.insert(s_Items, g_BRItemFactory:CreateFromTable(l_Item))
-    end
-
-    return BRLootPickup(
-        p_Table.Id,
-        LootPickupType[p_Table.Type],
-        p_Table.Transform,
-        s_Items
-    )
-end
-
 --==============================
 -- Spawn / Destroy functions
 --==============================
 
-function BRLootPickup:Spawn(p_Id)
+function BRLootPickup:Spawn()
     if self.m_Entities ~= nil then
         return
     end
@@ -143,18 +115,19 @@ function BRLootPickup:Spawn(p_Id)
         )
     )
 
-    if #self.m_Items == 1 then
+    local s_SingleItem = m_MapHelper:Item(self.m_Items)
+    if m_MapHelper:HasSingleItem(self.m_Items) then
         -- We need to set the bone transforms if we want to spawn a weapon or helmet
-        if (self.m_Items[1].m_Definition.m_Type == ItemType.Weapon or 
-        self.m_Items[1].m_Definition.m_Type == ItemType.Gadget) and 
-        self.m_Items[1].m_Definition.m_SoldierWeaponBlueprint ~= nil then
-            local s_SoldierWeaponUnlockAsset = self.m_Items[1].m_Definition.m_SoldierWeaponBlueprint:GetInstance()
+        if (s_SingleItem.m_Definition.m_Type == ItemType.Weapon or 
+        s_SingleItem.m_Definition.m_Type == ItemType.Gadget) and 
+        s_SingleItem.m_Definition.m_SoldierWeaponBlueprint ~= nil then
+            local s_SoldierWeaponUnlockAsset = s_SingleItem.m_Definition.m_SoldierWeaponBlueprint:GetInstance()
             local s_SoldierWeaponData = SoldierWeaponData(s_SoldierWeaponUnlockAsset.weapon.object)
             s_StaticModelEntityData.basePoseTransforms:clear()
             for _, l_LinearTransform in pairs(s_SoldierWeaponData.weaponStates[1].mesh3pTransforms) do        
                 s_StaticModelEntityData.basePoseTransforms:add(l_LinearTransform)
             end
-        elseif self.m_Items[1].m_Definition.m_Type == ItemType.Helmet or self.m_Items[1].m_Definition.m_Type == ItemType.Armor then
+        elseif s_SingleItem.m_Definition.m_Type == ItemType.Helmet or s_SingleItem.m_Definition.m_Type == ItemType.Armor then
             for i = 1, 213 do
                 s_StaticModelEntityData.basePoseTransforms:add(LinearTransform())
             end
@@ -162,10 +135,10 @@ function BRLootPickup:Spawn(p_Id)
     end
 
     local s_Color = Vec3(1.0, 0.9, 0.9)
-    if #self.m_Items == 1 and self.m_Items[1].m_Definition.m_Tier ~= nil then
-        if self.m_Items[1].m_Definition.m_Tier == Tier.Tier2 then
+    if m_MapHelper:HasSingleItem(self.m_Items) and s_SingleItem.m_Definition.m_Tier ~= nil then
+        if s_SingleItem.m_Definition.m_Tier == Tier.Tier2 then
             s_Color = Vec3(0.039, 0.702, 1)
-        elseif self.m_Items[1].m_Definition.m_Tier == Tier.Tier3 then
+        elseif s_SingleItem.m_Definition.m_Tier == Tier.Tier3 then
             s_Color = Vec3(1, 0.6, 0)
         end
     end
@@ -216,6 +189,39 @@ function BRLootPickup:Spawn(p_Id)
 
     s_BusSpotLight:Init(Realm.Realm_Client, true, false)
     self.m_Entities[s_BusSpotLight.instanceId] = s_BusSpotLight
+end
+
+--==============================
+-- Serialization
+--==============================
+
+function BRLootPickup:AsTable()
+    local s_Items = {}
+    for _, l_Item in pairs(self.m_Items) do
+        table.insert(s_Items, l_Item:AsTable())
+    end
+
+    return {
+        Id = self.m_Id,
+        Type = self.m_Type.Name,
+        Transform = self.m_Transform,
+        Items = s_Items,
+    }
+end
+
+function BRLootPickup:CreateFromTable(p_Table)
+    local s_Items = {}
+    for _, l_Item in pairs(p_Table.Items) do
+        local s_Item = g_BRItemFactory:CreateFromTable(l_Item)
+        s_Items[s_Item.m_Id] = s_Item
+    end
+
+    return BRLootPickup(
+        p_Table.Id,
+        p_Table.Type,
+        p_Table.Transform,
+        s_Items
+    )
 end
 
 function BRLootPickup:Destroy()

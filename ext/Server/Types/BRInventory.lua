@@ -157,13 +157,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
         m_Logger:Write("No available slot in the inventory.")
 
         if p_CreateLootPickup then
-            m_LootPickupDatabase:CreateLootPickup(
-                "Basic",
-                self.m_Owner.soldier.worldTransform,
-                {
-                    s_Item
-                }
-            )
+            m_LootPickupDatabase:CreateBasicLootPickup(self.m_Owner.soldier.worldTransform, {s_Item})
         end
 
         return false
@@ -193,11 +187,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
         local _, s_DroppedItems = s_Slot:Put(s_Item)
 
         if #s_DroppedItems > 0 then
-            m_LootPickupDatabase:CreateLootPickup(
-                "Basic",
-                self.m_Owner.soldier.worldTransform,
-                s_DroppedItems
-            )
+            m_LootPickupDatabase:CreateBasicLootPickup(self.m_Owner.soldier.worldTransform, s_DroppedItems)
         end
 
         m_Logger:Write("Item added to inventory. (" .. s_Item.m_Definition.m_Name .. ")")
@@ -250,12 +240,7 @@ function BRInventory:DropItem(p_ItemId, p_Quantity)
     local s_Slot = self:GetItemSlot(p_ItemId)
     if s_Slot ~= nil then
         local l_DroppedItems = s_Slot:Drop(p_Quantity)
-
-        m_LootPickupDatabase:CreateLootPickup(
-            "Basic",
-            self.m_Owner.soldier.worldTransform,
-            l_DroppedItems
-        )
+        m_LootPickupDatabase:CreateBasicLootPickup(self.m_Owner.soldier.worldTransform, l_DroppedItems)
 
         self:SendState()
     end

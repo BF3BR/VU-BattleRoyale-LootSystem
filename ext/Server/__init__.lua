@@ -56,29 +56,12 @@ end
 
 function VuBattleRoyaleLootSystemServer:OnLevelLoaded()
     local s_ItemAKSpawned = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-ak74m"])
-    m_LootPickupDatabase:CreateLootPickup(
-        "Basic",
-        LinearTransform(
-            Vec3(1.0, 0.0, 0.0), 
-            Vec3(0.0, 1.0, 0.0), 
-            Vec3(0.0, 0.0, 1.0), 
-            Vec3(21.276367, 10.880676, 3.685547)
-        ),
-        {
-            s_ItemAKSpawned,
-        }
-    )
+    m_LootPickupDatabase:CreateBasicLootPickup(Vec3(21.276367, 10.880676, 3.685547), {s_ItemAKSpawned})
 
     local s_ItemAcogSpawned = m_ItemDatabase:CreateItem(m_AttachmentDefinitions["attachment-acog"])
     local s_ItemHoloSpawned = m_ItemDatabase:CreateItem(m_AttachmentDefinitions["attachment-holo"])
-    m_LootPickupDatabase:CreateLootPickup(
-        "Basic",
-        LinearTransform(
-            Vec3(1.0, 0.0, 0.0), 
-            Vec3(0.0, 1.0, 0.0), 
-            Vec3(0.0, 0.0, 1.0), 
-            Vec3(20.837891, 10.881640, 7.938477)
-        ),
+    m_LootPickupDatabase:CreateBasicLootPickup(
+        Vec3(20.837891, 10.881640, 7.938477),
         {
             s_ItemAcogSpawned,
             s_ItemHoloSpawned
@@ -86,32 +69,10 @@ function VuBattleRoyaleLootSystemServer:OnLevelLoaded()
     )
 
     local s_ItemHoloSpawned2 = m_ItemDatabase:CreateItem(m_AttachmentDefinitions["attachment-holo"])
-    m_LootPickupDatabase:CreateLootPickup(
-        "Basic",
-        LinearTransform(
-            Vec3(1.0, 0.0, 0.0), 
-            Vec3(0.0, 1.0, 0.0), 
-            Vec3(0.0, 0.0, 1.0), 
-            Vec3(21.837891, 10.881640, 7.938477)
-        ),
-        {
-            s_ItemHoloSpawned2,
-        }
-    )
+    m_LootPickupDatabase:CreateBasicLootPickup(Vec3(21.837891, 10.881640, 7.938477), {s_ItemHoloSpawned2})
 
     local s_ItemM98b = m_ItemDatabase:CreateItem(m_WeaponDefinitions["weapon-m98b"])
-    m_LootPickupDatabase:CreateLootPickup(
-        "Basic",
-        LinearTransform(
-            Vec3(1.0, 0.0, 0.0), 
-            Vec3(0.0, 1.0, 0.0), 
-            Vec3(0.0, 0.0, 1.0), 
-            Vec3(21.047852, 10.881640, -0.941406)
-        ),
-        {
-            s_ItemM98b,
-        }
-    )
+    m_LootPickupDatabase:CreateBasicLootPickup(Vec3(21.047852, 10.881640, -0.941406), {s_ItemM98b})
 end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerRespawn(p_Player)

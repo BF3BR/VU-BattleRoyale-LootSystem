@@ -35,7 +35,10 @@ function BRInventoryGadgetSlot:UpdateItemPrimaryAmmo()
         self.m_Item:DecreaseQuantityBy(1)
     end
 
-    self.m_Item:SetPrimaryAmmo(s_Weapon.primaryAmmo)
+    -- check in case it was destroyed
+    if self.m_Item ~= nil then
+        self.m_Item:SetPrimaryAmmo(s_Weapon.primaryAmmo)
+    end
 end
 
 function BRInventoryGadgetSlot:DestroyIfEmpty()

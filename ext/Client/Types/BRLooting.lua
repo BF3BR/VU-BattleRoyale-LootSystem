@@ -2,6 +2,7 @@ class "BRLooting"
 
 local m_Debug = require "Debug"
 local m_Logger = Logger("BRLooting", true)
+local m_MapHelper = require "__shared/Utils/MapHelper"
 
 function BRLooting:__init()
 	self.m_LootPickups = {}
@@ -35,8 +36,9 @@ function BRLooting:OnClientUpdateInput(p_Delta)
 			local s_LootPickup = self:GetLootPickup(s_Entity)
 			if s_LootPickup ~= nil then
 				self.m_LastSelectedLootPickup = s_LootPickup
-				if #s_LootPickup.m_Items == 1 then
-					self:OnSendOverlayLoot(s_LootPickup.m_Items[1], false)
+				if m_MapHelper:HasSingleItem(s_LootPickup.m_Items) then
+					local s_SingleItem = m_MapHelper:Item(s_LootPickup.m_Items)
+					self:OnSendOverlayLoot(s_SingleItem, false)
 				else
 					self:OnSendOverlayLoot(s_LootPickup.m_Type, true)
 				end
@@ -50,14 +52,15 @@ function BRLooting:OnClientUpdateInput(p_Delta)
 		end
 
 		if InputManager:IsKeyDown(InputDeviceKeys.IDK_E) and self.m_LastSelectedLootPickup ~= nil then
-			if #self.m_LastSelectedLootPickup.m_Items == 1 then
+			local s_LootPickup = self.m_LastSelectedLootPickup
+			if m_MapHelper:HasSingleItem(s_LootPickup.m_Items) then
 				NetEvents:Send(
 					InventoryNetEvent.PickupItem,
-					self.m_LastSelectedLootPickup.m_Id,
-					self.m_LastSelectedLootPickup.m_Items[1].m_Id
+					s_LootPickup.m_Id,
+					m_MapHelper:Item(s_LootPickup.m_Items).m_Id
 				)
 			else
-				self:OnSendOverlayLootBox(self.m_LastSelectedLootPickup.m_Id, self.m_LastSelectedLootPickup.m_Items)
+				self:OnSendOverlayLootBox(s_LootPickup.m_Id, s_LootPickup.m_Items)
 			end
 		end
 	end
@@ -75,16 +78,14 @@ function BRLooting:OnCreateLootPickup(p_DataArray)
 	local s_LootPickup = BRLootPickup:CreateFromTable(p_DataArray)
 	self.m_LootPickups[p_DataArray.Id] = s_LootPickup
 
-	if SharedUtils:IsClientModule() then
-		s_LootPickup:Spawn(p_DataArray.Id)
+	s_LootPickup:Spawn(p_DataArray.Id)
 
-		if s_LootPickup.m_Entities == nil then
-			return
-		end
+	if s_LootPickup.m_Entities == nil then
+		return
+	end
 
-		for l_InstanceId, _ in pairs(s_LootPickup.m_Entities) do
-			self.m_InstanceIdToLootPickup[l_InstanceId] = s_LootPickup
-		end
+	for l_InstanceId, _ in pairs(s_LootPickup.m_Entities) do
+		self.m_InstanceIdToLootPickup[l_InstanceId] = s_LootPickup
 	end
 end
 

@@ -51,13 +51,8 @@ function OnPlayerSpawnCommand(p_Player, p_Args)
     end
 
     local s_CreatedItem = m_ItemDatabase:CreateItem(s_Definition, p_Args[2] ~= nil and tonumber(p_Args[2]) or 1)
-    m_LootPickupDatabase:CreateLootPickup(
-        "Basic",
-        p_Player.soldier.worldTransform,
-        {
-            s_CreatedItem,
-        }
-    )
+    m_LootPickupDatabase:CreateBasicLootPickup(p_Player.soldier.worldTransform, {s_CreatedItem})
+
     m_Logger:Write(s_Definition.m_Name .. " - Item spawned for player: " .. p_Player.name)
 end
 
