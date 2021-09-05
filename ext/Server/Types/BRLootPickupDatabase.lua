@@ -6,6 +6,7 @@ require "__shared/Types/BRLootPickup"
 
 local m_Logger = Logger("BRLootPickupDatabase", true)
 local m_ItemDatabase = require "Types/BRItemDatabase"
+local m_MapHelper = require "__shared/Utils/MapHelper"
 
 -- This is gonna get replaced with the Spatial index, probably
 
@@ -81,7 +82,7 @@ function BRLootPickupDatabase:RemoveItemFromLootPickup(p_LootPickupId, p_ItemId)
 
     s_LootPickup:RemoveItem(p_ItemId)
 
-    if #s_LootPickup.m_Items > 0 then
+    if not m_MapHelper:Empty(s_LootPickup.m_Items) then
         -- Broadcast updated lootPickup
         NetEvents:BroadcastLocal(InventoryNetEvent.UpdateLootPickup, s_LootPickup:AsTable())
     else

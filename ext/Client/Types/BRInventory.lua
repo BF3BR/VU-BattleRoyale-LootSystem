@@ -1,5 +1,3 @@
-
-
 class "BRInventory"
 
 require "__shared/Items/BRItem"
@@ -82,7 +80,6 @@ function BRInventory:OnWebUIMoveItem(p_JsonData)
 
     NetEvents:Send(InventoryNetEvent.MoveItem, s_ItemId, s_SlotId)
 end
-
 
 function BRInventory:OnWebUIDropItem(p_JsonData)
     local s_DecodedData = json.decode(p_JsonData)
