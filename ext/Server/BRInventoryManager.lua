@@ -105,7 +105,7 @@ function BRInventoryManager:OnInventoryPickupItem(p_Player, p_LootPickupId, p_It
     end
 
     -- get lootpickup
-    local s_LootPickup = m_LootPickupDatabase:GetLootPickup(p_LootPickupId)
+    local s_LootPickup = m_LootPickupDatabase:GetById(p_LootPickupId)
     if s_LootPickup == nil then
         return
     end

@@ -19,6 +19,9 @@ function BRLootPickup:__init(p_Id, p_TypeName, p_Transform, p_Items)
     -- A map of LootPickups {id -> LootPickup}
     self.m_Items = p_Items
 
+    -- 
+    self.m_ParentCell = nil
+
     -- [Client] Contains spawned entities {instanceId -> Entity}
     self.m_Entities = nil
 end
@@ -225,6 +228,8 @@ function BRLootPickup:CreateFromTable(p_Table)
 end
 
 function BRLootPickup:Destroy()
+    self.m_ParentCell = nil
+
     if self.m_Entities == nil then
         return
     end

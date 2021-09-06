@@ -1,4 +1,5 @@
-require "__shared/Type/BRLootGridCell"
+require "__shared/Types/BRLootGridCell"
+require "__shared/Types/BRLootGridCell"
 
 class "BRLootGrid"
 

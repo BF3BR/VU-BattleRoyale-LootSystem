@@ -1,23 +1,12 @@
-class "BRLootPickupDatabase"
-
 require "__shared/Enums/CustomEvents"
-
 require "__shared/Types/BRLootPickup"
+require "__shared/Types/BRLootPickupDatabaseShared"
+
+class("BRLootPickupDatabase", BRLootPickupDatabaseShared)
 
 local m_Logger = Logger("BRLootPickupDatabase", true)
 local m_ItemDatabase = require "Types/BRItemDatabase"
 local m_MapHelper = require "__shared/Utils/MapHelper"
-
--- This is gonna get replaced with the Spatial index, probably
-
-function BRLootPickupDatabase:__init()
-    -- A table of items (id -> BRLootPickup)
-    self.m_LootPickups = {}
-end
-
-function BRLootPickupDatabase:GetLootPickup(p_LootPickupId)
-    return self.m_LootPickups[p_LootPickupId]
-end
 
 ---@param p_Transform Vec3|LinearTransform
 ---@param p_Items BRItem[]
@@ -57,19 +46,19 @@ function BRLootPickupDatabase:CreateLootPickup(p_Type, p_Transform, p_Items)
     NetEvents:BroadcastLocal(InventoryNetEvent.CreateLootPickup, s_LootPickup:AsTable())
 end
 
-function BRLootPickupDatabase:UnregisterLootPickup(p_LootPickupId)
-    if self.m_LootPickups[p_LootPickupId] == nil then
+function BRLootPickupDatabase:Remove(p_LootPickup)
+    if not BRLootPickupDatabaseShared.Remove(self, p_LootPickup) then
         return
     end
 
-    for _, l_Item in pairs(self.m_LootPickups[p_LootPickupId].m_Items) do
+    -- remove remaining items from item database
+    for _, l_Item in pairs(p_LootPickup.m_Items) do
         m_ItemDatabase:UnregisterItem(l_Item.m_Id)
     end
 
-    self.m_LootPickups[p_LootPickupId]:Destroy()
-    self.m_LootPickups[p_LootPickupId] = nil
+    p_LootPickup:Destroy()
 
-    NetEvents:BroadcastLocal(InventoryNetEvent.UnregisterLootPickup, p_LootPickupId)
+    NetEvents:BroadcastLocal(InventoryNetEvent.UnregisterLootPickup, p_LootPickup.m_Id)
 
     m_Logger:Write("Loot Pickup removed from database.")
 end
@@ -87,7 +76,7 @@ function BRLootPickupDatabase:RemoveItemFromLootPickup(p_LootPickupId, p_ItemId)
         NetEvents:BroadcastLocal(InventoryNetEvent.UpdateLootPickup, s_LootPickup:AsTable())
     else
         -- Remove loot pickup if all the item got picked up
-        self:UnregisterLootPickup(p_LootPickupId)
+        self:Remove(s_LootPickup)
     end
 end
 

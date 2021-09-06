@@ -1,3 +1,5 @@
+require "__shared/Types/BRLootGrid"
+
 class "BRLootPickupDatabaseShared"
 
 function BRLootPickupDatabaseShared:__init()
@@ -12,11 +14,11 @@ function BRLootPickupDatabaseShared:ResetVars()
   self.m_Grid = BRLootGrid(32)
 end
 
-function BRLootPickupDatabase:GetById(p_Id)
+function BRLootPickupDatabaseShared:GetById(p_Id)
   return self.m_LootPickups[p_Id]
 end
 
-function BRLootPickupDatabase:Add(p_LootPickup)
+function BRLootPickupDatabaseShared:Add(p_LootPickup)
   if p_LootPickup == nil or self:Contains(p_LootPickup) then
     return false
   end
@@ -30,7 +32,7 @@ function BRLootPickupDatabase:Add(p_LootPickup)
   return true
 end
 
-function BRLootPickupDatabase:Remove(p_LootPickup)
+function BRLootPickupDatabaseShared:Remove(p_LootPickup)
   if p_LootPickup == nil or not self:Contains(p_LootPickup) then
     return false
   end
@@ -43,35 +45,41 @@ function BRLootPickupDatabaseShared:Contains(p_LootPickup)
   return self.m_LootPickups[p_LootPickup.m_Id] ~= nil
 end
 
-function BRLootPickupDatabaseShared:GetCloseItems(p_Position, p_Radius)
+function BRLootPickupDatabaseShared:GetCloseLootPickups(p_Position, p_Radius)
+  if p_Position == nil then
+    return
+  end
+
+  p_Radius = p_Radius or 5
+
   -- TODO
   return {}
 end
 
-function BRLootPickupDatabaseShared:GetClosestItem(p_Position, p_Radius)
-  local s_Items = self:GetCloseItems(p_Position, p_Radius)
+function BRLootPickupDatabaseShared:GetClosestLootPickup(p_Position, p_Radius)
+  local s_LootPickups = self:GetCloseLootPickups(p_Position, p_Radius)
 
   -- return the item at first index in case the items returned 
   -- are empty or only have one item
-  if #s_Items < 2 then
-    return s_Items[1]
+  if #s_LootPickups < 2 then
+    return s_LootPickups[1]
   end
 
   -- find the closest item
-  local s_ClosestItem = s_Items[1]
+  local s_ClosestPickup = s_LootPickups[1]
   local s_ClosestDistance = p_Position:Distance(Vec2(0, 0)) -- TODO
-  for l_Index = 2, #s_Items do
-    local s_Item = s_Items[l_Index]
-    -- local s_Distance = p_Position:Distance(s_Item:GetPosition2D()) -- TODO
+  for l_Index = 2, #s_LootPickups do
+    local s_LootPickup = s_LootPickups[l_Index]
+    -- local s_Distance = p_Position:Distance(s_LootPickup:GetPosition2D()) -- TODO
     local s_Distance = p_Position:Distance(Vec2(0, 0))
 
     if s_Distance < s_ClosestDistance then
-      s_ClosestItem = s_Item
+      s_ClosestPickup = s_LootPickup
       s_ClosestDistance = s_Distance
     end
   end
 
-  return s_ClosestItem
+  return s_ClosestPickup
 end
 
 function BRLootPickupDatabaseShared:OnRoundDestroy()
