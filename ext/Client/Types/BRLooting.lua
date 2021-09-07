@@ -3,13 +3,12 @@ class "BRLooting"
 local m_Debug = require "Debug"
 local m_Logger = Logger("BRLooting", true)
 local m_MapHelper = require "__shared/Utils/MapHelper"
+local m_BRLootPickupDatabase = require "Types/BRLootPickupDatabase"
 
 function BRLooting:__init()
-	self.m_LootPickups = {}
 	self.m_LastDelta = 0
 	self.m_LastSelectedLootPickup = nil
 
-	self.m_InstanceIdToLootPickup = {}
 	self.m_TimeToUpdateLootUi = 0.15
 end
 
@@ -26,14 +25,14 @@ function BRLooting:OnClientUpdateInput(p_Delta)
 	if s_Player == nil or s_Player.soldier == nil then
 		return
 	end
-	
+
 	-- InputManager:IsKeyDown(InputDeviceKeys.IDK_E) and
 	if self.m_LastDelta >= self.m_TimeToUpdateLootUi then
 		self.m_LastDelta = 0.0
 
 		local s_Entity = self:OnRaycast()
 		if s_Entity ~= nil then
-			local s_LootPickup = self:GetLootPickup(s_Entity)
+			local s_LootPickup = m_BRLootPickupDatabase:GetByInstanceId(s_Entity.instanceId)
 			if s_LootPickup ~= nil then
 				self.m_LastSelectedLootPickup = s_LootPickup
 				if m_MapHelper:HasSingleItem(s_LootPickup.m_Items) then
@@ -66,77 +65,31 @@ function BRLooting:OnClientUpdateInput(p_Delta)
 	end
 end
 
-function BRLooting:OnCreateLootPickup(p_DataArray)
-	if p_DataArray == nil then
+function BRLooting:OnUpdateLootPickup(p_LootPickupData)
+	-- update LootPickup in database
+	local s_LootPickup = m_BRLootPickupDatabase:Update(p_LootPickupData)
+	if s_LootPickup == nil then
 		return
 	end
 
-	if self.m_LootPickups[p_DataArray.Id] ~= nil then
-		return
-	end
-
-	local s_LootPickup = BRLootPickup:CreateFromTable(p_DataArray)
-	self.m_LootPickups[p_DataArray.Id] = s_LootPickup
-
-	s_LootPickup:Spawn(p_DataArray.Id)
-
-	if s_LootPickup.m_Entities == nil then
-		return
-	end
-
-	for l_InstanceId, _ in pairs(s_LootPickup.m_Entities) do
-		self.m_InstanceIdToLootPickup[l_InstanceId] = s_LootPickup
+	-- update LootPickup in WebUI if needed
+	if self.m_LastSelectedLootPickup ~= nil and 
+		self.m_LastSelectedLootPickup.m_Id == s_LootPickup.m_Id then
+		self:OnSendOverlayLootBox(s_LootPickup.m_Id, s_LootPickup.m_Items)
 	end
 end
 
 function BRLooting:OnUnregisterLootPickup(p_LootPickupId)
-	-- check if lootPickup exists in the table
-	if p_LootPickupId == nil or self.m_LootPickups[p_LootPickupId] == nil then
+	if not m_BRLootPickupDatabase:RemoveById(p_LootPickupId) then
 		return
 	end
 
-	local s_LootPickup = self.m_LootPickups[p_LootPickupId]
-
-	-- check if it was the last opened lootPickup
-	if self.m_LastSelectedLootPickup ~= nil and self.m_LastSelectedLootPickup.m_Id == p_LootPickupId then
-		self:OnSendOverlayLootBox(nil, nil)
+	-- update LootPickup in WebUI if needed
+	if self.m_LastSelectedLootPickup ~= nil and 
+		self.m_LastSelectedLootPickup.m_Id == p_LootPickupId then
+		self:OnSendOverlayLootBox(nil, false)
+		self.m_LastSelectedLootPickup = nil
 	end
-
-	-- clear references to this lootPickup
-	self.m_LootPickups[p_LootPickupId] = nil
-	for l_InstanceId, _ in pairs(s_LootPickup.m_Entities) do
-		self.m_InstanceIdToLootPickup[l_InstanceId] = nil
-	end
-
-	s_LootPickup:Destroy()
-end
-
-function BRLooting:OnUpdateLootPickup(p_DataArray)
-	if p_DataArray == nil then
-		return
-	end
-
-	if self.m_LastSelectedLootPickup == nil then
-		return
-	end
-	
-    if self.m_LootPickups[p_DataArray.Id] == nil then
-        return
-    end
-
-    self.m_LootPickups[p_DataArray.Id] = BRLootPickup:CreateFromTable(p_DataArray)
-
-	if self.m_LastSelectedLootPickup.m_Id == self.m_LootPickups[p_DataArray.Id].m_Id then
-		self:OnSendOverlayLootBox(self.m_LootPickups[p_DataArray.Id].m_Id, self.m_LootPickups[p_DataArray.Id].m_Items)
-	end
-end
-
-function BRLooting:GetLootPickup(p_Entity)	
-	if p_Entity == nil then
-		return nil
-	end
-
-	return self.m_InstanceIdToLootPickup[p_Entity.instanceId]
 end
 
 function BRLooting:OnRaycast()

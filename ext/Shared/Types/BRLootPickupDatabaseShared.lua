@@ -41,10 +41,15 @@ function BRLootPickupDatabaseShared:Remove(p_LootPickup)
   return true
 end
 
+function BRLootPickupDatabaseShared:RemoveById(p_LootPickupId)
+  return self:Remove(self:GetById(p_LootPickupId))
+end
+
 function BRLootPickupDatabaseShared:Contains(p_LootPickup)
   return self.m_LootPickups[p_LootPickup.m_Id] ~= nil
 end
 
+-- WIP
 function BRLootPickupDatabaseShared:GetCloseLootPickups(p_Position, p_Radius)
   if p_Position == nil then
     return
@@ -56,6 +61,7 @@ function BRLootPickupDatabaseShared:GetCloseLootPickups(p_Position, p_Radius)
   return {}
 end
 
+-- WIP
 function BRLootPickupDatabaseShared:GetClosestLootPickup(p_Position, p_Radius)
   local s_LootPickups = self:GetCloseLootPickups(p_Position, p_Radius)
 

@@ -80,13 +80,13 @@ end
 
 function BRLootPickup:Spawn()
     if self.m_Entities ~= nil then
-        return
+        return false
     end
 
     local s_Mesh = self:GetMesh()
     if s_Mesh == nil then
         m_Logger:Write("Mesh not found.")
-        return
+        return false
     end
 
     local s_LinearTransform = self:GetLinearTransform()
@@ -102,7 +102,7 @@ function BRLootPickup:Spawn()
     local s_Asset = s_Mesh:GetInstance()
     if s_Asset == nil then
         m_Logger:Write("Asset not found.")
-        return
+        return false
     end
 
     s_StaticModelEntityData = StaticModelEntityData()
@@ -180,7 +180,7 @@ function BRLootPickup:Spawn()
 
     if s_BusStaticModel == nil or s_BusSpotLight == nil then
         m_Logger:Write("Models are nil, can't spawn")
-        return
+        return false
     end
 
     if self.m_Entities == nil then
@@ -192,6 +192,8 @@ function BRLootPickup:Spawn()
 
     s_BusSpotLight:Init(Realm.Realm_Client, true, false)
     self.m_Entities[s_BusSpotLight.instanceId] = s_BusSpotLight
+
+    return self.m_Entities ~= nil
 end
 
 --==============================
@@ -227,9 +229,22 @@ function BRLootPickup:CreateFromTable(p_Table)
     )
 end
 
-function BRLootPickup:Destroy()
-    self.m_ParentCell = nil
+function BRLootPickup:UpdateFromTable(p_Table)
+    if p_Table.Id ~= self.m_Id then
+        return
+    end
 
+    local s_Items = {}
+    for _, l_Item in pairs(p_Table.Items) do
+        local s_Item = g_BRItemFactory:CreateFromTable(l_Item)
+        s_Items[s_Item.m_Id] = s_Item
+    end
+
+    self.m_Transform = p_Table.Transform
+    self.m_Items = s_Items
+end
+
+function BRLootPickup:DestroyEntities()
     if self.m_Entities == nil then
         return
     end
@@ -241,4 +256,11 @@ function BRLootPickup:Destroy()
 
         self.m_Entities[l_InstanceId] = nil
     end
+
+    self.m_Entities = nil
+end
+
+function BRLootPickup:Destroy()
+    self.m_ParentCell = nil
+    self:DestroyEntities()
 end

@@ -21,6 +21,7 @@ require "Types/BRLooting"
 require "ClientCommands"
 
 local m_Logger = Logger("VuBattleRoyaleLootSystemClient", true)
+local m_BRLootPickupDatabase = require "Types/BRLootPickupDatabase"
 
 function VuBattleRoyaleLootSystemClient:__init()
     Events:Subscribe("Extension:Loaded", self, self.OnExtensionLoaded)
@@ -95,14 +96,16 @@ function VuBattleRoyaleLootSystemClient:OnReceiveInventoryState(p_State)
 end
 
 function VuBattleRoyaleLootSystemClient:OnCreateLootPickup(p_DataArray)
-	self.m_Looting:OnCreateLootPickup(p_DataArray)
+    m_BRLootPickupDatabase:OnCreateLootPickup(p_DataArray)
 end
 
 function VuBattleRoyaleLootSystemClient:OnUnregisterLootPickup(p_LootPickupId)
+    -- m_BRLootPickupDatabase:OnUnregisterLootPickup(p_LootPickupId)
     self.m_Looting:OnUnregisterLootPickup(p_LootPickupId)
 end
 
 function VuBattleRoyaleLootSystemClient:OnUpdateLootPickup(p_DataArray)
+    -- m_BRLootPickupDatabase:OnUpdateLootPickup(p_DataArray)
     self.m_Looting:OnUpdateLootPickup(p_DataArray)
 end
 
