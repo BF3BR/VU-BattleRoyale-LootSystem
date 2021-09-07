@@ -87,7 +87,7 @@ function BRLooting:OnUnregisterLootPickup(p_LootPickupId)
 	-- update LootPickup in WebUI if needed
 	if self.m_LastSelectedLootPickup ~= nil and 
 		self.m_LastSelectedLootPickup.m_Id == p_LootPickupId then
-		self:OnSendOverlayLootBox(nil, false)
+		self:OnSendOverlayLootBox(nil, {})
 		self.m_LastSelectedLootPickup = nil
 	end
 end
@@ -319,16 +319,7 @@ function BRLooting:OnSendOverlayLoot(p_Item, p_MultiItem)
 		return
 	end
 
-	local s_ReturnVal = {
-		Id = p_Item.m_Id,
-		UId = p_Item.m_Definition.m_UId,
-		Name = p_Item.m_Definition.m_Name,
-		Type = p_Item.m_Definition.m_Type,
-		Description = p_Item.m_Definition.m_Description,
-		UIIcon = p_Item.m_Definition.m_UIIcon,
-		Price = p_Item.m_Definition.m_Price,
-		Quantity = p_Item.m_Quantity
-	}
+	local s_ReturnVal = p_Item:AsTable(true)
 
 	if p_Item.m_Definition.m_Type == ItemType.Weapon then
 		s_ReturnVal.Tier = p_Item.m_Definition.m_Tier
@@ -352,18 +343,8 @@ function BRLooting:OnSendOverlayLootBox(p_LootPickupId, p_Items)
 
 	local s_ReturnVal = { }
 	for l_Index, l_Item in pairs(p_Items) do
-		local l_ReturnVal = { }
-		l_ReturnVal = {
-			Id = l_Item.m_Id,
-			UId = l_Item.m_Definition.m_UId,
-			Name = l_Item.m_Definition.m_Name,
-			Type = l_Item.m_Definition.m_Type,
-			Description = l_Item.m_Definition.m_Description,
-			UIIcon = l_Item.m_Definition.m_UIIcon,
-			Price = l_Item.m_Definition.m_Price,
-			Quantity = l_Item.m_Quantity
-		}
-	
+		local l_ReturnVal = l_Item:AsTable(true)
+
 		if l_Item.m_Definition.m_Type == ItemType.Weapon then
 			l_ReturnVal.Tier = l_Item.m_Definition.m_Tier
 			l_ReturnVal.AmmoName = l_Item.m_Definition.m_AmmoDefinition.m_Name

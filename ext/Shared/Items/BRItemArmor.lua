@@ -10,8 +10,8 @@ function BRItemArmor:__init(p_Id, p_Definition, p_CurrentDurability)
     self.m_CurrentDurability = p_CurrentDurability or p_Definition.m_Durability
 end
 
-function BRItemArmor:AsTable()
-    local s_Table = BRItem.AsTable(self)
+function BRItemArmor:AsTable(p_Extended)
+    local s_Table = BRItem.AsTable(self, p_Extended)
 
     s_Table.CurrentDurability = self.m_CurrentDurability
 

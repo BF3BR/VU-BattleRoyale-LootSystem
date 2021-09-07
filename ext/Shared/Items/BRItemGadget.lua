@@ -28,8 +28,8 @@ function BRItemGadget:SetQuantity(p_Quantity)
     return BRItem.SetQuantity(self, p_Quantity)
 end
 
-function BRItemGadget:AsTable()
-    local s_Table = BRItem.AsTable(self)
+function BRItemGadget:AsTable(p_Extended)
+    local s_Table = BRItem.AsTable(self, p_Extended)
 
     s_Table.CurrentPrimaryAmmo = self.m_CurrentPrimaryAmmo
 

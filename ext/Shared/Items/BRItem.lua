@@ -19,20 +19,6 @@ function BRItem:__init(p_Id, p_Definition, p_Quantity)
     self.m_Owner = nil
 end
 
-function BRItem:AsTable()
-    local s_Table = {
-        Id = self.m_Id,
-        UId = self.m_Definition.m_UId,
-    }
-
-    -- add quantity if item is stackable
-    if self.m_Definition.m_Stackable then
-        s_Table.Quantity = self.m_Quantity
-    end
-
-    return s_Table
-end
-
 -- Returns the LootPickup instance that this item belongs to
 function BRItem:GetParentLootPickup()
     if self.m_Owner == nil or self.m_Owner.m_Items == nil then
@@ -107,6 +93,30 @@ end
 
 function BRItem:IsOfType(p_Type)
     return self.m_Definition.m_Type == p_Type
+end
+
+function BRItem:AsTable(p_Extended)
+    local s_Table = {
+        Id = self.m_Id,
+        UId = self.m_Definition.m_UId,
+    }
+
+    -- add quantity if item is stackable
+    if p_Extended or self.m_Definition.m_Stackable then
+        s_Table.Quantity = self.m_Quantity
+    end
+
+    -- add Definition data if Extended flag is true
+    if p_Extended then
+		s_Table.Name = self.m_Definition.m_Name
+		s_Table.Type = self.m_Definition.m_Type
+		s_Table.Description = self.m_Definition.m_Description
+		s_Table.UIIcon = self.m_Definition.m_UIIcon
+		s_Table.Price = self.m_Definition.m_Price
+		s_Table.Quantity = self.m_Quantity
+    end
+
+    return s_Table
 end
 
 function BRItem:CreateFromTable(p_Table)
