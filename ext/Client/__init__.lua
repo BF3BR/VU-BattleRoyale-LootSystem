@@ -46,6 +46,7 @@ function VuBattleRoyaleLootSystemClient:RegisterCommands()
     Console:Register("give", "Gives player items", ClientCommands.Give)
     Console:Register("spawn", "Spawns items under the player", ClientCommands.Spawn)
     Console:Register("list", "List all the items", ClientCommands.List)
+    Console:Register("spawn-kiasar-loot", "spawn-kiasar-loot", ClientCommands.SpawnKiasarLoot)
 end
 
 function VuBattleRoyaleLootSystemClient:UnregisterCommands()

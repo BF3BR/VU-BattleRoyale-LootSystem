@@ -29,6 +29,7 @@ local m_LootPickupDatabase = require "Types/BRLootPickupDatabase"
 
 local m_InventoryManager = require "BRInventoryManager"
 
+local m_MapHelper = require "__shared/Utils/MapHelper"
 local m_Logger = Logger("VuBattleRoyaleLootSystemServer", true)
 
 function VuBattleRoyaleLootSystemServer:__init()
@@ -40,6 +41,7 @@ function VuBattleRoyaleLootSystemServer:OnExtensionLoaded()
 
     Events:Subscribe("Player:Respawn", self, self.OnPlayerRespawn)
     Events:Subscribe("Player:Left", self, self.OnPlayerLeft)
+    NetEvents:Subscribe("SpawnKiasarLoot", self, self.OnSpawnKiasarLoot)
 
     -- TODO remove, just for reloading while testing
     local s_Players = PlayerManager:GetPlayers()
@@ -120,5 +122,19 @@ function VuBattleRoyaleLootSystemServer:OnPlayerRespawn(p_Player)
     s_Inventory:SendState()
 end
 
+function VuBattleRoyaleLootSystemServer:OnSpawnKiasarLoot(p_Player)
+    if p_Player == nil then
+        return
+    end
+
+    local s_Points = require "__shared/Configs/XP5_003_LootPresets"
+    local s_WeaponKeys = m_MapHelper:Keys(m_WeaponDefinitions)
+
+    for _, l_Point in ipairs(s_Points) do
+        local s_RandomKey = s_WeaponKeys[MathUtils:GetRandomInt(1, #s_WeaponKeys)]
+        local s_WeaponItem = m_ItemDatabase:CreateItem(m_WeaponDefinitions[s_RandomKey])
+        m_LootPickupDatabase:CreateBasicLootPickup(l_Point, {s_WeaponItem})
+    end
+end
 
 return VuBattleRoyaleLootSystemServer()
