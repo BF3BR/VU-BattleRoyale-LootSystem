@@ -391,9 +391,14 @@ function BRLooting:SendCloseLootPickupData(p_LootPickups)
 
 	local s_LootPickupData = {}
 	for _, l_LootPickup in pairs(p_LootPickups) do
-		table.insert(s_LootPickupData, l_LootPickup:AsTable(true))
+		local s_Data = l_LootPickup:AsTable(true)
+
+		-- remove redundant data
+		s_Data.Transform = nil
+
+		table.insert(s_LootPickupData, s_Data)
 	end
 
 	WebUI:ExecuteJS(string.format("SyncCloseLootPickupData(%s);", json.encode(s_LootPickupData)))
-	-- m_Logger:Write(json.encode(s_LootPickupData))
+	m_Logger:Write(json.encode(s_LootPickupData))
 end
