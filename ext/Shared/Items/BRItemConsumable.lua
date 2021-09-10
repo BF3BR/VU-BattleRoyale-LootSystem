@@ -145,6 +145,16 @@ function BRItemConsumable:UnsubscribeFromEngineUpdates()
     end
 end
 
+function BRItemHelmet:AsTable(p_Extended)
+    local s_Table = BRItem.AsTable(self, p_Extended)
+
+    if p_Extended then
+        s_Table.TimeToApply = self.m_Definition.m_TimeToApply
+    end
+
+    return s_Table
+end
+
 function BRItemConsumable:Destroy()
     -- Destroy timer
     if self.m_Timer ~= nil then

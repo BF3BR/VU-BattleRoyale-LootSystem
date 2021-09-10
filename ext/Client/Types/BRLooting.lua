@@ -3,11 +3,14 @@ class "BRLooting"
 local m_Debug = require "Debug"
 local m_Logger = Logger("BRLooting", true)
 local m_MapHelper = require "__shared/Utils/MapHelper"
+local m_Timers = require "__shared/Utils/Timers"
 local m_BRLootPickupDatabase = require "Types/BRLootPickupDatabase"
 
 function BRLooting:__init()
 	self.m_LastDelta = 0
 	self.m_LastSelectedLootPickup = nil
+
+	m_Timers:Interval(0.25, self, self.OnSpatialRaycast)
 
 	self.m_TimeToUpdateLootUi = 0.15
 end
@@ -231,6 +234,47 @@ function BRLooting:OnRaycast()
 	return nil
 end
 
+function BRLooting:OnSpatialRaycast()
+	-- Make sure we have a local player.
+	local s_Player = PlayerManager:GetLocalPlayer()
+	if s_Player == nil or s_Player.soldier == nil then
+		return nil
+	end
+
+	-- Our prop-picking ray will start at what the camera is looking at and
+	-- extend forward by 3.0m.
+	local s_CameraTransform = ClientUtils:GetCameraTransform()
+	if s_CameraTransform == nil or s_CameraTransform.trans == Vec3(0,0,0) then
+		return
+	end
+
+	local s_From = Vec3(s_CameraTransform.trans)
+
+	-- We get the raycast end transform with the calculated direction and the max distance.
+	local s_Direction = s_CameraTransform.forward * -1
+	local s_Target = s_CameraTransform.trans + (s_Direction * 3)
+
+	local s_Entities = RaycastManager:SpatialRaycast(s_From, s_Target, SpatialQueryFlags.AllGrids)
+
+	-- convert entities instance Ids to LootPickups
+	local s_LootPickups = {}
+	for _, l_Entity in ipairs(s_Entities) do
+		local s_LootPickup = m_BRLootPickupDatabase:GetByInstanceId(l_Entity.instanceId)
+
+		-- add LootPickup if it's not already in and it's close to player
+		if s_LootPickup ~= nil and 
+			s_LootPickups[s_LootPickup.m_Id] == nil and
+			s_LootPickup.m_Transform.trans:Distance(s_Player.soldier.transform.trans) <= 3 then
+			s_LootPickups[s_LootPickup.m_Id] = s_LootPickup
+		end
+	end
+
+	-- DEBUG
+	-- m_Logger:Write("FOUND #" .. m_MapHelper:Size(s_LootPickups) .. " LootPickups close to player")
+
+	self:SendCloseLootPickupData(s_LootPickups)
+end
+
 function BRLooting:GetMesh(entity)
 	local data = entity.data
 
@@ -321,17 +365,6 @@ function BRLooting:OnSendOverlayLoot(p_Item, p_MultiItem)
 
 	local s_ReturnVal = p_Item:AsTable(true)
 
-	if p_Item.m_Definition.m_Type == ItemType.Weapon then
-		s_ReturnVal.Tier = p_Item.m_Definition.m_Tier
-		s_ReturnVal.AmmoName = p_Item.m_Definition.m_AmmoDefinition.m_Name
-	elseif p_Item.m_Definition.m_Type == ItemType.Helmet or p_Item.m_Definition.m_Type == ItemType.Armor then
-		s_ReturnVal.Tier = p_Item.m_Definition.m_Tier
-		s_ReturnVal.Durability = p_Item.m_Definition.m_Durability
-		s_ReturnVal.CurrentDurability = p_Item.m_CurrentDurability
-	elseif p_Item.m_Definition.m_Type == ItemType.Consumable then
-		s_ReturnVal.TimeToApply = p_Item.m_Definition.m_TimeToApply
-	end
-
 	WebUI:ExecuteJS(string.format("SyncOverlayLoot(%s);", json.encode(s_ReturnVal)))
 end
 
@@ -345,19 +378,22 @@ function BRLooting:OnSendOverlayLootBox(p_LootPickupId, p_Items)
 	for l_Index, l_Item in pairs(p_Items) do
 		local l_ReturnVal = l_Item:AsTable(true)
 
-		if l_Item.m_Definition.m_Type == ItemType.Weapon then
-			l_ReturnVal.Tier = l_Item.m_Definition.m_Tier
-			l_ReturnVal.AmmoName = l_Item.m_Definition.m_AmmoDefinition.m_Name
-		elseif l_Item.m_Definition.m_Type == ItemType.Helmet or l_Item.m_Definition.m_Type == ItemType.Armor then
-			l_ReturnVal.Tier = l_Item.m_Definition.m_Tier
-			l_ReturnVal.Durability = l_Item.m_Definition.m_Durability
-			l_ReturnVal.CurrentDurability = l_Item.m_CurrentDurability
-		elseif l_Item.m_Definition.m_Type == ItemType.Consumable then
-			l_ReturnVal.TimeToApply = l_Item.m_Definition.m_TimeToApply
-		end
-
 		table.insert(s_ReturnVal, l_ReturnVal)
-    end
+  end
 
 	WebUI:ExecuteJS(string.format("SyncOverlayLootBox('%s', %s);", p_LootPickupId, json.encode(s_ReturnVal)))
+end
+
+function BRLooting:SendCloseLootPickupData(p_LootPickups)
+	if p_LootPickups == nil then
+		return
+	end
+
+	local s_LootPickupData = {}
+	for _, l_LootPickup in pairs(p_LootPickups) do
+		table.insert(s_LootPickupData, l_LootPickup:AsTable(true))
+	end
+
+	WebUI:ExecuteJS(string.format("SyncCloseLootPickupData(%s);", json.encode(s_LootPickupData)))
+	-- m_Logger:Write(json.encode(s_LootPickupData))
 end

@@ -195,10 +195,10 @@ end
 -- Serialization
 --==============================
 
-function BRLootPickup:AsTable()
+function BRLootPickup:AsTable(p_Extended)
     local s_Items = {}
     for _, l_Item in pairs(self.m_Items) do
-        table.insert(s_Items, l_Item:AsTable())
+        table.insert(s_Items, l_Item:AsTable(p_Extended))
     end
 
     return {
