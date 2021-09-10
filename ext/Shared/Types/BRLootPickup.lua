@@ -27,7 +27,7 @@ function BRLootPickup:__init(p_Id, p_TypeName, p_Transform, p_Items)
 end
 
 function BRLootPickup:AddItem(p_Item)
-    if p_Item == nil or self:ContainsItem(p_Item.m_Id) then
+    if p_Item == nil or self:ContainsItemId(p_Item.m_Id) then
         return
     end
 
@@ -41,14 +41,14 @@ function BRLootPickup:RemoveItem(p_Id)
     end
 end
 
-function BRLootPickup:ContainsItem(p_Id)
+function BRLootPickup:ContainsItemId(p_Id)
     return self.m_Items[p_Id] ~= nil
 end
 
 function BRLootPickup:GetMesh()
-    if m_MapHelper:HasSingleItem(self.m_Items) then
+    if m_MapHelper:SizeEquals(self.m_Items, 1) then
         -- If there is only one item then use its mesh
-        return m_MapHelper:Item(self.m_Items).m_Definition.m_Mesh
+        return m_MapHelper:NextItem(self.m_Items).m_Definition.m_Mesh
     elseif self.m_Type.Mesh ~= nil then
         -- If there is a mesh set to the current type
         return self.m_Type.Mesh
@@ -58,20 +58,15 @@ function BRLootPickup:GetMesh()
 end
 
 function BRLootPickup:GetLinearTransform()
-    if m_MapHelper:HasSingleItem(self.m_Items) then
+    if m_MapHelper:SizeEquals(self.m_Items, 1) then
         -- If there is only one item then use its LT
-        return m_MapHelper:Item(self.m_Items).m_Definition.m_Transform
+        return m_MapHelper:NextItem(self.m_Items).m_Definition.m_Transform
     elseif self.m_Type.Mesh ~= nil then
         -- If there is a LT set to the current type
         return self.m_Type.Transform
     end
 
-    return LinearTransform(
-        Vec3(1, 0, 0),
-        Vec3(0, 1, 0),
-        Vec3(0, 0, 1),
-        Vec3(0, 0, 0)
-    )
+    return LinearTransform()
 end
 
 --==============================
@@ -118,8 +113,8 @@ function BRLootPickup:Spawn()
         )
     )
 
-    local s_SingleItem = m_MapHelper:Item(self.m_Items)
-    if m_MapHelper:HasSingleItem(self.m_Items) then
+    local s_SingleItem = m_MapHelper:NextItem(self.m_Items)
+    if m_MapHelper:SizeEquals(self.m_Items, 1) then
         -- We need to set the bone transforms if we want to spawn a weapon or helmet
         if (s_SingleItem.m_Definition.m_Type == ItemType.Weapon or 
         s_SingleItem.m_Definition.m_Type == ItemType.Gadget) and 
@@ -138,7 +133,7 @@ function BRLootPickup:Spawn()
     end
 
     local s_Color = Vec3(1.0, 0.9, 0.9)
-    if m_MapHelper:HasSingleItem(self.m_Items) and s_SingleItem.m_Definition.m_Tier ~= nil then
+    if m_MapHelper:SizeEquals(self.m_Items, 1) and s_SingleItem.m_Definition.m_Tier ~= nil then
         if s_SingleItem.m_Definition.m_Tier == Tier.Tier2 then
             s_Color = Vec3(0.039, 0.702, 1)
         elseif s_SingleItem.m_Definition.m_Tier == Tier.Tier3 then

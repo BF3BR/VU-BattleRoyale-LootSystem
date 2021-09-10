@@ -35,8 +35,8 @@ function BRLooting:OnClientUpdateInput(p_Delta)
 			local s_LootPickup = m_BRLootPickupDatabase:GetByInstanceId(s_Entity.instanceId)
 			if s_LootPickup ~= nil then
 				self.m_LastSelectedLootPickup = s_LootPickup
-				if m_MapHelper:HasSingleItem(s_LootPickup.m_Items) then
-					local s_SingleItem = m_MapHelper:Item(s_LootPickup.m_Items)
+				if m_MapHelper:SizeEquals(s_LootPickup.m_Items, 1) then
+					local s_SingleItem = m_MapHelper:NextItem(s_LootPickup.m_Items)
 					self:OnSendOverlayLoot(s_SingleItem, false)
 				else
 					self:OnSendOverlayLoot(s_LootPickup.m_Type, true)
@@ -52,11 +52,11 @@ function BRLooting:OnClientUpdateInput(p_Delta)
 
 		if InputManager:IsKeyDown(InputDeviceKeys.IDK_E) and self.m_LastSelectedLootPickup ~= nil then
 			local s_LootPickup = self.m_LastSelectedLootPickup
-			if m_MapHelper:HasSingleItem(s_LootPickup.m_Items) then
+			if m_MapHelper:SizeEquals(s_LootPickup.m_Items, 1) then
 				NetEvents:Send(
 					InventoryNetEvent.PickupItem,
 					s_LootPickup.m_Id,
-					m_MapHelper:Item(s_LootPickup.m_Items).m_Id
+					m_MapHelper:NextItem(s_LootPickup.m_Items).m_Id
 				)
 			else
 				self:OnSendOverlayLootBox(s_LootPickup.m_Id, s_LootPickup.m_Items)

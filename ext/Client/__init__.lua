@@ -26,6 +26,7 @@ local m_BRLootPickupDatabase = require "Types/BRLootPickupDatabase"
 function VuBattleRoyaleLootSystemClient:__init()
     Events:Subscribe("Extension:Loaded", self, self.OnExtensionLoaded)
     Events:Subscribe("Extension:Unloaded", self, self.OnExtensionUnloaded)
+    Events:Subscribe("Level:Destroy", self, self.OnLevelDestroy)
 end
 
 function VuBattleRoyaleLootSystemClient:OnExtensionLoaded()
@@ -40,6 +41,11 @@ end
 
 function VuBattleRoyaleLootSystemClient:OnExtensionUnloaded()
     self:UnregisterCommands()
+    m_BRLootPickupDatabase:OnExtensionUnloaded()
+end
+
+function VuBattleRoyaleLootSystemClient:OnLevelDestroy()
+    m_BRLootPickupDatabase:OnLevelDestroy()
 end
 
 function VuBattleRoyaleLootSystemClient:RegisterCommands()

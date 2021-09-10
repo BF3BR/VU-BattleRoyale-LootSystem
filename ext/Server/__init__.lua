@@ -37,6 +37,7 @@ end
 
 function VuBattleRoyaleLootSystemServer:OnExtensionLoaded()
     Events:Subscribe("Level:Loaded", self, self.OnLevelLoaded)
+    Events:Subscribe("Level:Destroy", self, self.OnLevelDestroy)
 
     Events:Subscribe("Player:Respawn", self, self.OnPlayerRespawn)
     Events:Subscribe("Player:Left", self, self.OnPlayerLeft)
@@ -52,6 +53,10 @@ end
 
 function VuBattleRoyaleLootSystemServer:OnPlayerLeft(p_Player)
     m_InventoryManager:OnPlayerLeft(p_Player)
+end
+
+function VuBattleRoyaleLootSystemServer:OnLevelDestroy(p_Player)
+    m_LootPickupDatabase:OnLevelDestroy()
 end
 
 function VuBattleRoyaleLootSystemServer:OnLevelLoaded()
