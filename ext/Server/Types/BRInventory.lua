@@ -135,9 +135,8 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
         return false
     end
 
-    local s_Slot = self.m_Slots[p_SlotIndex]
-
     -- check if there's a free slot
+    local s_Slot = self.m_Slots[p_SlotIndex]
     if s_Slot == nil then
         s_Slot = self:GetFirstAvailableSlot(s_Item)
     end
@@ -305,18 +304,30 @@ function BRInventory:GetWeaponItemByName(p_WeaponName)
     return nil
 end
 
+function BRInventory:GetWeaponItemByWeaponSlot(p_WeaponSlot)
+    if p_WeaponSlot == WeaponSlot.WeaponSlot_0 then
+        return self:GetSlot(InventorySlot.PrimaryWeapon).m_Item
+    elseif p_WeaponSlot == WeaponSlot.WeaponSlot_1 then
+        return self:GetSlot(InventorySlot.SecondaryWeapon).m_Item
+    elseif p_WeaponSlot == WeaponSlot.WeaponSlot_2 then
+        return self:GetSlot(InventorySlot.Gadget).m_Item
+    end
+
+    return nil
+end
+
 function BRInventory:GetAmmoDefinition(p_WeaponName)
     local s_Item = self:GetWeaponItemByName(p_WeaponName)
     return (s_Item ~= nil and s_Item.m_Definition.m_AmmoDefinition) or nil
 end
 
-function BRInventory:GetSavedPrimaryAmmo(p_WeaponName)
-    local s_Item = self:GetWeaponItemByName(p_WeaponName)
+function BRInventory:GetSavedPrimaryAmmo(p_WeaponSlot)
+    local s_Item = self:GetWeaponItemByWeaponSlot(p_WeaponSlot)
     return (s_Item ~= nil and s_Item.m_CurrentPrimaryAmmo) or 0
 end
 
-function BRInventory:SavePrimaryAmmo(p_WeaponName, p_AmmoCount)
-    local s_Item = self:GetWeaponItemByName(p_WeaponName)
+function BRInventory:SavePrimaryAmmo(p_WeaponSlot, p_AmmoCount)
+    local s_Item = self:GetWeaponItemByWeaponSlot(p_WeaponSlot)
     return s_Item ~= nil and s_Item:SetPrimaryAmmo(p_AmmoCount)
 end
 
@@ -446,9 +457,9 @@ function BRInventory:UpdateSoldierCustomization()
     self.m_Owner.soldier:ApplyCustomization(self:CreateCustomizeSoldierData())
 
     -- Reset primary ammo for each weapon
-    for _, l_Weapon in pairs(self.m_Owner.soldier.weaponsComponent.weapons) do
+    for l_WeaponSlot, l_Weapon in pairs(self.m_Owner.soldier.weaponsComponent.weapons) do
         if l_Weapon ~= nil then
-            l_Weapon.primaryAmmo = self:GetSavedPrimaryAmmo(l_Weapon.name)
+            l_Weapon.primaryAmmo = self:GetSavedPrimaryAmmo(l_WeaponSlot - 1)
             l_Weapon.secondaryAmmo = self:GetAmmoTypeCount(l_Weapon.name)
         end
     end

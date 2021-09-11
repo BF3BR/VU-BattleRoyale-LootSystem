@@ -191,7 +191,7 @@ function BRInventoryManager:OnPlayerPostReload(p_Player, p_AmmoAdded, p_Weapon)
     s_Inventory:RemoveAmmo(p_Weapon.name, p_AmmoAdded)
 
     -- Update ammo values
-    s_Inventory:SavePrimaryAmmo(p_Weapon.name, p_Weapon.primaryAmmo)
+    s_Inventory:SavePrimaryAmmo(p_Player.soldier.weaponsComponent.currentWeaponSlot, p_Weapon.primaryAmmo)
     p_Weapon.secondaryAmmo = s_Inventory:GetAmmoTypeCount(p_Weapon.name)
 end
 
@@ -215,9 +215,4 @@ function BRInventoryManager:OnItemDestroy(p_ItemId)
     m_ItemDatabase:UnregisterItem(p_ItemId)
 end
 
--- define global
-if g_BRInventoryManager== nil then
-    g_BRInventoryManager = BRInventoryManager()
-end
-
-return g_BRInventoryManager
+return BRInventoryManager()
