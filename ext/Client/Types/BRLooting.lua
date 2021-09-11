@@ -370,7 +370,8 @@ end
 
 function BRLooting:OnSendOverlayLootBox(p_LootPickupId, p_Items)
 	if p_Items == nil then
-		WebUI:ExecuteJS(string.format("SyncOverlayLootBox(%s, %s);", nil, nil))
+		-- TODO: remove all old loot box related code
+		-- WebUI:ExecuteJS(string.format("SyncOverlayLootBox(%s, %s);", nil, nil))
 		return
 	end
 
@@ -379,9 +380,10 @@ function BRLooting:OnSendOverlayLootBox(p_LootPickupId, p_Items)
 		local l_ReturnVal = l_Item:AsTable(true)
 
 		table.insert(s_ReturnVal, l_ReturnVal)
-  end
+	end
 
-	WebUI:ExecuteJS(string.format("SyncOverlayLootBox('%s', %s);", p_LootPickupId, json.encode(s_ReturnVal)))
+ 	 -- TODO: remove all old loot box related code
+	-- WebUI:ExecuteJS(string.format("SyncOverlayLootBox('%s', %s);", p_LootPickupId, json.encode(s_ReturnVal)))
 end
 
 function BRLooting:SendCloseLootPickupData(p_LootPickups)

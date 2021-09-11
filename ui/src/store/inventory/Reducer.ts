@@ -3,14 +3,13 @@ import {
     InventoryActionTypes,
     UPDATE_INVENTORY,
     UPDATE_OVERLAY_LOOT,
-    UPDATE_OVERLAY_LOOT_BOX
+    UPDATE_CLOSE_LOOT_PICKUP
 } from "./ActionTypes";
 
 const initialState: InventoryState = {
     slots: [],
     overlayLoot: null,
-    overlayLootBox: [],
-    lootId: null,
+    closeItems: [],
 };
 
 const InventoryReducer = (
@@ -28,11 +27,18 @@ const InventoryReducer = (
                 ...state,
                 overlayLoot: action.payload.overlayLoot,
             };
-        case UPDATE_OVERLAY_LOOT_BOX:
+        case UPDATE_CLOSE_LOOT_PICKUP:
+            /*if (JSON.stringify(state.closeItems) !== JSON.stringify(action.payload.items)) {
+                return {
+                    ...state,
+                    closeItems: action.payload.items,
+                };
+            }
+
+            return state;*/
             return {
                 ...state,
-                overlayLootBox: action.payload.items,
-                lootId: action.payload.lootId,
+                closeItems: action.payload.items,
             };
         default:
             return state;

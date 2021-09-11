@@ -7,6 +7,7 @@ export function Draggable(props: any) {
         data: {
             currentSlot: props.currentSlot,
             item: props.item,
+            lootId: props.lootId??null,
         },
     });
     

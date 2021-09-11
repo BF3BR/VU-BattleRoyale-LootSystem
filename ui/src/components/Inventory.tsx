@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { connect } from "react-redux";
 import { RootState } from "../store/RootReducer";
@@ -16,16 +16,14 @@ import "./Inventory.scss";
 
 interface StateFromReducer {
     slots: any;
-    overlayLootBox: any;
-    lootId: string|null;
+    closeItems: any;
 }
 
 type Props = StateFromReducer;
 
 const Inventory: React.FC<Props> = ({
     slots,
-    overlayLootBox,
-    lootId
+    closeItems,
 }) => {
     const [splitModal, setSplitModal] = useState({
         id: null,
@@ -46,7 +44,7 @@ const Inventory: React.FC<Props> = ({
 
     function handleDragStart(event: any) {
         const { active } = event;
-        setIsDragging(active.data.current.item);
+        setIsDragging(active.data.current);
     }
 
     function handleDragEnd(event: any) {
@@ -55,15 +53,14 @@ const Inventory: React.FC<Props> = ({
 
         if (over !== null) {
             const slot = over.id;
-            if (active.data.current.currentSlot === undefined) {
+            if (active.data.current.currentSlot === undefined && active.data.current.lootId !== null) {
                 // When you pick up from a loot box
-                if (lootId !== null) {
-                    sendToLua('WebUI:PickupItem', JSON.stringify({ 
-                        item: active.id, 
-                        slot: slot,
-                        lootPickup: lootId,
-                    }));
-                }
+                sendToLua('WebUI:PickupItem', JSON.stringify({ 
+                    item: active.id, 
+                    slot: slot,
+                    lootPickup: active.data.current.lootId,
+                }));
+                return;
             } else if (active.data.current.currentSlot.toString() !== slot) {
                 if (slot === "item-drop") {
                     sendToLua('WebUI:DropItem', JSON.stringify({ item: active.id, quantity: slots[active.data.current.currentSlot].Quantity }));
@@ -242,6 +239,11 @@ const Inventory: React.FC<Props> = ({
         }
     }
 
+    const [ closeItemsChange, setCloseItemsChange ] = useState<Date|null>(null);
+    useEffect(() => {
+        setCloseItemsChange(new Date());
+    }, [closeItems]);
+
     return (
         <>
             <div className={"split-modal " + (splitModal.show?"show":"")}>
@@ -305,151 +307,153 @@ const Inventory: React.FC<Props> = ({
                     </div>
                 </div>
             </div>
-            <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
-                <div id="Inventory" className="open">
-                    <div className="InventoryWrapper">
-                        <div className="card PrimaryWeaponBox">
-                            <div className="card-header">
-                                <h1>
-                                    Primary Weapon
-                                </h1>
-                            </div>
-                            <div className="card-content weapon-grid">
-                                <Droppable id={0} type="weapon-slot">
-                                    {getSlotItem(slots[0], 0)}
-                                </Droppable>
-                                <Droppable id={1}>
-                                    {getSlotItem(slots[1], 1)}
-                                </Droppable>
-                                <Droppable id={2}>
-                                    {getSlotItem(slots[2], 2)}
-                                </Droppable>
-                                <Droppable id={3}>
-                                    {getSlotItem(slots[3], 3)}
-                                </Droppable>
-                            </div>
-                        </div>
-
-                        <div className="card SecondaryWeaponBox">
-                            <div className="card-header">
-                                <h1>
-                                    Secondary Weapon
-                                </h1>
-                            </div>
-                            <div className="card-content weapon-grid">
-                                <Droppable id={4} type="weapon-slot">
-                                    {getSlotItem(slots[4], 4)}
-                                </Droppable>
-                                <Droppable id={5}>
-                                    {getSlotItem(slots[5], 5)}
-                                </Droppable>
-                                <Droppable id={6}>
-                                    {getSlotItem(slots[6], 6)}
-                                </Droppable>
-                                <Droppable id={7}>
-                                    {getSlotItem(slots[7], 7)}
-                                </Droppable>
-                            </div>
-                        </div>
-
-                        <div className="gear-grid">
-                            <div className="card">
+            {closeItemsChange !== null &&
+                <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+                    <div id="Inventory" className="open">
+                        <div className="InventoryWrapper">
+                            <div className="card PrimaryWeaponBox">
                                 <div className="card-header">
                                     <h1>
-                                        Helmet
+                                        Primary Weapon
                                     </h1>
                                 </div>
-                                <div className="card-content">
-                                    <Droppable id={9}>
-                                        {getSlotItem(slots[9], 9)}
+                                <div className="card-content weapon-grid">
+                                    <Droppable id={0} type="weapon-slot">
+                                        {getSlotItem(slots[0], 0)}
+                                    </Droppable>
+                                    <Droppable id={1}>
+                                        {getSlotItem(slots[1], 1)}
+                                    </Droppable>
+                                    <Droppable id={2}>
+                                        {getSlotItem(slots[2], 2)}
+                                    </Droppable>
+                                    <Droppable id={3}>
+                                        {getSlotItem(slots[3], 3)}
                                     </Droppable>
                                 </div>
                             </div>
-                            <div className="card">
-                                <div className="card-header">
-                                    <h1>
-                                        Armor
-                                    </h1>
-                                </div>
-                                <div className="card-content">
-                                    <Droppable id={8}>
-                                        {getSlotItem(slots[8], 8)}
-                                    </Droppable>
-                                </div>
-                            </div>
-                            <div className="card">
-                                <div className="card-header">
-                                    <h1>
-                                        Gadget
-                                    </h1>
-                                </div>
-                                <div className="card-content">
-                                    <Droppable id={10}>
-                                        {getSlotItem(slots[10], 10)}
-                                    </Droppable>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div className="card BackpackBox">
-                            <div className="card-header">
-                                <h1>
-                                    Backpack
-                                </h1>
+                            <div className="card SecondaryWeaponBox">
+                                <div className="card-header">
+                                    <h1>
+                                        Secondary Weapon
+                                    </h1>
+                                </div>
+                                <div className="card-content weapon-grid">
+                                    <Droppable id={4} type="weapon-slot">
+                                        {getSlotItem(slots[4], 4)}
+                                    </Droppable>
+                                    <Droppable id={5}>
+                                        {getSlotItem(slots[5], 5)}
+                                    </Droppable>
+                                    <Droppable id={6}>
+                                        {getSlotItem(slots[6], 6)}
+                                    </Droppable>
+                                    <Droppable id={7}>
+                                        {getSlotItem(slots[7], 7)}
+                                    </Droppable>
+                                </div>
                             </div>
-                            <div className="card-content backpack-grid">
-                                {slots.map((slot: any, key: number) => (
-                                    <React.Fragment key={key}>
-                                        {key >= 11 &&
-                                            <Droppable key={key} id={key}>
-                                                {getSlotItem(slots[key], key)}
-                                            </Droppable>
-                                        }
-                                    </React.Fragment>
-                                ))}
+
+                            <div className="gear-grid">
+                                <div className="card">
+                                    <div className="card-header">
+                                        <h1>
+                                            Helmet
+                                        </h1>
+                                    </div>
+                                    <div className="card-content">
+                                        <Droppable id={9}>
+                                            {getSlotItem(slots[9], 9)}
+                                        </Droppable>
+                                    </div>
+                                </div>
+                                <div className="card">
+                                    <div className="card-header">
+                                        <h1>
+                                            Armor
+                                        </h1>
+                                    </div>
+                                    <div className="card-content">
+                                        <Droppable id={8}>
+                                            {getSlotItem(slots[8], 8)}
+                                        </Droppable>
+                                    </div>
+                                </div>
+                                <div className="card">
+                                    <div className="card-header">
+                                        <h1>
+                                            Gadget
+                                        </h1>
+                                    </div>
+                                    <div className="card-content">
+                                        <Droppable id={10}>
+                                            {getSlotItem(slots[10], 10)}
+                                        </Droppable>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="card BackpackBox">
+                                <div className="card-header">
+                                    <h1>
+                                        Backpack
+                                    </h1>
+                                </div>
+                                <div className="card-content backpack-grid">
+                                    {slots.map((slot: any, key: number) => (
+                                        <React.Fragment key={key}>
+                                            {key >= 11 &&
+                                                <Droppable key={key} id={key}>
+                                                    {getSlotItem(slots[key], key)}
+                                                </Droppable>
+                                            }
+                                        </React.Fragment>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="itemDrop">
-                        <Droppable id="item-drop" />
-                    </div>
-                    <div className="ProximityWrapper">
-                        <div className="card proximity-card">
-                            <div className="card-header">
-                                <h1>
-                                    Near you
-                                </h1>
-                            </div>
-                            <div className="card-content near-grid">
-                                {overlayLootBox.length > 0 &&
-                                    <>
-                                        {overlayLootBox.map((slot: any, key: number) => (
+                        <div className="itemDrop">
+                            {(isDragging !== null && isDragging.currentSlot !== undefined) &&
+                                <Droppable id="item-drop" />
+                            }
+                        </div>
+                        {closeItems.length > 0 &&
+                            <div className="ProximityWrapper">
+                                <div className="card proximity-card">
+                                    <div className="card-header">
+                                        <h1>
+                                            Near you
+                                        </h1>
+                                    </div>
+                                    <div className="card-content near-grid">
+                                        {closeItems.map((item: any, key: number) => (
                                             <div className="item-slot" key={key}>
-                                                <Draggable id={slot.Id} item={slot}>
-                                                    {getSlotDrag(slot, true)}
+                                                <Draggable id={item.Id} item={item} lootId={item.lootId}>
+                                                    {getSlotDrag(item, true)}
                                                 </Draggable>
                                             </div>
                                         ))}
-                                    </>
-                                }
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
-                </div>
-                <DragOverlay 
-                    dropAnimation={null}
-                    adjustScale={false}
-                    style={{
-                        background: "red",
-                    }}
-                >
-                    {isDragging !== null && 
-                        <div className="dragoverlay-object">
-                            {getSlotDrag(isDragging)}
-                        </div>
-                    }
-                </DragOverlay>
-            </DndContext>
+                    <DragOverlay 
+                        dropAnimation={null}
+                        adjustScale={false}
+                        style={{
+                            background: "red",
+                        }}
+                    >
+                        {isDragging !== null && 
+                            <div className="dragoverlay-object">
+                                {getSlotDrag(isDragging.item)}
+                            </div>
+                        }
+                    </DragOverlay>
+                </DndContext>
+            }
             {(progress.slot !== null) &&
                 <>
                     <InventoryTimer
@@ -476,8 +480,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         // InventoryReducer
         slots: state.InventoryReducer.slots,
-        overlayLootBox: state.InventoryReducer.overlayLootBox,
-        lootId: state.InventoryReducer.lootId,
+        closeItems: state.InventoryReducer.closeItems,
     };
 }
 const mapDispatchToProps = (dispatch: any) => {
