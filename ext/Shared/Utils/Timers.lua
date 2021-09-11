@@ -165,3 +165,5 @@ end
 
 -- TimerManager singleton
 g_Timers = TimerManager()
+
+return g_Timers
