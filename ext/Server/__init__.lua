@@ -16,6 +16,8 @@ require "__shared/Items/BRItemAttachment"
 require "__shared/Items/BRItemConsumable"
 require "__shared/Items/BRItemGadget"
 
+require "DebugCommands"
+
 local m_AmmoDefinitions = require "__shared/Items/Definitions/BRItemAmmoDefinition"
 local m_ArmorDefinitions = require "__shared/Items/Definitions/BRItemArmorDefinition"
 local m_AttachmentDefinitions = require "__shared/Items/Definitions/BRItemAttachmentDefinition"
