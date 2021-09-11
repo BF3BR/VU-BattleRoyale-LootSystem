@@ -26,7 +26,7 @@ return {
         {
             Description = "The M320 Smoke is a variant of the M320 grenade launcher that fires smoke grenades.",
             MaxStack = 3,
-            Weight = 5.0,
+            RandomWeight = 100,
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/m320",
             EbxName = "Weapons/Gadgets/M320/M320",
             Mesh = DC(Guid("C1C59CFB-D2DD-5C43-CF76-4A465CB9007A"), Guid("579D4CB4-1937-D2CA-C7EA-23193B0B0B7B")),

@@ -29,6 +29,7 @@ return {
             UIIcon = "__armor",
             Tier = Tier.Tier1,
             Durability = 50,
+            RandomWeight = 60,
         }
     ),
     ["armor-tier-2"] = BRItemArmorDefinition(
@@ -39,6 +40,7 @@ return {
             UIIcon = "__armor",
             Tier = Tier.Tier2,
             Durability = 75,
+            RandomWeight = 30,
         }
     ),
     ["armor-tier-3"] = BRItemArmorDefinition(
@@ -49,6 +51,7 @@ return {
             UIIcon = "__armor",
             Tier = Tier.Tier3,
             Durability = 100,
+            RandomWeight = 10,
         }
     ),
 }

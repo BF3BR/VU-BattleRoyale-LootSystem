@@ -10,7 +10,7 @@ function BRItemDefinition:__init(p_UId, p_Name, p_Options)
     self.m_Description = p_Options.Description or ""
     self.m_UIIcon = p_Options.UIIcon
     self.m_Type = p_Options.Type or ItemType.Default
-    self.m_Weight = p_Options.Weight or 0.0
+    self.m_RandomWeight = p_Options.RandomWeight or 0.0
     self.m_Stackable = p_Options.Stackable or false
     self.m_MaxStack = p_Options.MaxStack
     self.m_Price = p_Options.Price or 0

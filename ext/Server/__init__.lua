@@ -28,6 +28,7 @@ local m_ItemDatabase = require "Types/BRItemDatabase"
 local m_LootPickupDatabase = require "Types/BRLootPickupDatabase"
 
 local m_InventoryManager = require "BRInventoryManager"
+local m_LootRandomizer = require "BRLootRandomizer"
 
 local m_MapHelper = require "__shared/Utils/MapHelper"
 local m_Logger = Logger("VuBattleRoyaleLootSystemServer", true)
@@ -128,12 +129,8 @@ function VuBattleRoyaleLootSystemServer:OnSpawnKiasarLoot(p_Player)
     end
 
     local s_Points = require "__shared/Configs/XP5_003_LootPresets"
-    local s_WeaponKeys = m_MapHelper:Keys(m_WeaponDefinitions)
-
     for _, l_Point in ipairs(s_Points) do
-        local s_RandomKey = s_WeaponKeys[MathUtils:GetRandomInt(1, #s_WeaponKeys)]
-        local s_WeaponItem = m_ItemDatabase:CreateItem(m_WeaponDefinitions[s_RandomKey])
-        m_LootPickupDatabase:CreateBasicLootPickup(l_Point, {s_WeaponItem})
+        m_LootRandomizer:Spawn(l_Point)
     end
 end
 

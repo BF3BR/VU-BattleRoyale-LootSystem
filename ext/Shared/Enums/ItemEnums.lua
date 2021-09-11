@@ -62,6 +62,40 @@ LootPickupType = {
     },
 }
 
+RandomWeightsTable = {
+    ["Nothing"] = {
+        RandomWeight = 20,
+    },
+    [ItemType.Weapon] = {
+        RandomWeight = 20,
+        Tiers = {
+            [Tier.Tier1] = {
+                RandomWeight = 60,
+            },
+            [Tier.Tier2] = {
+                RandomWeight = 30,
+            },
+            [Tier.Tier3] = {
+                RandomWeight = 10,
+            },
+        },
+    },
+    --[[[ItemType.Attachment] = {
+        RandomWeight = 20,
+    },]]
+    --[[[LootPickupType.Chest] = {
+        RandomWeight = 20,
+    },]]
+}
+
+RandomWeaponPatterns = {
+    OnlyWeapon = 1,
+    WeaponWithAmmo = 2,
+    WeaponWithAttachment = 3,
+    WeaponWithAttachmentAndAmmo = 4,
+    WeaponWithTwoAmmo = 5,
+}
+
 AttachmentType = {
     Optics = 1,
     Barrel = 2,

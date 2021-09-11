@@ -14,7 +14,6 @@ function BRItemWeaponDefinition:__init(p_UId, p_Name, p_Options)
     p_Options.Stackable = false
     p_Options.MaxStack = nil
     p_Options.Price = 0
-    p_Options.Weight = 0
 
     -- call super's constructor and set shared options
     BRItemDefinition.__init(self, p_UId, p_Name, p_Options)
@@ -65,6 +64,7 @@ return {
                 [g_AttachmentIds.IRNV] = DC(Guid("B79705D0-3908-11E0-A679-E62A6140CBF0"), Guid("DC2D38D6-D065-CBE2-B9CD-1C1EE6419FD1")),
                 [g_AttachmentIds.Bipod] = DC(Guid("5E6BD6BC-390E-11E0-A679-E62A6140CBF0"), Guid("049B5E44-9CA2-9567-0CEE-37B1FB6449D8")),
             },
+            RandomWeight = 15,
         }
     ),
     -- SMG
@@ -101,6 +101,7 @@ return {
                 [g_AttachmentIds.IRNV] = DC(Guid("05052EA8-4A46-11E0-AA9B-CBCA7495985E"), Guid("00B0B8B5-6FEC-D91E-3278-5BE193A7EF37")),
                 [g_AttachmentIds.Silencer] = DC(Guid("38C5AA18-4A46-11E0-AA9B-CBCA7495985E"), Guid("FE2DF152-BCE9-0AB8-6C03-5B4D16D8E526")),
             },
+            RandomWeight = 15,
         }
     ),
     -- Shotgun
@@ -145,6 +146,7 @@ return {
                 [g_AttachmentIds.PSO_1] = DC(Guid("B875DA46-4A29-11E0-A181-90CCED4B9CC9"), Guid("8927BB0B-F533-44A9-6A81-DE7511845715")),
                 [g_AttachmentIds.SlugShells] = DC(Guid("DC41C10F-4997-11E0-B2FF-C5C18AA9A698"), Guid("DF5BC116-2245-E2AD-0A97-BB8DA7452208")),
             },
+            RandomWeight = 15,
         }
     ),
     -- Sniper
@@ -184,6 +186,7 @@ return {
                 [g_AttachmentIds.IRNV] = DC(Guid("74324C88-4F06-11E0-A005-82E878F0C038"), Guid("F27793AE-0FFA-CD1B-BA01-C9213DFC24B9")),
                 [g_AttachmentIds.Bipod] = DC(Guid("EC6B82FF-4F07-11E0-A005-82E878F0C038"), Guid("2872282D-7596-6D36-A99E-936AF3BE4977")),
             },
+            RandomWeight = 15,
         }
     ),
 }

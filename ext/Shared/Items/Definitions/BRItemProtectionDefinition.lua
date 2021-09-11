@@ -11,7 +11,6 @@ function BRItemProtectionDefinition:__init(p_UId, p_Name, p_Options)
     p_Options.Stackable = false
     p_Options.MaxStack = nil
     p_Options.Price = 0
-    p_Options.Weight = 0
 
     -- call super's constructor and set shared options
     BRItemDefinition.__init(self, p_UId, p_Name, p_Options)

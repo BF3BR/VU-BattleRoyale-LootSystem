@@ -30,6 +30,7 @@ return {
             UIIcon = "__helmet",
             Tier = Tier.Tier1,
             Durability = 50,
+            RandomWeight = 60,
         }
     ),
     ["helmet-tier-2"] = BRItemHelmetDefinition(
@@ -40,6 +41,7 @@ return {
             UIIcon = "__helmet",
             Tier = Tier.Tier2,
             Durability = 75,
+            RandomWeight = 30,
         }
     ),
     ["helmet-tier-3"] = BRItemHelmetDefinition(
@@ -50,6 +52,7 @@ return {
             UIIcon = "__helmet",
             Tier = Tier.Tier3,
             Durability = 100,
+            RandomWeight = 10,
         }
     ),
 }

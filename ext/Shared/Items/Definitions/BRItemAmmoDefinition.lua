@@ -21,7 +21,7 @@ return {
         "5.56mm",
         {
             Description = "The 5.56mm ammo is used for ARs.",
-            Weight = 0.25,
+            RandomWeight = 25,
             Mesh = DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
             UIIcon = "__ammo_556mm",
             MaxStack = 60,
@@ -32,7 +32,7 @@ return {
         "9mm",
         {
             Description = "The 9mm ammo is used for SMGs and Pistols.",
-            Weight = 0.1,
+            RandomWeight = 25,
             Mesh = DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
             UIIcon = "__ammo_9mm",
             MaxStack = 90,
@@ -43,7 +43,7 @@ return {
         "7.62mm",
         {
             Description = "The 7.62mm ammo is used for Snipers.",
-            Weight = 0.1,
+            RandomWeight = 25,
             Mesh = DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
             UIIcon = "__ammo_762mm",
             MaxStack = 15,
@@ -54,7 +54,7 @@ return {
         "12 Gauge", 
         {
             Description = "The 7.62mm ammo is used for Snipers.",
-            Weight = 0.1,
+            RandomWeight = 25,
             Mesh = DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
             UIIcon = "__ammo_12-gauge",
             MaxStack = 30,
