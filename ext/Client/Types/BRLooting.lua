@@ -10,7 +10,7 @@ function BRLooting:__init()
 	self.m_LastDelta = 0
 	self.m_LastSelectedLootPickup = nil
 
-	m_Timers:Interval(0.25, self, self.OnSpatialRaycast)
+	-- m_Timers:Interval(0.25, self, self.OnSpatialRaycast)
 
 	self.m_TimeToUpdateLootUi = 0.15
 end
@@ -400,5 +400,5 @@ function BRLooting:SendCloseLootPickupData(p_LootPickups)
 	end
 
 	WebUI:ExecuteJS(string.format("SyncCloseLootPickupData(%s);", json.encode(s_LootPickupData)))
-	m_Logger:Write(json.encode(s_LootPickupData))
+	-- m_Logger:Write(json.encode(s_LootPickupData))
 end
