@@ -3,7 +3,13 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { RootState } from "../store/RootReducer";
 
-import { DndContext, DragOverlay } from '@dnd-kit/core';
+import {
+    DndContext,
+    DragOverlay,
+    LayoutMeasuringStrategy,
+    PointerSensor,
+    useSensor
+} from '@dnd-kit/core';
 import { Draggable } from './dnd/Draggable';
 import { Droppable } from './dnd/Droppable';
 
@@ -25,15 +31,15 @@ const Inventory: React.FC<Props> = ({
     slots,
     closeItems,
 }) => {
+    const sensors = [useSensor(PointerSensor)];
+
     const [splitModal, setSplitModal] = useState({
         id: null,
         show: false,
         maxQuantity: 60,
         value: 30,
     });
-
     const [isDragging, setIsDragging] = useState<any>(null);
-
     const [progress, setProgress] = useState<{
         slot: any,
         time: number|null,
@@ -56,7 +62,7 @@ const Inventory: React.FC<Props> = ({
             if (active.data.current.currentSlot === undefined && active.data.current.lootId !== null) {
                 // When you pick up from a loot box
                 sendToLua('WebUI:PickupItem', JSON.stringify({ 
-                    item: active.id, 
+                    item: active.id.replace('loot-',''), 
                     slot: slot,
                     lootPickup: active.data.current.lootId,
                 }));
@@ -302,7 +308,12 @@ const Inventory: React.FC<Props> = ({
                     </div>
                 </div>
             </div>
-            <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+            <DndContext
+                layoutMeasuring={{ strategy: LayoutMeasuringStrategy.Always }}
+                onDragEnd={handleDragEnd}
+                onDragStart={handleDragStart}
+                sensors={sensors}
+            >
                 <div id="Inventory" className="open">
                     <div className="InventoryWrapper">
                         <div className="card PrimaryWeaponBox">
@@ -412,26 +423,24 @@ const Inventory: React.FC<Props> = ({
                             <Droppable id="item-drop" />
                         }
                     </div>
-                    {closeItems.length > 0 &&
-                        <div className="ProximityWrapper">
-                            <div className="card proximity-card">
-                                <div className="card-header">
-                                    <h1>
-                                        Near you
-                                    </h1>
-                                </div>
-                                <div className="card-content near-grid">
-                                    {closeItems.map((item: any, key: number) => (
-                                        <div className="item-slot" key={key}>
-                                            <Draggable id={item.Id} item={item} lootId={item.lootId}>
-                                                {getSlotDrag(item, true)}
-                                            </Draggable>
-                                        </div>
-                                    ))}
-                                </div>
+                    <div className="ProximityWrapper">
+                        <div className="card proximity-card">
+                            <div className="card-header">
+                                <h1>
+                                    Near you
+                                </h1>
+                            </div>
+                            <div className="card-content">
+                                {closeItems.map((item: any, key: number) => (
+                                    <div className="item-slot" key={key}>
+                                        <Draggable id={"loot-" + item.Id} item={item} lootId={item.lootId}>
+                                            {getSlotDrag(item, true)}
+                                        </Draggable>
+                                    </div>
+                                ))}
                             </div>
                         </div>
-                    }
+                    </div>
                 </div>
                 <DragOverlay 
                     dropAnimation={null}

@@ -1225,10 +1225,10 @@
   dependencies:
     tslib "^2.0.0"
 
-"@dnd-kit/core@^3.0.1":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@dnd-kit/core/-/core-3.0.2.tgz#e46ae11ef667aa5c31fddab21cf36ffd80d3ce5b"
-  integrity sha512-L+rGnDYBb4BfYKDylzIBeODRIlJ+YVvo2iL9pVXsh317Nq7c9irCvi3XK8JnWD5QBw/3WZ5FmbPmTE91EKwKeA==
+"@dnd-kit/core@3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/core/-/core-3.1.1.tgz#c5ad6665931f5a51e74226220e58ac7514f3faf0"
+  integrity sha512-18YY5+1lTqJbGSg6JBSa/fjAOTUYAysFrQ5Ti8oppEPHFacQbC+owM51y2z2KN0LkDHBfGZKw2sFT7++ttwfpA==
   dependencies:
     "@dnd-kit/accessibility" "^3.0.0"
     "@dnd-kit/utilities" "^2.0.0"
