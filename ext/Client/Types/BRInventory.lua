@@ -120,5 +120,5 @@ function BRInventory:OnWebUIPickupItem(p_JsonData)
         return
     end
 
-    NetEvents:Send(InventoryNetEvent.PickupItem, s_LootPickupId, s_ItemId, p_SlotId)
+    NetEvents:Send(InventoryNetEvent.PickupItem, s_LootPickupId, s_ItemId, s_SlotId)
 end
