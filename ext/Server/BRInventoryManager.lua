@@ -128,6 +128,8 @@ function BRInventoryManager:OnInventoryPickupItem(p_Player, p_LootPickupId, p_It
     if s_LootPickup:ContainsItemId(p_ItemId) then
         if s_Inventory:AddItem(p_ItemId, p_SlotIndex) then
             m_LootPickupDatabase:RemoveItemFromLootPickup(p_LootPickupId, p_ItemId)
+        else
+            m_LootPickupDatabase:UpdateState(p_LootPickupId)
         end
     end
 end
@@ -198,7 +200,7 @@ end
 -- ugly solution for now
 -- BRItemDatabase should know where each item resides and
 -- destroy it and remove any references when needed
-function BRInventoryManager:OnItemDestroy(p_ItemId)
+function BRInventoryManager:DestroyItem(p_ItemId)
     -- search for the item
     for _, l_Inventory in pairs(self.m_Inventories) do
         local s_Slot = l_Inventory:GetItemSlot(p_ItemId)
@@ -213,6 +215,10 @@ function BRInventoryManager:OnItemDestroy(p_ItemId)
 
     -- remove item from database
     m_ItemDatabase:UnregisterItem(p_ItemId)
+end
+
+function BRInventoryManager:OnItemDestroy(p_ItemId)
+    return self:DestroyItem(p_ItemId)
 end
 
 return BRInventoryManager()

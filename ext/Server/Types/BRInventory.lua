@@ -137,7 +137,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
 
     -- check if there's a free slot
     local s_Slot = self.m_Slots[p_SlotIndex]
-    if s_Slot == nil then
+    if s_Slot == nil or not s_Slot:IsAccepted(s_Item) then
         s_Slot = self:GetFirstAvailableSlot(s_Item)
     end
 
@@ -146,6 +146,7 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
     if s_Slot == nil and s_Item:IsOfType(ItemType.Weapon) then
         s_Slot = self:GetCurrentWeaponSlot()
 
+        -- check if slot is available for this item
         if s_Slot ~= nil and not s_Slot:IsAccepted(s_Item) then
             s_Slot = nil
         end
@@ -162,36 +163,52 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
         return false
     end
 
-    if s_Slot.m_Item ~= nil and s_Item.m_Definition.m_Stackable then
-        local s_CurrentSlotItem = s_Slot.m_Item
-        local s_NewQuantity = s_CurrentSlotItem.m_Quantity + s_Item.m_Quantity
+    -- If the item is stackable, first it should prioritize to fill the similar
+    -- items that have some space left instead of beign put in some empty slot
+    if s_Item.m_Definition.m_Stackable then
+        -- Get similar stackable items
+        local s_SimilarItems = self:GetItemsByDefinition(s_Item.m_Definition)
 
-        if s_NewQuantity <= s_Item.m_Definition.m_MaxStack then
-            s_CurrentSlotItem:SetQuantity(s_NewQuantity)
-            m_Logger:Write("(Less than maxstack) Item quantity updated to: " .. s_NewQuantity .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
-        else
-            -- Set the current one to max stack
-            s_CurrentSlotItem:SetQuantity(s_Item.m_Definition.m_MaxStack)
-            m_Logger:Write("(More than maxstack) Item quantity updated to: " .. s_Item.m_Definition.m_MaxStack .. ". (" .. s_CurrentSlotItem.m_Definition.m_Name .. ")")
+        -- Sort by quantity from low to high
+        table.sort(s_SimilarItems, function (p_ItemA, p_ItemB)
+            return p_ItemA.m_Quantity < p_ItemB.m_Quantity
+        end)
 
-            -- TODO issue if s_NewQuantity bigger than MaxStack, it will only create one new item
-            -- (although i guess, it shouldn't be)
-            s_NewQuantity = math.min(math.abs(s_NewQuantity - s_Item.m_Definition.m_MaxStack), s_Item.m_Definition.m_MaxStack)
-            local s_CreatedItem = m_ItemDatabase:CreateItem(s_Item.m_Definition, s_NewQuantity)
-            self:AddItem(s_CreatedItem.m_Id, nil, true)
+        -- Fill all the similar stackable items from low to high
+        -- and also create a new one if needed
+        local s_QuantityLeftToAdd = s_Item.m_Quantity
+        for _, l_SimilarItem in ipairs(s_SimilarItems) do
+            -- Update similar item quantity
+            local s_AvailableSpace = math.abs(l_SimilarItem.m_Definition.m_MaxStack - l_SimilarItem.m_Quantity)
+            local s_QuantityToAdd = math.min(s_QuantityLeftToAdd, s_AvailableSpace)
+            l_SimilarItem:IncreaseQuantityBy(s_QuantityToAdd)
 
-            m_ItemDatabase:UnregisterItem(p_ItemId)
+            -- Update quantity left to add
+            s_QuantityLeftToAdd = s_QuantityLeftToAdd - s_QuantityToAdd
+            if s_QuantityLeftToAdd <= 0 then
+                self:DestroyItem(s_Item.m_Id)
+                self:SendState()
+                return true
+            end
         end
-    else
-        local _, s_DroppedItems = s_Slot:Put(s_Item)
 
-        if #s_DroppedItems > 0 then
-            m_LootPickupDatabase:CreateBasicLootPickup(self.m_Owner.soldier.worldTransform, s_DroppedItems)
+        -- If item has still quantity left to be added try to readd it
+        -- in the inventory
+        s_Item:SetQuantity(s_QuantityLeftToAdd)
+        self:SendState()
+
+        if s_Slot.m_Item ~= nil then
+            return self:AddItem(s_Item.m_Id, nil, false)
         end
-
-        m_Logger:Write("Item added to inventory. (" .. s_Item.m_Definition.m_Name .. ")")
     end
 
+    local _, s_DroppedItems = s_Slot:Put(s_Item)
+
+    if #s_DroppedItems > 0 then
+        m_LootPickupDatabase:CreateBasicLootPickup(self.m_Owner.soldier.worldTransform, s_DroppedItems)
+    end
+
+    m_Logger:Write("Item added to inventory. (" .. s_Item.m_Definition.m_Name .. ")")
     self:SendState()
     return true
 end
@@ -218,10 +235,9 @@ function BRInventory:SwapItems(p_ItemId, p_SlotId)
     -- swap items
     s_NewSlot:PutWithRelated(s_NewItems)
     local _, s_RemainingItems = s_OldSlot:PutWithRelated(s_ReplacedItems)
-
     -- try to readd all the remaining items
     for _, l_Item in ipairs(s_RemainingItems) do
-        self:AddItem(l_Item.m_Id)
+        self:AddItem(l_Item.m_Id, nil, true)
     end
 
     self:SendState()
@@ -269,6 +285,10 @@ function BRInventory:DestroyItem(p_ItemId)
 end
 
 function BRInventory:GetFirstAvailableSlot(p_Item)
+    if p_Item == nil then
+        return nil
+    end
+
     for _, l_Slot in pairs(self.m_Slots) do
         if l_Slot:IsAvailable(p_Item) then
             return l_Slot
