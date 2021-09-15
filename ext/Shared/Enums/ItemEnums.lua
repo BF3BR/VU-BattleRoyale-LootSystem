@@ -70,22 +70,56 @@ RandomWeightsTable = {
         RandomWeight = 20,
         Tiers = {
             [Tier.Tier1] = {
-                RandomWeight = 60,
+                RandomWeight = 80,
             },
             [Tier.Tier2] = {
-                RandomWeight = 30,
+                RandomWeight = 17,
             },
             [Tier.Tier3] = {
-                RandomWeight = 10,
+                RandomWeight = 3,
             },
         },
     },
-    --[[[ItemType.Attachment] = {
+    [ItemType.Attachment] = {
         RandomWeight = 20,
-    },]]
-    --[[[LootPickupType.Chest] = {
+    },
+    [ItemType.Helmet] = {
         RandomWeight = 20,
-    },]]
+        Tiers = {
+            [Tier.Tier1] = {
+                RandomWeight = 80,
+            },
+            [Tier.Tier2] = {
+                RandomWeight = 17,
+            },
+            [Tier.Tier3] = {
+                RandomWeight = 3,
+            },
+        },
+    },
+    [ItemType.Armor] = {
+        RandomWeight = 20,
+        Tiers = {
+            [Tier.Tier1] = {
+                RandomWeight = 80,
+            },
+            [Tier.Tier2] = {
+                RandomWeight = 17,
+            },
+            [Tier.Tier3] = {
+                RandomWeight = 3,
+            },
+        },
+    },
+    [ItemType.Ammo] = {
+        RandomWeight = 20,
+    },
+    [ItemType.Gadget] = {
+        RandomWeight = 20,
+    },
+    [ItemType.Consumable] = {
+        RandomWeight = 20,
+    },
 }
 
 RandomWeaponPatterns = {
@@ -94,6 +128,12 @@ RandomWeaponPatterns = {
     WeaponWithAttachment = 3,
     WeaponWithAttachmentAndAmmo = 4,
     WeaponWithTwoAmmo = 5,
+}
+
+RandomAmmoPatterns = {
+    OneItem = 1,
+    TwoItems = 2,
+    ThreeItems = 3,
 }
 
 AttachmentType = {

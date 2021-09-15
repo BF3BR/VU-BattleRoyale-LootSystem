@@ -13,6 +13,7 @@ local m_AttachmentDefinitions = require "__shared/Items/Definitions/BRItemAttach
 local m_ConsumableDefinitions = require "__shared/Items/Definitions/BRItemConsumableDefinition"
 local m_HelmetDefinitions = require "__shared/Items/Definitions/BRItemHelmetDefinition"
 local m_WeaponDefinitions = require "__shared/Items/Definitions/BRItemWeaponDefinition"
+local m_GadgetDefinitions = require "__shared/Items/Definitions/BRItemGadgetDefinition"
 
 local m_MapHelper = require "__shared/Utils/MapHelper"
 
@@ -35,21 +36,22 @@ function BRLootRandomizer:Spawn(p_Point)
         return
     end
     
-    local s_RandomTierIndex = nil
+    local s_RandomTier = nil
     if RandomWeightsTable[s_RandomTypeIndex].Tiers ~= nil then
         -- If there are tiers then we should randomize it as well
-        s_RandomTierIndex = self:Randomizer(RandomWeightsTable[s_RandomTypeIndex].Tiers)
+        s_RandomTier = self:Randomizer(RandomWeightsTable[s_RandomTypeIndex].Tiers)
     end
 
     local s_Point = p_Point
     local s_RandomItemDefinition = nil
+    local s_RandomItemQuantity = 1
     if s_RandomTypeIndex == "Nothing" then
         m_Logger:Write("Nothing to spawn.")
         return
     else
         if s_RandomTypeIndex == ItemType.Weapon then
             -- If we want to spawn a weapon we should randomize an ammo and an attachment or two ammos or nothing just the weapon
-            s_RandomItemDefinition = self:Randomizer(m_WeaponDefinitions, true, s_RandomTierIndex)
+            s_RandomItemDefinition = self:Randomizer(m_WeaponDefinitions, true, s_RandomTier)
 
             -- Get a randomized attachment
             s_AttachmentDefinition = self:Randomizer(m_AttachmentDefinitions, true, nil, s_RandomItemDefinition.m_EbxAttachments)
@@ -59,9 +61,8 @@ function BRLootRandomizer:Spawn(p_Point)
 
             s_Patterns = m_MapHelper:Keys(RandomWeaponPatterns)
             s_WeaponSpawnPattern = math.random(#s_Patterns)
-            m_Logger:Write("Pattern: " .. s_WeaponSpawnPattern)
             if s_WeaponSpawnPattern == RandomWeaponPatterns.WeaponWithAmmo then
-                local s_AddedItem = m_ItemDatabase:CreateItem(s_AmmoDefinition)
+                local s_AddedItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
                 m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
                     s_Point.trans.x + 0.5,
                     s_Point.trans.y,
@@ -94,7 +95,7 @@ function BRLootRandomizer:Spawn(p_Point)
                     s_Point.trans.z + 0.35
                 ), {s_AddedItem})
 
-                local s_AddedSecondItem = m_ItemDatabase:CreateItem(s_AmmoDefinition)
+                local s_AddedSecondItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
                 m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
                     s_Point.trans.x - 0.35,
                     s_Point.trans.y,
@@ -107,14 +108,70 @@ function BRLootRandomizer:Spawn(p_Point)
                     s_Point.trans.z
                 )
             elseif s_WeaponSpawnPattern == RandomWeaponPatterns.WeaponWithTwoAmmo then
-                local s_AddedItem = m_ItemDatabase:CreateItem(s_AmmoDefinition)
+                local s_AddedItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
                 m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
                     s_Point.trans.x - 0.35,
                     s_Point.trans.y,
                     s_Point.trans.z + 0.35
                 ), {s_AddedItem})
 
-                local s_AddedSecondItem = m_ItemDatabase:CreateItem(s_AmmoDefinition)
+                local s_AddedSecondItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
+                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                    s_Point.trans.x - 0.35,
+                    s_Point.trans.y,
+                    s_Point.trans.z - 0.35
+                ), {s_AddedSecondItem})
+
+                s_Point.trans = Vec3(
+                    s_Point.trans.x + 0.5,
+                    s_Point.trans.y,
+                    s_Point.trans.z
+                )
+            end
+        elseif s_RandomTypeIndex == ItemType.Attachment then
+            s_RandomItemDefinition = self:Randomizer(m_AttachmentDefinitions, true)
+        elseif s_RandomTypeIndex == ItemType.Helmet then
+            s_RandomItemDefinition = self:Randomizer(m_HelmetDefinitions, true, s_RandomTier)
+        elseif s_RandomTypeIndex == ItemType.Armor then
+            s_RandomItemDefinition = self:Randomizer(m_ArmorDefinitions, true, s_RandomTier)
+        elseif s_RandomTypeIndex == ItemType.Gadget then
+            s_RandomItemDefinition = self:Randomizer(m_GadgetDefinitions, true)
+        elseif s_RandomTypeIndex == ItemType.Consumable then
+            s_RandomItemDefinition = self:Randomizer(m_ConsumableDefinitions, true)
+        elseif s_RandomTypeIndex == ItemType.Consumable then
+            s_RandomItemDefinition = self:Randomizer(m_AmmoDefinition, true)
+
+            if s_RandomItemDefinition == nil then
+                m_Logger:Write("No item definition found.")
+                return
+            end
+
+            s_RandomItemQuantity = s_RandomItemDefinition.m_MaxStack
+
+            s_Patterns = m_MapHelper:Keys(RandomAmmoPatterns)
+            s_WeaponSpawnPattern = math.random(#s_Patterns)
+            if s_WeaponSpawnPattern == RandomAmmoPatterns.TwoItems then
+                local s_AddedItem = m_ItemDatabase:CreateItem(s_RandomItemDefinition, s_RandomItemDefinition.m_MaxStack)
+                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                    s_Point.trans.x + 0.5,
+                    s_Point.trans.y,
+                    s_Point.trans.z
+                ), {s_AddedItem})
+
+                s_Point.trans = Vec3(
+                    s_Point.trans.x - 0.5,
+                    s_Point.trans.y,
+                    s_Point.trans.z
+                )
+            elseif s_WeaponSpawnPattern == RandomAmmoPatterns.ThreeItems then
+                local s_AddedItem = m_ItemDatabase:CreateItem(s_RandomItemDefinition, s_RandomItemDefinition.m_MaxStack)
+                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                    s_Point.trans.x - 0.35,
+                    s_Point.trans.y,
+                    s_Point.trans.z + 0.35
+                ), {s_AddedItem})
+
+                local s_AddedSecondItem = m_ItemDatabase:CreateItem(s_RandomItemDefinition, s_RandomItemDefinition.m_MaxStack)
                 m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
                     s_Point.trans.x - 0.35,
                     s_Point.trans.y,
@@ -135,7 +192,7 @@ function BRLootRandomizer:Spawn(p_Point)
         return
     end
 
-    local s_Item = m_ItemDatabase:CreateItem(s_RandomItemDefinition)
+    local s_Item = m_ItemDatabase:CreateItem(s_RandomItemDefinition, s_RandomItemQuantity)
     m_LootPickupDatabase:CreateBasicLootPickup(s_Point, {s_Item})
 end
 

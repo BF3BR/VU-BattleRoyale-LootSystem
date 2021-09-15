@@ -146,7 +146,7 @@ function BRLootPickup:Spawn()
         end
     end
 
-    local s_SpotLightEntityData = SpotLightEntityData()
+    local s_SpotLightEntityData = PointLightEntityData()
     local left, up, forward = m_RotationHelper:GetLUFfromYPR(0, 1.57079633, 0)
     s_SpotLightEntityData.transform = LinearTransform(
         left,
@@ -155,15 +155,18 @@ function BRLootPickup:Spawn()
         Vec3(0, 1.2, 0)
     )
     s_SpotLightEntityData.color = s_Color
-    s_SpotLightEntityData.radius = 40.0
-    s_SpotLightEntityData.intensity = 15.0
+    s_SpotLightEntityData.radius = 2.35
+    s_SpotLightEntityData.width = 2.0
+    s_SpotLightEntityData.intensity = 5.25
+    s_SpotLightEntityData.visible = true
+    s_SpotLightEntityData.enlightenEnable = false
+
+    --[[s_SpotLightEntityData.intensity = 15.0
     s_SpotLightEntityData.attenuationOffset = 50.0
     s_SpotLightEntityData.specularEnable = true
     s_SpotLightEntityData.enlightenColorMode = EnlightenColorMode.EnlightenColorMode_Multiply
-    s_SpotLightEntityData.enlightenEnable = true
     s_SpotLightEntityData.enlightenColorScale = Vec3(1.3, 1.3, 1.3)
     s_SpotLightEntityData.particleColorScale = Vec3(0.2, 0.2, 0.2)
-    s_SpotLightEntityData.visible = true
     s_SpotLightEntityData.shape = SpotLightShape.SpotLightShape_Frustum
     s_SpotLightEntityData.coneInnerAngle = 0.0
     s_SpotLightEntityData.coneOuterAngle = 32.3720016479
@@ -173,7 +176,7 @@ function BRLootPickup:Spawn()
     s_SpotLightEntityData.orthoHeight = 5.0
     s_SpotLightEntityData.castShadowsEnable = false
     s_SpotLightEntityData.castShadowsMinLevel = QualityLevel.QualityLevel_Low
-    s_SpotLightEntityData.texture = m_FlashlightTexture:GetInstance()
+    s_SpotLightEntityData.texture = m_FlashlightTexture:GetInstance()]]
 
     local s_BusStaticModel = EntityManager:CreateEntity(s_StaticModelEntityData, self.m_Transform)
     local s_BusSpotLight = EntityManager:CreateEntity(s_SpotLightEntityData, self.m_Transform)

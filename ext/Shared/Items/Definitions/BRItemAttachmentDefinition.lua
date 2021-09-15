@@ -187,24 +187,6 @@ return {
             AttachmentId = g_AttachmentIds.HeavyBarrel
         }
     ),
-    ["attachment-flashlight"] = BRItemAttachmentDefinition(
-        "attachment-flashlight",
-        "Tactical Light", 
-        {
-            Description = "A Tactical Light is a flashlight or torch that can be attached to a user's weapon by means of a standard rail or other mount, freeing the user from having to carry a separate flashlight, or when more advanced night vision equipment is not available.",
-            RandomWeight = 25,
-            UIIcon = "UI/Art/Persistence/WeaponAccessory/Fancy/flashlight",
-            Mesh = DC(Guid("D4D4A69A-A7A0-0AEC-3962-579188852BE7"), Guid("4A244D6B-31BF-4C74-8870-77170B844046")),
-            Transform = LinearTransform(
-                Vec3(2, 0, 0),
-                Vec3(0, 2, 0),
-                Vec3(0, 0, 2),
-                Vec3(0, 0, 0)
-            ),
-            AttachmentType = AttachmentType.Barrel,
-            AttachmentId = g_AttachmentIds.Flashlight
-        }
-    ),
 
     -- Other (Secondary)
     ["attachment-foregrip"] = BRItemAttachmentDefinition(
@@ -241,6 +223,24 @@ return {
             ),
             AttachmentType = AttachmentType.Other,
             AttachmentId = g_AttachmentIds.TargetPointer
+        }
+    ),
+    ["attachment-flashlight"] = BRItemAttachmentDefinition(
+        "attachment-flashlight",
+        "Tactical Light", 
+        {
+            Description = "A Tactical Light is a flashlight or torch that can be attached to a user's weapon by means of a standard rail or other mount, freeing the user from having to carry a separate flashlight, or when more advanced night vision equipment is not available.",
+            RandomWeight = 25,
+            UIIcon = "UI/Art/Persistence/WeaponAccessory/Fancy/flashlight",
+            Mesh = DC(Guid("D4D4A69A-A7A0-0AEC-3962-579188852BE7"), Guid("4A244D6B-31BF-4C74-8870-77170B844046")),
+            Transform = LinearTransform(
+                Vec3(2, 0, 0),
+                Vec3(0, 2, 0),
+                Vec3(0, 0, 2),
+                Vec3(0, 0, 0)
+            ),
+            AttachmentType = AttachmentType.Other,
+            AttachmentId = g_AttachmentIds.Flashlight
         }
     ),
 }
