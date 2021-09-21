@@ -64,16 +64,16 @@ LootPickupType = {
 
 RandomWeightsTable = {
     ["Nothing"] = {
-        RandomWeight = 20,
+        RandomWeight = 25,
     },
     [ItemType.Weapon] = {
-        RandomWeight = 20,
+        RandomWeight = 100,
         Tiers = {
             [Tier.Tier1] = {
-                RandomWeight = 80,
+                RandomWeight = 65,
             },
             [Tier.Tier2] = {
-                RandomWeight = 17,
+                RandomWeight = 32,
             },
             [Tier.Tier3] = {
                 RandomWeight = 3,
@@ -81,16 +81,16 @@ RandomWeightsTable = {
         },
     },
     [ItemType.Attachment] = {
-        RandomWeight = 20,
+        RandomWeight = 25,
     },
     [ItemType.Helmet] = {
-        RandomWeight = 20,
+        RandomWeight = 25,
         Tiers = {
             [Tier.Tier1] = {
-                RandomWeight = 80,
+                RandomWeight = 65,
             },
             [Tier.Tier2] = {
-                RandomWeight = 17,
+                RandomWeight = 32,
             },
             [Tier.Tier3] = {
                 RandomWeight = 3,
@@ -98,13 +98,13 @@ RandomWeightsTable = {
         },
     },
     [ItemType.Armor] = {
-        RandomWeight = 20,
+        RandomWeight = 25,
         Tiers = {
             [Tier.Tier1] = {
-                RandomWeight = 80,
+                RandomWeight = 65,
             },
             [Tier.Tier2] = {
-                RandomWeight = 17,
+                RandomWeight = 32,
             },
             [Tier.Tier3] = {
                 RandomWeight = 3,
@@ -112,13 +112,13 @@ RandomWeightsTable = {
         },
     },
     [ItemType.Ammo] = {
-        RandomWeight = 20,
+        RandomWeight = 35,
     },
     [ItemType.Gadget] = {
         RandomWeight = 20,
     },
     [ItemType.Consumable] = {
-        RandomWeight = 20,
+        RandomWeight = 30,
     },
 }
 

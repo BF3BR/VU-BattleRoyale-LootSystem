@@ -20,6 +20,8 @@ local m_MapHelper = require "__shared/Utils/MapHelper"
 require "__shared/Utils/BRItemFactory"
 
 function BRLootRandomizer:__init()
+    self.m_WeightTable = {}
+    self.m_AccumulatedWeight = {}
 end
 
 function BRLootRandomizer:Spawn(p_Point)
@@ -28,7 +30,7 @@ function BRLootRandomizer:Spawn(p_Point)
     end
 
     -- Randomize the type first
-    local s_RandomTypeIndex = self:Randomizer(RandomWeightsTable)
+    local s_RandomTypeIndex = self:Randomizer("Type", RandomWeightsTable)
 
     
     if s_RandomTypeIndex == nil then
@@ -39,7 +41,7 @@ function BRLootRandomizer:Spawn(p_Point)
     local s_RandomTier = nil
     if RandomWeightsTable[s_RandomTypeIndex].Tiers ~= nil then
         -- If there are tiers then we should randomize it as well
-        s_RandomTier = self:Randomizer(RandomWeightsTable[s_RandomTypeIndex].Tiers)
+        s_RandomTier = self:Randomizer(tostring(s_RandomTypeIndex) .. "_Tier", RandomWeightsTable[s_RandomTypeIndex].Tiers)
     end
 
     local s_Point = p_Point
@@ -51,10 +53,10 @@ function BRLootRandomizer:Spawn(p_Point)
     else
         if s_RandomTypeIndex == ItemType.Weapon then
             -- If we want to spawn a weapon we should randomize an ammo and an attachment or two ammos or nothing just the weapon
-            s_RandomItemDefinition = self:Randomizer(m_WeaponDefinitions, true, s_RandomTier)
+            s_RandomItemDefinition = self:Randomizer(tostring(s_RandomTier) .. "_Weapon", m_WeaponDefinitions, true, s_RandomTier)
 
             -- Get a randomized attachment
-            s_AttachmentDefinition = self:Randomizer(m_AttachmentDefinitions, true, nil, s_RandomItemDefinition.m_EbxAttachments)
+            s_AttachmentDefinition = self:Randomizer(tostring(s_RandomItemDefinition.m_Name) .. "_Attachment", m_AttachmentDefinitions, true, nil, s_RandomItemDefinition.m_EbxAttachments)
 
             -- Get the ammo definition
             s_AmmoDefinition = s_RandomItemDefinition.m_AmmoDefinition
@@ -129,17 +131,17 @@ function BRLootRandomizer:Spawn(p_Point)
                 )
             end
         elseif s_RandomTypeIndex == ItemType.Attachment then
-            s_RandomItemDefinition = self:Randomizer(m_AttachmentDefinitions, true)
+            s_RandomItemDefinition = self:Randomizer("Attachment", m_AttachmentDefinitions, true)
         elseif s_RandomTypeIndex == ItemType.Helmet then
-            s_RandomItemDefinition = self:Randomizer(m_HelmetDefinitions, true, s_RandomTier)
+            s_RandomItemDefinition = self:Randomizer(tostring(s_RandomTier) .. "_Helmet", m_HelmetDefinitions, true, s_RandomTier)
         elseif s_RandomTypeIndex == ItemType.Armor then
-            s_RandomItemDefinition = self:Randomizer(m_ArmorDefinitions, true, s_RandomTier)
+            s_RandomItemDefinition = self:Randomizer(tostring(s_RandomTier) .. "_Armor", m_ArmorDefinitions, true, s_RandomTier)
         elseif s_RandomTypeIndex == ItemType.Gadget then
-            s_RandomItemDefinition = self:Randomizer(m_GadgetDefinitions, true)
+            s_RandomItemDefinition = self:Randomizer("Gadget", m_GadgetDefinitions, true)
         elseif s_RandomTypeIndex == ItemType.Consumable then
-            s_RandomItemDefinition = self:Randomizer(m_ConsumableDefinitions, true)
-        elseif s_RandomTypeIndex == ItemType.Consumable then
-            s_RandomItemDefinition = self:Randomizer(m_AmmoDefinition, true)
+            s_RandomItemDefinition = self:Randomizer("Consumable", m_ConsumableDefinitions, true)
+        elseif s_RandomTypeIndex == ItemType.Ammo then
+            s_RandomItemDefinition = self:Randomizer("Ammo", m_AmmoDefinitions, true)
 
             if s_RandomItemDefinition == nil then
                 m_Logger:Write("No item definition found.")
@@ -196,35 +198,56 @@ function BRLootRandomizer:Spawn(p_Point)
     m_LootPickupDatabase:CreateBasicLootPickup(s_Point, {s_Item})
 end
 
-function BRLootRandomizer:Randomizer(p_LevelOrDefinitions, p_IsItem, p_Tier, p_Attachments)
-    local s_AttachmentsTable = {}
-    if p_Attachments ~= nil then
-        s_AttachmentsTable = m_MapHelper:Keys(p_Attachments)
-    end
-    
+function BRLootRandomizer:Randomizer(p_Name, p_LevelOrDefinitions, p_IsItem, p_Tier, p_Attachments)
     local s_WeightTable = {}
     local s_AccumulatedWeight = 0
-    for l_Index, l_Value in pairs(p_LevelOrDefinitions) do
-        if p_IsItem == true then
-            if p_Tier ~= nil and l_Value.m_Tier ~= p_Tier then
-                goto continue
-            end
 
-            if p_Attachments ~= nil then
-                if not m_MapHelper:Contains(s_AttachmentsTable, l_Value.m_AttachmentId) then
+    if p_LevelOrDefinitions == nil then
+        return
+    end
+
+    if self.m_WeightTable[p_Name] ~= nil and self.m_AccumulatedWeight[p_Name] ~= nil then
+        s_WeightTable = self.m_WeightTable[p_Name]
+        s_AccumulatedWeight = self.m_AccumulatedWeight[p_Name]
+    else
+        local s_AttachmentsTable = {}
+        if p_Attachments ~= nil then
+            s_AttachmentsTable = m_MapHelper:Keys(p_Attachments)
+        end
+    
+        for l_Index, l_Value in pairs(p_LevelOrDefinitions) do
+            if p_IsItem == true then
+                if p_Tier ~= nil and l_Value.m_Tier ~= p_Tier then
                     goto continue
                 end
-            end
+    
+                if p_Attachments ~= nil then
+                    if not m_MapHelper:Contains(s_AttachmentsTable, l_Value.m_AttachmentId) then
+                        goto continue
+                    end
+                end
 
-            s_AccumulatedWeight = s_AccumulatedWeight + l_Value.m_RandomWeight
-        else
-            s_AccumulatedWeight = s_AccumulatedWeight + l_Value.RandomWeight
+                if l_Value.m_RandomWeight == 0 then
+                    goto continue
+                end
+    
+                s_AccumulatedWeight = s_AccumulatedWeight + l_Value.m_RandomWeight
+            else
+                if l_Value.RandomWeight == 0 then
+                    goto continue
+                end
+
+                s_AccumulatedWeight = s_AccumulatedWeight + l_Value.RandomWeight
+            end
+    
+            s_WeightTable[l_Index] = s_AccumulatedWeight
+    
+            ::continue::
         end
 
-		s_WeightTable[l_Index] = s_AccumulatedWeight
-
-        ::continue::
-	end
+        self.m_WeightTable[p_Name] = s_WeightTable
+        self.m_AccumulatedWeight[p_Name] = s_AccumulatedWeight
+    end
 
     local s_Random = math.random(0, s_AccumulatedWeight)
     for l_Index, l_Weight in pairs(s_WeightTable) do
@@ -236,8 +259,6 @@ function BRLootRandomizer:Randomizer(p_LevelOrDefinitions, p_IsItem, p_Tier, p_A
             return l_Index
         end
     end
-
-
 
     return nil
 end
