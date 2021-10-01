@@ -31,7 +31,6 @@ function BRLootRandomizer:Spawn(p_Point)
 
     -- Randomize the type first
     local s_RandomTypeIndex = self:Randomizer("Type", RandomWeightsTable)
-
     
     if s_RandomTypeIndex == nil then
         m_Logger:Write("No type found.")
@@ -50,142 +49,142 @@ function BRLootRandomizer:Spawn(p_Point)
     if s_RandomTypeIndex == "Nothing" then
         m_Logger:Write("Nothing to spawn.")
         return
-    else
-        if s_RandomTypeIndex == ItemType.Weapon then
-            -- If we want to spawn a weapon we should randomize an ammo and an attachment or two ammos or nothing just the weapon
-            s_RandomItemDefinition = self:Randomizer(tostring(s_RandomTier) .. "_Weapon", m_WeaponDefinitions, true, s_RandomTier)
+    end
+    
+    if s_RandomTypeIndex == ItemType.Weapon then
+        -- If we want to spawn a weapon we should randomize an ammo and an attachment or two ammos or nothing just the weapon
+        s_RandomItemDefinition = self:Randomizer(tostring(s_RandomTier) .. "_Weapon", m_WeaponDefinitions, true, s_RandomTier)
 
-            -- Get a randomized attachment
-            s_AttachmentDefinition = self:Randomizer(tostring(s_RandomItemDefinition.m_Name) .. "_Attachment", m_AttachmentDefinitions, true, nil, s_RandomItemDefinition.m_EbxAttachments)
+        -- Get a randomized attachment
+        s_AttachmentDefinition = self:Randomizer(tostring(s_RandomItemDefinition.m_Name) .. "_Attachment", m_AttachmentDefinitions, true, nil, s_RandomItemDefinition.m_EbxAttachments)
 
-            -- Get the ammo definition
-            s_AmmoDefinition = s_RandomItemDefinition.m_AmmoDefinition
+        -- Get the ammo definition
+        s_AmmoDefinition = s_RandomItemDefinition.m_AmmoDefinition
 
-            s_Patterns = m_MapHelper:Keys(RandomWeaponPatterns)
-            s_WeaponSpawnPattern = math.random(#s_Patterns)
-            if s_WeaponSpawnPattern == RandomWeaponPatterns.WeaponWithAmmo then
-                local s_AddedItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
-                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
-                    s_Point.trans.x + 0.5,
-                    s_Point.trans.y,
-                    s_Point.trans.z
-                ), {s_AddedItem})
+        s_Patterns = m_MapHelper:Keys(RandomWeaponPatterns)
+        s_WeaponSpawnPattern = math.random(#s_Patterns)
+        if s_WeaponSpawnPattern == RandomWeaponPatterns.WeaponWithAmmo then
+            local s_AddedItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
+            m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                s_Point.trans.x + 0.5,
+                s_Point.trans.y,
+                s_Point.trans.z
+            ), {s_AddedItem})
 
-                s_Point.trans = Vec3(
-                    s_Point.trans.x - 0.5,
-                    s_Point.trans.y,
-                    s_Point.trans.z
-                )
-            elseif s_WeaponSpawnPattern == RandomWeaponPatterns.WeaponWithAttachment then
-                local s_AddedItem = m_ItemDatabase:CreateItem(s_AttachmentDefinition)
-                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
-                    s_Point.trans.x + 0.5,
-                    s_Point.trans.y,
-                    s_Point.trans.z
-                ), {s_AddedItem})
+            s_Point.trans = Vec3(
+                s_Point.trans.x - 0.5,
+                s_Point.trans.y,
+                s_Point.trans.z
+            )
+        elseif s_WeaponSpawnPattern == RandomWeaponPatterns.WeaponWithAttachment then
+            local s_AddedItem = m_ItemDatabase:CreateItem(s_AttachmentDefinition)
+            m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                s_Point.trans.x + 0.5,
+                s_Point.trans.y,
+                s_Point.trans.z
+            ), {s_AddedItem})
 
-                s_Point.trans = Vec3(
-                    s_Point.trans.x - 0.5,
-                    s_Point.trans.y,
-                    s_Point.trans.z
-                )
-            elseif s_WeaponSpawnPattern == RandomWeaponPatterns.WeaponWithAttachmentAndAmmo then
-                local s_AddedItem = m_ItemDatabase:CreateItem(s_AttachmentDefinition)
-                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
-                    s_Point.trans.x - 0.35,
-                    s_Point.trans.y,
-                    s_Point.trans.z + 0.35
-                ), {s_AddedItem})
+            s_Point.trans = Vec3(
+                s_Point.trans.x - 0.5,
+                s_Point.trans.y,
+                s_Point.trans.z
+            )
+        elseif s_WeaponSpawnPattern == RandomWeaponPatterns.WeaponWithAttachmentAndAmmo then
+            local s_AddedItem = m_ItemDatabase:CreateItem(s_AttachmentDefinition)
+            m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                s_Point.trans.x - 0.35,
+                s_Point.trans.y,
+                s_Point.trans.z + 0.35
+            ), {s_AddedItem})
 
-                local s_AddedSecondItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
-                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
-                    s_Point.trans.x - 0.35,
-                    s_Point.trans.y,
-                    s_Point.trans.z - 0.35
-                ), {s_AddedSecondItem})
+            local s_AddedSecondItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
+            m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                s_Point.trans.x - 0.35,
+                s_Point.trans.y,
+                s_Point.trans.z - 0.35
+            ), {s_AddedSecondItem})
 
-                s_Point.trans = Vec3(
-                    s_Point.trans.x + 0.5,
-                    s_Point.trans.y,
-                    s_Point.trans.z
-                )
-            elseif s_WeaponSpawnPattern == RandomWeaponPatterns.WeaponWithTwoAmmo then
-                local s_AddedItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
-                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
-                    s_Point.trans.x - 0.35,
-                    s_Point.trans.y,
-                    s_Point.trans.z + 0.35
-                ), {s_AddedItem})
+            s_Point.trans = Vec3(
+                s_Point.trans.x + 0.5,
+                s_Point.trans.y,
+                s_Point.trans.z
+            )
+        elseif s_WeaponSpawnPattern == RandomWeaponPatterns.WeaponWithTwoAmmo then
+            local s_AddedItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
+            m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                s_Point.trans.x - 0.35,
+                s_Point.trans.y,
+                s_Point.trans.z + 0.35
+            ), {s_AddedItem})
 
-                local s_AddedSecondItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
-                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
-                    s_Point.trans.x - 0.35,
-                    s_Point.trans.y,
-                    s_Point.trans.z - 0.35
-                ), {s_AddedSecondItem})
+            local s_AddedSecondItem = m_ItemDatabase:CreateItem(s_AmmoDefinition, s_AmmoDefinition.m_MaxStack)
+            m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                s_Point.trans.x - 0.35,
+                s_Point.trans.y,
+                s_Point.trans.z - 0.35
+            ), {s_AddedSecondItem})
 
-                s_Point.trans = Vec3(
-                    s_Point.trans.x + 0.5,
-                    s_Point.trans.y,
-                    s_Point.trans.z
-                )
-            end
-        elseif s_RandomTypeIndex == ItemType.Attachment then
-            s_RandomItemDefinition = self:Randomizer("Attachment", m_AttachmentDefinitions, true)
-        elseif s_RandomTypeIndex == ItemType.Helmet then
-            s_RandomItemDefinition = self:Randomizer(tostring(s_RandomTier) .. "_Helmet", m_HelmetDefinitions, true, s_RandomTier)
-        elseif s_RandomTypeIndex == ItemType.Armor then
-            s_RandomItemDefinition = self:Randomizer(tostring(s_RandomTier) .. "_Armor", m_ArmorDefinitions, true, s_RandomTier)
-        elseif s_RandomTypeIndex == ItemType.Gadget then
-            s_RandomItemDefinition = self:Randomizer("Gadget", m_GadgetDefinitions, true)
-        elseif s_RandomTypeIndex == ItemType.Consumable then
-            s_RandomItemDefinition = self:Randomizer("Consumable", m_ConsumableDefinitions, true)
-        elseif s_RandomTypeIndex == ItemType.Ammo then
-            s_RandomItemDefinition = self:Randomizer("Ammo", m_AmmoDefinitions, true)
+            s_Point.trans = Vec3(
+                s_Point.trans.x + 0.5,
+                s_Point.trans.y,
+                s_Point.trans.z
+            )
+        end
+    elseif s_RandomTypeIndex == ItemType.Attachment then
+        s_RandomItemDefinition = self:Randomizer("Attachment", m_AttachmentDefinitions, true)
+    elseif s_RandomTypeIndex == ItemType.Helmet then
+        s_RandomItemDefinition = self:Randomizer(tostring(s_RandomTier) .. "_Helmet", m_HelmetDefinitions, true, s_RandomTier)
+    elseif s_RandomTypeIndex == ItemType.Armor then
+        s_RandomItemDefinition = self:Randomizer(tostring(s_RandomTier) .. "_Armor", m_ArmorDefinitions, true, s_RandomTier)
+    elseif s_RandomTypeIndex == ItemType.Gadget then
+        s_RandomItemDefinition = self:Randomizer("Gadget", m_GadgetDefinitions, true)
+    elseif s_RandomTypeIndex == ItemType.Consumable then
+        s_RandomItemDefinition = self:Randomizer("Consumable", m_ConsumableDefinitions, true)
+    elseif s_RandomTypeIndex == ItemType.Ammo then
+        s_RandomItemDefinition = self:Randomizer("Ammo", m_AmmoDefinitions, true)
 
-            if s_RandomItemDefinition == nil then
-                m_Logger:Write("No item definition found.")
-                return
-            end
+        if s_RandomItemDefinition == nil then
+            m_Logger:Write("No item definition found.")
+            return
+        end
 
-            s_RandomItemQuantity = s_RandomItemDefinition.m_MaxStack
+        s_RandomItemQuantity = s_RandomItemDefinition.m_MaxStack
 
-            s_Patterns = m_MapHelper:Keys(RandomAmmoPatterns)
-            s_WeaponSpawnPattern = math.random(#s_Patterns)
-            if s_WeaponSpawnPattern == RandomAmmoPatterns.TwoItems then
-                local s_AddedItem = m_ItemDatabase:CreateItem(s_RandomItemDefinition, s_RandomItemDefinition.m_MaxStack)
-                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
-                    s_Point.trans.x + 0.5,
-                    s_Point.trans.y,
-                    s_Point.trans.z
-                ), {s_AddedItem})
+        s_Patterns = m_MapHelper:Keys(RandomAmmoPatterns)
+        s_WeaponSpawnPattern = math.random(#s_Patterns)
+        if s_WeaponSpawnPattern == RandomAmmoPatterns.TwoItems then
+            local s_AddedItem = m_ItemDatabase:CreateItem(s_RandomItemDefinition, s_RandomItemDefinition.m_MaxStack)
+            m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                s_Point.trans.x + 0.5,
+                s_Point.trans.y,
+                s_Point.trans.z
+            ), {s_AddedItem})
 
-                s_Point.trans = Vec3(
-                    s_Point.trans.x - 0.5,
-                    s_Point.trans.y,
-                    s_Point.trans.z
-                )
-            elseif s_WeaponSpawnPattern == RandomAmmoPatterns.ThreeItems then
-                local s_AddedItem = m_ItemDatabase:CreateItem(s_RandomItemDefinition, s_RandomItemDefinition.m_MaxStack)
-                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
-                    s_Point.trans.x - 0.35,
-                    s_Point.trans.y,
-                    s_Point.trans.z + 0.35
-                ), {s_AddedItem})
+            s_Point.trans = Vec3(
+                s_Point.trans.x - 0.5,
+                s_Point.trans.y,
+                s_Point.trans.z
+            )
+        elseif s_WeaponSpawnPattern == RandomAmmoPatterns.ThreeItems then
+            local s_AddedItem = m_ItemDatabase:CreateItem(s_RandomItemDefinition, s_RandomItemDefinition.m_MaxStack)
+            m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                s_Point.trans.x - 0.35,
+                s_Point.trans.y,
+                s_Point.trans.z + 0.35
+            ), {s_AddedItem})
 
-                local s_AddedSecondItem = m_ItemDatabase:CreateItem(s_RandomItemDefinition, s_RandomItemDefinition.m_MaxStack)
-                m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
-                    s_Point.trans.x - 0.35,
-                    s_Point.trans.y,
-                    s_Point.trans.z - 0.35
-                ), {s_AddedSecondItem})
+            local s_AddedSecondItem = m_ItemDatabase:CreateItem(s_RandomItemDefinition, s_RandomItemDefinition.m_MaxStack)
+            m_LootPickupDatabase:CreateBasicLootPickup(Vec3(
+                s_Point.trans.x - 0.35,
+                s_Point.trans.y,
+                s_Point.trans.z - 0.35
+            ), {s_AddedSecondItem})
 
-                s_Point.trans = Vec3(
-                    s_Point.trans.x + 0.5,
-                    s_Point.trans.y,
-                    s_Point.trans.z
-                )
-            end
+            s_Point.trans = Vec3(
+                s_Point.trans.x + 0.5,
+                s_Point.trans.y,
+                s_Point.trans.z
+            )
         end
     end
 
@@ -240,7 +239,11 @@ function BRLootRandomizer:Randomizer(p_Name, p_LevelOrDefinitions, p_IsItem, p_T
                 s_AccumulatedWeight = s_AccumulatedWeight + l_Value.RandomWeight
             end
     
-            s_WeightTable[l_Index] = s_AccumulatedWeight
+
+            table.insert(s_WeightTable, {
+                index = l_Index,
+                accumulatedWeight = s_AccumulatedWeight
+            })
     
             ::continue::
         end
@@ -250,13 +253,13 @@ function BRLootRandomizer:Randomizer(p_Name, p_LevelOrDefinitions, p_IsItem, p_T
     end
 
     local s_Random = math.random(0, s_AccumulatedWeight)
-    for l_Index, l_Weight in pairs(s_WeightTable) do
-        if s_Random <= l_Weight then
+    for _, l_WeightTable in ipairs(s_WeightTable) do
+        if s_Random <= l_WeightTable.accumulatedWeight then
             if p_IsItem == true then
-                return p_LevelOrDefinitions[l_Index]
+                return p_LevelOrDefinitions[l_WeightTable.index]
             end
 
-            return l_Index
+            return l_WeightTable.index
         end
     end
 

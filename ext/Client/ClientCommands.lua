@@ -66,6 +66,29 @@ ClientCommands =
         return "Item spawned."        
     end,
 
+    SpawnAirdrop = function(p_Args)
+        -- Get the local player
+        local s_LocalPlayer = PlayerManager:GetLocalPlayer()
+        if s_LocalPlayer == nil then
+            return ClientCommands.errInvalidCommand
+        end
+
+        -- Check to see if the player is alive
+        if s_LocalPlayer.alive == false then
+            return ClientCommands.errInvalidCommand
+        end
+
+        -- Get the local soldier instance
+        local s_LocalSoldier = s_LocalPlayer.soldier
+        if s_LocalSoldier == nil then
+            return ClientCommands.errInvalidCommand
+        end
+
+        NetEvents:Send("SpawnAirdropCommand")
+
+        return "Airdrop spawned."        
+    end,
+
     List = function(p_Args)
         local s_Result = "";
         

@@ -1,6 +1,9 @@
-local m_ItemDatabase = require "Types/BRItemDatabase"
 local m_InventoryManager = require "BRInventoryManager"
+local m_BRAirdropManager = require "BRAirdropManager"
+
+local m_ItemDatabase = require "Types/BRItemDatabase"
 local m_LootPickupDatabase = require "Types/BRLootPickupDatabase"
+
 local m_Logger = Logger("DebugCommands", true)
 
 --============================================================
@@ -56,6 +59,24 @@ function OnPlayerSpawnCommand(p_Player, p_Args)
     m_Logger:Write(s_Definition.m_Name .. " - Item spawned for player: " .. p_Player.name)
 end
 
+function OnSpawnAirdropCommand(p_Player)
+    if p_Player == nil then
+        return
+    end
+    
+    m_BRAirdropManager:CreateAirdrop(LinearTransform(
+        Vec3(1, 0, 0),
+        Vec3(0, 1, 0),
+        Vec3(0, 0, 1),
+        Vec3(
+            p_Player.soldier.worldTransform.trans.x,
+            p_Player.soldier.worldTransform.trans.y + 50,
+            p_Player.soldier.worldTransform.trans.z
+        )
+    ))
+end
+
 -- subscribe to commands
 NetEvents:Subscribe(InventoryNetEvent.InventoryGiveCommand, OnPlayerGiveCommand)
 NetEvents:Subscribe(InventoryNetEvent.InventorySpawnCommand, OnPlayerSpawnCommand)
+NetEvents:Subscribe("SpawnAirdropCommand", OnSpawnAirdropCommand)
