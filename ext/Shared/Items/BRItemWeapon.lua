@@ -19,6 +19,11 @@ function BRItemWeapon:AsTable(p_Extended)
 
     s_Table.CurrentPrimaryAmmo = self.m_CurrentPrimaryAmmo
 
+    if p_Extended then
+        s_Table.Tier = self.m_Definition.m_Tier
+        s_Table.AmmoName = self.m_Definition.m_AmmoDefinition.m_Name
+    end
+
     return s_Table
 end
 

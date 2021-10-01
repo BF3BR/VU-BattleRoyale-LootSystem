@@ -80,6 +80,15 @@ function BRLootPickupDatabase:RemoveItemFromLootPickup(p_LootPickupId, p_ItemId)
     end
 end
 
+function BRLootPickupDatabase:UpdateState(p_LootPickupId)
+    local s_LootPickup = self.m_LootPickups[p_LootPickupId]
+    if s_LootPickup == nil then
+        return
+    end
+
+    NetEvents:BroadcastLocal(InventoryNetEvent.UpdateLootPickup, s_LootPickup:AsTable())
+end
+
 function BRLootPickupDatabase:GetRandomId()
     -- for now use the guid string
     return tostring(MathUtils:RandomGuid())

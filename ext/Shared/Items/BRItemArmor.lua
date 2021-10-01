@@ -15,6 +15,12 @@ function BRItemArmor:AsTable(p_Extended)
 
     s_Table.CurrentDurability = self.m_CurrentDurability
 
+    if p_Extended then
+        s_Table.Tier = self.m_Definition.m_Tier
+        s_Table.Durability = self.m_Definition.m_Durability
+        s_Table.CurrentDurability = self.m_CurrentDurability
+    end
+
     return s_Table
 end
 

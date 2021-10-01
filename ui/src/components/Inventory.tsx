@@ -3,7 +3,13 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { RootState } from "../store/RootReducer";
 
-import { DndContext, DragOverlay } from '@dnd-kit/core';
+import {
+    DndContext,
+    DragOverlay,
+    LayoutMeasuringStrategy,
+    PointerSensor,
+    useSensor
+} from '@dnd-kit/core';
 import { Draggable } from './dnd/Draggable';
 import { Droppable } from './dnd/Droppable';
 
@@ -16,26 +22,24 @@ import "./Inventory.scss";
 
 interface StateFromReducer {
     slots: any;
-    overlayLootBox: any;
-    lootId: string|null;
+    closeItems: any;
 }
 
 type Props = StateFromReducer;
 
 const Inventory: React.FC<Props> = ({
     slots,
-    overlayLootBox,
-    lootId
+    closeItems,
 }) => {
+    const sensors = [useSensor(PointerSensor)];
+
     const [splitModal, setSplitModal] = useState({
         id: null,
         show: false,
         maxQuantity: 60,
         value: 30,
     });
-
     const [isDragging, setIsDragging] = useState<any>(null);
-
     const [progress, setProgress] = useState<{
         slot: any,
         time: number|null,
@@ -46,7 +50,7 @@ const Inventory: React.FC<Props> = ({
 
     function handleDragStart(event: any) {
         const { active } = event;
-        setIsDragging(active.data.current.item);
+        setIsDragging(active.data.current);
     }
 
     function handleDragEnd(event: any) {
@@ -55,15 +59,14 @@ const Inventory: React.FC<Props> = ({
 
         if (over !== null) {
             const slot = over.id;
-            if (active.data.current.currentSlot === undefined) {
+            if (active.data.current.currentSlot === undefined && active.data.current.lootId !== null) {
                 // When you pick up from a loot box
-                if (lootId !== null) {
-                    sendToLua('WebUI:PickupItem', JSON.stringify({ 
-                        item: active.id, 
-                        slot: slot,
-                        lootPickup: lootId,
-                    }));
-                }
+                sendToLua('WebUI:PickupItem', JSON.stringify({ 
+                    item: active.id.replace('loot-',''), 
+                    slot: slot,
+                    lootPickup: active.data.current.lootId,
+                }));
+                return;
             } else if (active.data.current.currentSlot.toString() !== slot) {
                 if (slot === "item-drop") {
                     sendToLua('WebUI:DropItem', JSON.stringify({ item: active.id, quantity: slots[active.data.current.currentSlot].Quantity }));
@@ -305,7 +308,12 @@ const Inventory: React.FC<Props> = ({
                     </div>
                 </div>
             </div>
-            <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+            <DndContext
+                layoutMeasuring={{ strategy: LayoutMeasuringStrategy.Always }}
+                onDragEnd={handleDragEnd}
+                onDragStart={handleDragStart}
+                sensors={sensors}
+            >
                 <div id="Inventory" className="open">
                     <div className="InventoryWrapper">
                         <div className="card PrimaryWeaponBox">
@@ -411,7 +419,9 @@ const Inventory: React.FC<Props> = ({
                         </div>
                     </div>
                     <div className="itemDrop">
-                        <Droppable id="item-drop" />
+                        {(isDragging !== null && isDragging.currentSlot !== undefined) &&
+                            <Droppable id="item-drop" />
+                        }
                     </div>
                     <div className="ProximityWrapper">
                         <div className="card proximity-card">
@@ -420,18 +430,14 @@ const Inventory: React.FC<Props> = ({
                                     Near you
                                 </h1>
                             </div>
-                            <div className="card-content near-grid">
-                                {overlayLootBox.length > 0 &&
-                                    <>
-                                        {overlayLootBox.map((slot: any, key: number) => (
-                                            <div className="item-slot" key={key}>
-                                                <Draggable id={slot.Id} item={slot}>
-                                                    {getSlotDrag(slot, true)}
-                                                </Draggable>
-                                            </div>
-                                        ))}
-                                    </>
-                                }
+                            <div className="card-content">
+                                {closeItems.map((item: any, key: number) => (
+                                    <div className="item-slot" key={key}>
+                                        <Draggable id={"loot-" + item.Id} item={item} lootId={item.lootId}>
+                                            {getSlotDrag(item, true)}
+                                        </Draggable>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -445,7 +451,7 @@ const Inventory: React.FC<Props> = ({
                 >
                     {isDragging !== null && 
                         <div className="dragoverlay-object">
-                            {getSlotDrag(isDragging)}
+                            {getSlotDrag(isDragging.item)}
                         </div>
                     }
                 </DragOverlay>
@@ -476,8 +482,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         // InventoryReducer
         slots: state.InventoryReducer.slots,
-        overlayLootBox: state.InventoryReducer.overlayLootBox,
-        lootId: state.InventoryReducer.lootId,
+        closeItems: state.InventoryReducer.closeItems,
     };
 }
 const mapDispatchToProps = (dispatch: any) => {

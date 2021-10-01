@@ -46,7 +46,11 @@ function BRLootPickupDatabaseShared:RemoveById(p_LootPickupId)
 end
 
 function BRLootPickupDatabaseShared:Contains(p_LootPickup)
-  return self.m_LootPickups[p_LootPickup.m_Id] ~= nil
+  return self.m_LootPickups[p_LootPickup ~= nil and p_LootPickup.m_Id] ~= nil
+end
+
+function BRLootPickupDatabaseShared:ContainsId(p_LootPickupId)
+  return self.m_LootPickups[p_LootPickupId] ~= nil
 end
 
 -- WIP
@@ -88,6 +92,14 @@ function BRLootPickupDatabaseShared:GetClosestLootPickup(p_Position, p_Radius)
   return s_ClosestPickup
 end
 
-function BRLootPickupDatabaseShared:OnRoundDestroy()
+function BRLootPickupDatabaseShared:Destroy()
   self:ResetVars()
+end
+
+function BRLootPickupDatabaseShared:OnLevelDestroy()
+  self:Destroy()
+end
+
+function BRLootPickupDatabaseShared:OnExtensionUnloaded()
+  self:Destroy()
 end

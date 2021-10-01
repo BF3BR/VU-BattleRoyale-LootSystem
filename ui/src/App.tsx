@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useDispatch } from "react-redux";
-import { updateInventory, updateOverlayLoot, updateOverlayLootBox } from "./store/inventory/Actions";
+import { updateCloseLootPickup, updateInventory, updateOverlayLoot } from "./store/inventory/Actions";
 
 import Inventory from "./components/Inventory";
 import Overlay from "./components/Overlay";
@@ -21,12 +21,23 @@ const App: React.FC = () => {
         dispatch(updateOverlayLoot(p_DataJson));
     }
 
-    window.SyncOverlayLootBox = (p_LootPickupId: string|null, p_DataJson: any) => {
-        let data = p_DataJson;
-        if (p_DataJson === null) {
-            data = [];
+    window.SyncCloseLootPickupData = (p_DataJson: any) => {
+        if (p_DataJson === null || p_DataJson.length === undefined) {
+            dispatch(updateCloseLootPickup([]));
+            return;
         }
-        dispatch(updateOverlayLootBox(p_LootPickupId, data));
+        
+        let tempData: any = [];
+        p_DataJson.forEach((loot: any, key: number) => {
+            if (loot.Items.length > 0) {
+                loot.Items.forEach((item: any, key: number) => {
+                    item.lootId = loot.Id;
+                    tempData.push(item);
+                });
+            }
+        });
+
+        dispatch(updateCloseLootPickup(tempData));
     }
 
     return (
@@ -43,6 +54,6 @@ declare global {
     interface Window {
         SyncInventory: (p_DataJson: any) => void;
         SyncOverlayLoot: (p_DataJson: any) => void;
-        SyncOverlayLootBox: (p_LootPickupId: string|null, p_DataJson: any) => void;
+        SyncCloseLootPickupData: (p_DataJson: any) => void;
     }
 }

@@ -2,8 +2,8 @@ require "__shared/Types/BRLootPickupDatabaseShared"
 
 class ("BRLootPickupDatabase", BRLootPickupDatabaseShared)
 
-function BRLootPickupDatabase:__init()
-  BRLootPickupDatabaseShared.__init(self)
+function BRLootPickupDatabase:ResetVars()
+  BRLootPickupDatabaseShared.ResetVars(self)
 
   self.m_InstanceIdToLootPickup = {}
 end
@@ -90,8 +90,16 @@ function BRLootPickupDatabase:OnCreateLootPickup(p_LootPickupData)
   self:Add(s_LootPickup)
 end
 
--- function BRLootPickupDatabase:OnUnregisterLootPickup(p_LootPickupId)
---   self:RemoveById(p_LootPickupId)
--- end
+function BRLootPickupDatabase:Destroy()
+  for _, l_LootPickup in ipairs(self.m_LootPickups) do
+    -- destroy entities and references to them
+    self:DestroyLootPickupEntities(l_LootPickup)
+
+    -- destroy LootPickups
+	  l_LootPickup:Destroy()
+  end
+
+  self:ResetVars()
+end
 
 return BRLootPickupDatabase()

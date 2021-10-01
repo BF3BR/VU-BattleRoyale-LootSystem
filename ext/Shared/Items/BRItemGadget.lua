@@ -17,7 +17,7 @@ end
 -- Updates the quantity value for this item 
 function BRItemGadget:SetQuantity(p_Quantity)
     -- fix for gadgets because m_Quantity contains both primary and secondary
-    -- ammo, compared to other ammo items that m_Quantity is only the secondary ammo.
+    -- ammo, compared to other ammo items where m_Quantity is only the secondary ammo.
     -- After first reload (when self.m_CurrentPrimaryAmmo will be zero), quantity
     -- should stay the same.
     -- !!! :SetQuantity should be called before updating m_CurrentPrimaryAmmo

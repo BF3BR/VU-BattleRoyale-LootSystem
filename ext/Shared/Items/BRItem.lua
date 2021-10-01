@@ -26,7 +26,7 @@ function BRItem:GetParentLootPickup()
     end
 
     -- make sure the loot pickup contains this item
-    return self.m_Owner:ContainsItem(self.m_Id) and self.m_Owner or nil
+    return self.m_Owner:ContainsId(self.m_Id) and self.m_Owner or nil
 end
 
 -- Returns the BRInventorySlot instance that this item belongs to

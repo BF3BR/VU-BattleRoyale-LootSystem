@@ -49,6 +49,25 @@ function MapHelper:Size(p_Map)
 	return s_Count
 end
 
+-- Checks if map size equals the target. Difference with :Size
+-- is that it doesn't need to iterate the whole map
+function MapHelper:SizeEquals(p_Map, p_TargetSize)
+	for _, _ in pairs(p_Map) do
+		p_TargetSize = p_TargetSize - 1
+
+		if p_TargetSize < 0 then
+			return false
+		end
+	end
+
+	return true
+end
+
+-- Check if the Map has exactly one item
+function MapHelper:HasSingleItem(p_Map)
+	return self:SizeEquals(p_Map, 1)
+end
+
 -- Removes the first entry of the map where the value is equal to the specified one
 function MapHelper:RemoveByValue(p_Map, p_Value)
 	for l_Key, l_Value in pairs(p_Map) do
@@ -62,28 +81,8 @@ function MapHelper:RemoveByValue(p_Map, p_Value)
 end
 
 -- Returns an item of the Map if it's not empty, otherwise nil
-function MapHelper:Item(p_Map)
-	local s_Key = next(p_Map)
-
-	if s_Key ~= nil then
-		return p_Map[s_Key]
-	end
-
-	return nil
+function MapHelper:NextItem(p_Map, p_PrevKey)
+	return p_Map[next(p_Map, p_PrevKey)]
 end
 
--- Check if the Map has only one item
-function MapHelper:HasSingleItem(p_Map)
-	local s_FirstKey = next(p_Map)
-	if s_FirstKey == nil then
-		return false
-	end
-
-	return next(p_Map, s_FirstKey) == nil
-end
-
-if g_MapHelper == nil then
-	g_MapHelper = MapHelper()
-end
-
-return g_MapHelper
+return MapHelper()

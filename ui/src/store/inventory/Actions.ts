@@ -2,7 +2,7 @@ import {
     InventoryActionTypes,
     UPDATE_INVENTORY,
     UPDATE_OVERLAY_LOOT,
-    UPDATE_OVERLAY_LOOT_BOX
+    UPDATE_CLOSE_LOOT_PICKUP
 } from "./ActionTypes";
 
 export function updateInventory(slots: any[]): InventoryActionTypes {
@@ -19,9 +19,9 @@ export function updateOverlayLoot(overlayLoot: any): InventoryActionTypes {
     };
 }
 
-export function updateOverlayLootBox(lootId: string|null, items: any[]): InventoryActionTypes {
+export function updateCloseLootPickup(items: any[]): InventoryActionTypes {
     return {
-        type: UPDATE_OVERLAY_LOOT_BOX,
-        payload: { lootId, items },
+        type: UPDATE_CLOSE_LOOT_PICKUP,
+        payload: { items },
     };
 }
