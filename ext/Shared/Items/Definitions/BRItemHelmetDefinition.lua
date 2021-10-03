@@ -14,7 +14,7 @@ function BRItemHelmetDefinition:__init(p_UId, p_Name, p_Options)
         Vec3(1.2, 0, 0),
         Vec3(0, 1.2, 0),
         Vec3(0, 0, 1.2),
-        Vec3(0, -1.2, 0)
+        Vec3(0, -2, 0)
     )
 
     -- call super's constructor and set shared options

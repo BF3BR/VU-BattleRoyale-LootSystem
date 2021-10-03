@@ -108,10 +108,14 @@ function BRLootPickup:Spawn()
         s_LinearTransform.forward,
         Vec3(
             s_LinearTransform.trans.x,
-            s_LinearTransform.trans.y + 0.4,
+            s_LinearTransform.trans.y,
             s_LinearTransform.trans.z
         )
     )
+
+    if self.m_Type.PhysicsEntityData ~= nil then
+        s_StaticModelEntityData.physicsData = self.m_Type.PhysicsEntityData:GetInstance()
+    end
 
     local s_SingleItem = m_MapHelper:NextItem(self.m_Items)
     if m_MapHelper:SizeEquals(self.m_Items, 1) then
@@ -141,55 +145,61 @@ function BRLootPickup:Spawn()
         end
     end
 
-    local s_SpotLightEntityData = PointLightEntityData()
+    --[[local s_LightEntityData = PointLightEntityData()
     local left, up, forward = m_RotationHelper:GetLUFfromYPR(0, 1.57079633, 0)
-    s_SpotLightEntityData.transform = LinearTransform(
+    s_LightEntityData.transform = LinearTransform(
         left,
         up,
         forward,
-        Vec3(0, 1.2, 0)
+        Vec3(0, 0.35, 0)
+    )]]
+    local s_LightEntityData = PointLightEntityData()
+    s_LightEntityData.transform = LinearTransform(
+        Vec3(1, 0, 0),
+        Vec3(0, 1, 0),
+        Vec3(0, 0, 1),
+        Vec3(0, 0.35, 0)
     )
-    s_SpotLightEntityData.color = s_Color
-    s_SpotLightEntityData.radius = 2.35
-    s_SpotLightEntityData.width = 2.0
-    s_SpotLightEntityData.intensity = 5.25
-    s_SpotLightEntityData.visible = true
-    s_SpotLightEntityData.enlightenEnable = false
+    s_LightEntityData.color = s_Color
+    s_LightEntityData.radius = 2.65
+    s_LightEntityData.width = 0.5
+    s_LightEntityData.intensity = 7
+    s_LightEntityData.visible = true
+    s_LightEntityData.enlightenEnable = false
 
-    --[[s_SpotLightEntityData.intensity = 15.0
-    s_SpotLightEntityData.attenuationOffset = 50.0
-    s_SpotLightEntityData.specularEnable = true
-    s_SpotLightEntityData.enlightenColorMode = EnlightenColorMode.EnlightenColorMode_Multiply
-    s_SpotLightEntityData.enlightenColorScale = Vec3(1.3, 1.3, 1.3)
-    s_SpotLightEntityData.particleColorScale = Vec3(0.2, 0.2, 0.2)
-    s_SpotLightEntityData.shape = SpotLightShape.SpotLightShape_Frustum
-    s_SpotLightEntityData.coneInnerAngle = 0.0
-    s_SpotLightEntityData.coneOuterAngle = 32.3720016479
-    s_SpotLightEntityData.frustumFov = 55.0
-    s_SpotLightEntityData.frustumAspect = 1.0
-    s_SpotLightEntityData.orthoWidth = 5.0
-    s_SpotLightEntityData.orthoHeight = 5.0
-    s_SpotLightEntityData.castShadowsEnable = false
-    s_SpotLightEntityData.castShadowsMinLevel = QualityLevel.QualityLevel_Low
-    s_SpotLightEntityData.texture = m_FlashlightTexture:GetInstance()]]
+    --[[s_LightEntityData.intensity = 15.0
+    s_LightEntityData.attenuationOffset = 50.0
+    s_LightEntityData.specularEnable = true
+    s_LightEntityData.enlightenColorMode = EnlightenColorMode.EnlightenColorMode_Multiply
+    s_LightEntityData.enlightenColorScale = Vec3(1.3, 1.3, 1.3)
+    s_LightEntityData.particleColorScale = Vec3(0.2, 0.2, 0.2)
+    s_LightEntityData.shape = SpotLightShape.SpotLightShape_Frustum
+    s_LightEntityData.coneInnerAngle = 0.0
+    s_LightEntityData.coneOuterAngle = 32.3720016479
+    s_LightEntityData.frustumFov = 55.0
+    s_LightEntityData.frustumAspect = 1.0
+    s_LightEntityData.orthoWidth = 5.0
+    s_LightEntityData.orthoHeight = 5.0
+    s_LightEntityData.castShadowsEnable = false
+    s_LightEntityData.castShadowsMinLevel = QualityLevel.QualityLevel_Low
+    s_LightEntityData.texture = m_FlashlightTexture:GetInstance()]]
 
     local s_BusStaticModel = EntityManager:CreateEntity(s_StaticModelEntityData, self.m_Transform)
-    local s_BusSpotLight = EntityManager:CreateEntity(s_SpotLightEntityData, self.m_Transform)
-
-    if s_BusStaticModel == nil or s_BusSpotLight == nil then
-        m_Logger:Write("Models are nil, can't spawn")
-        return false
-    end
+    local s_BusSpotLight = EntityManager:CreateEntity(s_LightEntityData, self.m_Transform)
 
     if self.m_Entities == nil then
         self.m_Entities = {}
     end
 
-    s_BusStaticModel:Init(Realm.Realm_Client, true, false)
-    self.m_Entities[s_BusStaticModel.instanceId] = s_BusStaticModel
+    if s_BusStaticModel ~= nil then
+        s_BusStaticModel:Init(Realm.Realm_ClientAndServer, true, false)
+        self.m_Entities[s_BusStaticModel.instanceId] = s_BusStaticModel
+    end
 
-    s_BusSpotLight:Init(Realm.Realm_Client, true, false)
-    self.m_Entities[s_BusSpotLight.instanceId] = s_BusSpotLight
+    if s_BusSpotLight ~= nil then
+        s_BusSpotLight:Init(Realm.Realm_ClientAndServer, true, false)
+        self.m_Entities[s_BusSpotLight.instanceId] = s_BusSpotLight
+    end
 
     return self.m_Entities ~= nil
 end

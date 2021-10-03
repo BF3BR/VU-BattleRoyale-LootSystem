@@ -14,6 +14,10 @@ function BRLootPickupDatabase:CreateBasicLootPickup(p_Transform, p_Items)
     self:CreateLootPickup(LootPickupType.Basic.Name, p_Transform, p_Items)
 end
 
+function BRLootPickupDatabase:CreateAirdropLootPickup(p_Transform, p_Items)
+    self:CreateLootPickup(LootPickupType.Airdrop.Name, p_Transform, p_Items)
+end
+
 function BRLootPickupDatabase:CreateLootPickup(p_Type, p_Transform, p_Items)
     if p_Type == nil or p_Transform == nil or p_Items == nil then
         m_Logger:Error("Invalid CreateLootPickup parameters")
@@ -38,8 +42,10 @@ function BRLootPickupDatabase:CreateLootPickup(p_Type, p_Transform, p_Items)
     local s_LootPickup = BRLootPickup(s_LootPickupId, p_Type, p_Transform, s_Items)
     self.m_LootPickups[s_LootPickupId] = s_LootPickup
 
-    -- I don't think we need to spawn the entity server side
-    -- self.m_LootPickups[s_DataArray.Id]:Spawn(s_DataArray.Id)
+    -- Spawn the entity server side as well if it has collision
+    if LootPickupType[p_Type].PhysicsEntityData ~= nil then
+        self.m_LootPickups[s_LootPickupId]:Spawn()
+    end
 
     m_Logger:Write(string.format("LootPickup #%s was added", s_LootPickupId))
 

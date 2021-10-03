@@ -35,7 +35,7 @@ return {
                 Vec3(2, 0, 0),
                 Vec3(0, 2, 0),
                 Vec3(0, 0, 2),
-                Vec3(0, 0, 0)
+                Vec3(0, 0.015, 0)
             ),
             AttachmentType = AttachmentType.Optics,
             AttachmentId = g_AttachmentIds.Acog
@@ -107,7 +107,7 @@ return {
                 Vec3(2, 0, 0),
                 Vec3(0, 2, 0),
                 Vec3(0, 0, 2),
-                Vec3(0, 0, 0)
+                Vec3(0, 0.015, 0)
             ),
             AttachmentType = AttachmentType.Optics,
             AttachmentId = g_AttachmentIds.PK_AS
@@ -145,7 +145,7 @@ return {
                 Vec3(2, 0, 0),
                 Vec3(0, 2, 0),
                 Vec3(0, 0, 2),
-                Vec3(0, 0, 0)
+                Vec3(0, 0.015, 0)
             ),
             AttachmentType = AttachmentType.Barrel,
             AttachmentId = g_AttachmentIds.Silencer
@@ -219,7 +219,7 @@ return {
                 Vec3(2, 0, 0),
                 Vec3(0, 2, 0),
                 Vec3(0, 0, 2),
-                Vec3(0, 0, 0)
+                Vec3(0, 0.2, 0)
             ),
             AttachmentType = AttachmentType.Other,
             AttachmentId = g_AttachmentIds.TargetPointer
@@ -237,7 +237,7 @@ return {
                 Vec3(2, 0, 0),
                 Vec3(0, 2, 0),
                 Vec3(0, 0, 2),
-                Vec3(0, 0, 0)
+                Vec3(0, 0.05, 0)
             ),
             AttachmentType = AttachmentType.Other,
             AttachmentId = g_AttachmentIds.Flashlight

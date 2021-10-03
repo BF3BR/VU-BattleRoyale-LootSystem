@@ -24,13 +24,16 @@ function BRLootRandomizer:__init()
     self.m_AccumulatedWeight = {}
 end
 
-function BRLootRandomizer:Spawn(p_Point)
+function BRLootRandomizer:Spawn(p_Point, p_TypeIndex, p_Tier)
     if p_Point == nil then
         return
     end
 
-    -- Randomize the type first
-    local s_RandomTypeIndex = self:Randomizer("Type", RandomWeightsTable)
+    local s_RandomTypeIndex = p_TypeIndex
+    if p_TypeIndex == nil then
+        -- Randomize the type first
+        s_RandomTypeIndex = self:Randomizer("Type", RandomWeightsTable)
+    end
     
     if s_RandomTypeIndex == nil then
         m_Logger:Write("No type found.")
@@ -38,9 +41,13 @@ function BRLootRandomizer:Spawn(p_Point)
     end
     
     local s_RandomTier = nil
-    if RandomWeightsTable[s_RandomTypeIndex].Tiers ~= nil then
-        -- If there are tiers then we should randomize it as well
-        s_RandomTier = self:Randomizer(tostring(s_RandomTypeIndex) .. "_Tier", RandomWeightsTable[s_RandomTypeIndex].Tiers)
+    if p_Tier == nil then
+        if RandomWeightsTable[s_RandomTypeIndex].Tiers ~= nil then
+            -- If there are tiers then we should randomize it as well
+            s_RandomTier = self:Randomizer(tostring(s_RandomTypeIndex) .. "_Tier", RandomWeightsTable[s_RandomTypeIndex].Tiers)
+        end
+    else
+        s_RandomTier = p_Tier
     end
 
     local s_Point = p_Point

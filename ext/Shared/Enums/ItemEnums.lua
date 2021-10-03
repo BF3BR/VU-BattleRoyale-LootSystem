@@ -25,29 +25,32 @@ LootPickupType = {
             Vec3(0, 1, 0),
             Vec3(0, 0, 1),
             Vec3(0, 0, 0)
-        )
+        ),
+        PhysicsEntityData = nil,
     },
     Chest = {
         Name = "Chest",
-        Mesh = DC(Guid("50BB59D3-DFAB-C286-EBAC-B5CF4BAB7AC0"), Guid("6412D2CA-7AF5-A459-E048-688143B6E35B")),
+        Mesh = DC(Guid("6D61C008-905F-602A-FC16-FF44B8F563F9"), Guid("2E9A903C-48BA-094B-6FB9-2EF6D89271F0")),
         CheckPrice = false,
         Transform = LinearTransform(
             Vec3(1, 0, 0),
             Vec3(0, 1, 0),
             Vec3(0, 0, 1),
             Vec3(0, 0, 0)
-        )
+        ),
+        PhysicsEntityData = DC(Guid("6A4E0250-6FA5-11DE-8B6A-B2B60718374F"), Guid("6A6D279B-7870-9FC5-46DA-3B70CF7C1CD9")),
     },
     Airdrop = {
         Name = "Airdrop",
-        Mesh = nil,
+        Mesh = DC(Guid("DA504C92-911F-87DD-0D84-944BD542E835"), Guid("B5CE760E-5220-29BA-3316-23EA12244E88")),
         CheckPrice = false,
         Transform = LinearTransform(
             Vec3(1, 0, 0),
             Vec3(0, 1, 0),
             Vec3(0, 0, 1),
             Vec3(0, 0, 0)
-        )
+        ),
+        PhysicsEntityData = DC(Guid("A80588DC-4471-11DE-B7E8-80A76CACD9DC"), Guid("598A91F1-B01C-B253-741C-1CF5669BA476")),
     },
     Shop = {
         Name = "Shop",
@@ -58,7 +61,8 @@ LootPickupType = {
             Vec3(0, 1, 0),
             Vec3(0, 0, 1),
             Vec3(0, 0, 0)
-        )
+        ),
+        PhysicsEntityData = nil,
     },
 }
 

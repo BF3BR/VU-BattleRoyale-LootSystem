@@ -10,6 +10,12 @@ function BRItemAmmoDefinition:__init(p_UId, p_Name, p_Options)
     p_Options.Type = ItemType.Ammo
     p_Options.Stackable = true
     p_Options.Price = 0
+    p_Options.Transform = LinearTransform(
+        Vec3(0.65, 0, 0),
+        Vec3(0, 0.65, 0),
+        Vec3(0, 0, 0.65),
+        Vec3(0, 0, 0)
+    )
 
     -- call super's constructor and set shared options
     BRItemDefinition.__init(self, p_UId, p_Name, p_Options)
