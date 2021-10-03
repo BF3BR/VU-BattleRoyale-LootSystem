@@ -5,6 +5,10 @@ local m_Logger = Logger("BRInventoryWeaponSlot", true)
 
 class("BRInventoryWeaponSlot", BRInventorySlot)
 
+local m_NoOptics = DC(Guid("6D3830F2-3528-11E0-B502-B15F9292C9B8"), Guid("A1AD1762-C856-F5D7-66B5-5E485460D3DF"))
+local m_NoPrimaryAccessory = DC(Guid("57CE9FB1-3528-11E0-B502-B15F9292C9B8"), Guid("C6F8E97B-A579-263F-C9F6-38397F7706A0"))
+local m_NoSecondaryAccessory = DC(Guid("619781B1-3528-11E0-B502-B15F9292C9B8"), Guid("BBB62E4A-4F15-29F6-0C5C-BAB1609B0636"))
+
 function BRInventoryWeaponSlot:__init(p_Inventory, p_UnlockWeaponSlot)
     BRInventorySlot.__init(self, p_Inventory, { ItemType.Weapon })
 
@@ -76,11 +80,19 @@ function BRInventoryWeaponSlot:GetUnlockWeaponAndSlot()
     )
 
     -- Add attachments
-    for _, l_Slot in pairs(self.m_AttachmentSlots) do
+    for l_Index, l_Slot in pairs(self.m_AttachmentSlots) do
         local s_Unlock = l_Slot:GetUnlockAsset()
 
         if s_Unlock ~= nil then
             s_Weapon.unlockAssets:add(s_Unlock)
+        else
+            if l_Index == "OpticsSlot" then
+                s_Weapon.unlockAssets:add(m_NoOptics:GetInstance())
+            elseif l_Index == "BarrelSlot" then
+                s_Weapon.unlockAssets:add(m_NoPrimaryAccessory:GetInstance())
+            elseif l_Index == "OtherSlot" then
+                s_Weapon.unlockAssets:add(m_NoSecondaryAccessory:GetInstance())
+            end
         end
     end
 

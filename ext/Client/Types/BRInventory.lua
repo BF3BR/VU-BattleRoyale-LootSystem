@@ -122,3 +122,7 @@ function BRInventory:OnWebUIPickupItem(p_JsonData)
 
     NetEvents:Send(InventoryNetEvent.PickupItem, s_LootPickupId, s_ItemId, s_SlotId)
 end
+
+function BRInventory:OnItemActionCanceled()
+    WebUI:ExecuteJS("ItemCancelAction();")
+end

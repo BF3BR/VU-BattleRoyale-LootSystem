@@ -72,6 +72,7 @@ function VuBattleRoyaleLootSystemClient:RegisterEvents()
     NetEvents:Subscribe(InventoryNetEvent.CreateLootPickup, self, self.OnCreateLootPickup)
     NetEvents:Subscribe(InventoryNetEvent.UnregisterLootPickup, self, self.OnUnregisterLootPickup)
     NetEvents:Subscribe(InventoryNetEvent.UpdateLootPickup, self, self.OnUpdateLootPickup)
+    NetEvents:Subscribe(InventoryNetEvent.ItemActionCanceled, self, self.OnItemActionCanceled)
 end
 
 function VuBattleRoyaleLootSystemClient:RegisterWebUIEvents()
@@ -115,6 +116,10 @@ end
 function VuBattleRoyaleLootSystemClient:OnUpdateLootPickup(p_DataArray)
     -- m_BRLootPickupDatabase:OnUpdateLootPickup(p_DataArray)
     self.m_Looting:OnUpdateLootPickup(p_DataArray)
+end
+
+function VuBattleRoyaleLootSystemClient:OnItemActionCanceled()
+    self.m_Invetnory:OnItemActionCanceled()
 end
 
 function VuBattleRoyaleLootSystemClient:OnClientUpdateInput(p_Delta)

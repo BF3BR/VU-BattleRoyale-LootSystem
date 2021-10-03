@@ -4,7 +4,8 @@ local m_Logger = Logger("BRLootPickup", true)
 local m_RotationHelper = require "__shared/Utils/RotationHelper"
 local m_MapHelper = require "__shared/Utils/MapHelper"
 
-local m_FlashlightTexture = DC(Guid("04C62561-2236-11DF-A528-EA655525F02D"), Guid("2EE018E8-1451-908C-0974-DB7676407D61"))
+local m_Airdrop_Object_SFX = DC(Guid("CE2EF674-9C22-11E0-9F7B-CD3BC4364C43"), Guid("EBF2202A-9716-2A81-EA34-464432189CD0"))
+local m_Airdrop_Object_FX_Smoke = DC(Guid("25B9AFF0-6622-11DE-9DCF-A96EA7FB2539"), Guid("EB9BAF48-75CA-3413-DE82-0CF9EC98603F"))
 
 function BRLootPickup:__init(p_Id, p_TypeName, p_Transform, p_Items)
     -- Unique Id for each loot pickup
@@ -145,14 +146,6 @@ function BRLootPickup:Spawn()
         end
     end
 
-    --[[local s_LightEntityData = PointLightEntityData()
-    local left, up, forward = m_RotationHelper:GetLUFfromYPR(0, 1.57079633, 0)
-    s_LightEntityData.transform = LinearTransform(
-        left,
-        up,
-        forward,
-        Vec3(0, 0.35, 0)
-    )]]
     local s_LightEntityData = PointLightEntityData()
     s_LightEntityData.transform = LinearTransform(
         Vec3(1, 0, 0),
@@ -167,25 +160,8 @@ function BRLootPickup:Spawn()
     s_LightEntityData.visible = true
     s_LightEntityData.enlightenEnable = false
 
-    --[[s_LightEntityData.intensity = 15.0
-    s_LightEntityData.attenuationOffset = 50.0
-    s_LightEntityData.specularEnable = true
-    s_LightEntityData.enlightenColorMode = EnlightenColorMode.EnlightenColorMode_Multiply
-    s_LightEntityData.enlightenColorScale = Vec3(1.3, 1.3, 1.3)
-    s_LightEntityData.particleColorScale = Vec3(0.2, 0.2, 0.2)
-    s_LightEntityData.shape = SpotLightShape.SpotLightShape_Frustum
-    s_LightEntityData.coneInnerAngle = 0.0
-    s_LightEntityData.coneOuterAngle = 32.3720016479
-    s_LightEntityData.frustumFov = 55.0
-    s_LightEntityData.frustumAspect = 1.0
-    s_LightEntityData.orthoWidth = 5.0
-    s_LightEntityData.orthoHeight = 5.0
-    s_LightEntityData.castShadowsEnable = false
-    s_LightEntityData.castShadowsMinLevel = QualityLevel.QualityLevel_Low
-    s_LightEntityData.texture = m_FlashlightTexture:GetInstance()]]
 
     local s_BusStaticModel = EntityManager:CreateEntity(s_StaticModelEntityData, self.m_Transform)
-    local s_BusSpotLight = EntityManager:CreateEntity(s_LightEntityData, self.m_Transform)
 
     if self.m_Entities == nil then
         self.m_Entities = {}
@@ -196,9 +172,45 @@ function BRLootPickup:Spawn()
         self.m_Entities[s_BusStaticModel.instanceId] = s_BusStaticModel
     end
 
-    if s_BusSpotLight ~= nil then
-        s_BusSpotLight:Init(Realm.Realm_ClientAndServer, true, false)
-        self.m_Entities[s_BusSpotLight.instanceId] = s_BusSpotLight
+    if SharedUtils:IsClientModule() then
+        if self.m_Type.Name == "Airdrop" then
+            local s_BusEffect = EntityManager:CreateEntitiesFromBlueprint(m_Airdrop_Object_SFX:GetInstance(), self.m_Transform)
+            if s_BusEffect ~= nil then
+                for _, l_Entity in pairs(s_BusEffect.entities) do
+                    l_Entity:Init(Realm.Realm_Client, false)
+                    l_Entity:FireEvent("Start")
+                    self.m_Entities[l_Entity.instanceId] = l_Entity
+                end
+            end
+
+            local s_BusSmokeEffect = EntityManager:CreateEntitiesFromBlueprint(
+                m_Airdrop_Object_FX_Smoke:GetInstance(), 
+                LinearTransform(
+                    self.m_Transform.left,
+                    self.m_Transform.up,
+                    self.m_Transform.forward,
+                    Vec3(
+                        self.m_Transform.trans.x,
+                        self.m_Transform.trans.y + 1.6,
+                        self.m_Transform.trans.z
+                    )
+                )
+            )
+            if s_BusSmokeEffect ~= nil then
+                for _, l_Entity in pairs(s_BusSmokeEffect.entities) do
+                    l_Entity:Init(Realm.Realm_Client, false)
+                    l_Entity:FireEvent("Start")
+                    self.m_Entities[l_Entity.instanceId] = l_Entity
+                end
+            end
+        else
+            local s_BusLight = EntityManager:CreateEntity(s_LightEntityData, self.m_Transform)
+        
+            if s_BusLight ~= nil then
+                s_BusLight:Init(Realm.Realm_ClientAndServer, true, false)
+                self.m_Entities[s_BusLight.instanceId] = s_BusLight
+            end
+        end
     end
 
     return self.m_Entities ~= nil

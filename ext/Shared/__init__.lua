@@ -10,6 +10,7 @@ require "__shared/Types/DataContainer"
 local m_AirdropObjectBlueprint = DC(Guid("344790FB-C800-11E0-BD5B-D85FACD7C899"), Guid("DE3ABA3C-D0D1-9863-50FB-D48577340978"))
 local m_RigidMesh = DC(Guid("DA504C92-911F-87DD-0D84-944BD542E835"), Guid("B5CE760E-5220-29BA-3316-23EA12244E88"))
 local m_HavokAsset = DC(Guid("A80588DC-4471-11DE-B7E8-80A76CACD9DC"), Guid("CB8BB4E2-E1F4-EA1D-E815-3DFD8765447B"))
+local m_SmokeColorData = DC(Guid("5CE988C3-6622-11DE-9DCF-A96EA7FB2539"), Guid("0302E7F2-51CE-4089-817C-2DCDC9114BF4"))
 
 local m_Logger = Logger("VuBattleRoyaleLootSystemShared", true)
 
@@ -31,6 +32,7 @@ function VuBattleRoyaleLootSystemShared:__init()
 
 	-- TODO: Move this to the main BR mod
 	m_AirdropObjectBlueprint:RegisterLoadHandler(self, self.CreateObjectBlueprint)
+	m_SmokeColorData:RegisterLoadHandler(self, self.ModifySmokeColorData)
 end
 
 function VuBattleRoyaleLootSystemShared:OnLevelLoadResources(p_MapName, p_GameModeName, p_DedicatedServer)
@@ -69,6 +71,12 @@ function VuBattleRoyaleLootSystemShared:CreateObjectBlueprint(p_ObjectBlueprint)
 	ResourceManager:AddRegistry(s_Registry, ResourceCompartment.ResourceCompartment_Game)
 
 	m_Logger:Write("Custom airdrop BangerEntityData created")
+end
+
+function VuBattleRoyaleLootSystemShared:ModifySmokeColorData(p_PolynomialColorInterpData)
+	p_PolynomialColorInterpData.color0 = Vec3(0.9,0.1,0.1)
+	p_PolynomialColorInterpData.color1 = Vec3(0.8,0.1,0.1)
+	p_PolynomialColorInterpData.coefficients = Vec4(0,0,-1.3197676,1.0089285)
 end
 
 return VuBattleRoyaleLootSystemShared()

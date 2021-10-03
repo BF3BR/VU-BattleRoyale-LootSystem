@@ -64,7 +64,7 @@ function BRAirdropManager:CreateAirdrop(p_Trans)
                 handle = self.m_AirdropHandles,
             }
 
-            self.m_AirdropTimers[p_Entity.instanceId] = g_Timers:Timeout(2.0, s_Table, function(p_Table)
+            self.m_AirdropTimers[p_Entity.instanceId] = g_Timers:Timeout(2.5, s_Table, function(p_Table)
                 local s_RandomWeaponDefinition = m_LootRandomizer:Randomizer(tostring(Tier.Tier3) .. "_Weapon", m_WeaponDefinitions, true, Tier.Tier3)
 
                 -- Get a randomized attachment

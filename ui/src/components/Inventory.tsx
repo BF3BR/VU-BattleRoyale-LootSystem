@@ -48,6 +48,14 @@ const Inventory: React.FC<Props> = ({
         time: null
     });
 
+    
+    window.ItemCancelAction = () => {
+        setProgress({
+            slot: null,
+            time: null
+        });
+    }
+
     function handleDragStart(event: any) {
         const { active } = event;
         setIsDragging(active.data.current);
@@ -461,7 +469,6 @@ const Inventory: React.FC<Props> = ({
                     <InventoryTimer
                         slot={progress.slot}
                         onComplete={(slot: any) => {
-                            // handleUseItem(slot.Id);
                             setProgress({
                                 slot: null,
                                 time: null
@@ -489,3 +496,9 @@ const mapDispatchToProps = (dispatch: any) => {
     return {};
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Inventory);
+
+declare global {
+    interface Window {
+        ItemCancelAction: () => void;
+    }
+}
