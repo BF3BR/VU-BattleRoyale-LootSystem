@@ -109,7 +109,7 @@ end
 -- Returns the inventory slot of the currently equipped weapon
 function BRInventory:GetCurrentWeaponSlot()
     if self.m_Owner == nil or self.m_Owner.soldier == nil then
-        return
+        return nil
     end
 
     local s_WeaponSlot = self.m_Owner.soldier.weaponsComponent.currentWeaponSlot
@@ -141,14 +141,27 @@ function BRInventory:AddItem(p_ItemId, p_SlotIndex, p_CreateLootPickup)
         s_Slot = self:GetFirstAvailableSlot(s_Item)
     end
 
+    local s_CurrentWeaponSlot = self:GetCurrentWeaponSlot()
+
     -- get current weapon slot if item is weapon and no other slot
     -- is available
     if s_Slot == nil and s_Item:IsOfType(ItemType.Weapon) then
-        s_Slot = self:GetCurrentWeaponSlot()
+        s_Slot = s_CurrentWeaponSlot
 
         -- check if slot is available for this item
         if s_Slot ~= nil and not s_Slot:IsAccepted(s_Item) then
             s_Slot = nil
+        end
+    end
+
+    -- get current attachment slot if the item is attachment
+    if p_SlotIndex == nil and s_Item:IsOfType(ItemType.Attachment) then
+        if s_CurrentWeaponSlot ~= nil then
+            local s_TempSlot = s_CurrentWeaponSlot:ResolveSlot(s_Item)
+
+            if s_TempSlot.m_Item == nil then
+                s_Slot = s_TempSlot
+            end
         end
     end
 
