@@ -123,6 +123,14 @@ function BRInventorySlot:IsAvailable(p_Item)
     return false
 end
 
+function BRInventorySlot:ResolveSlot(p_Item)
+    if not self:IsAccepted(p_Item) then
+        return nil
+    end
+
+    return self
+end
+
 function BRInventorySlot:GetOwner()
     return self.m_Inventory.m_Owner
 end

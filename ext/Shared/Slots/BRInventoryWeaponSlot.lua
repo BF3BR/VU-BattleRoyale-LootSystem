@@ -39,6 +39,24 @@ function BRInventoryWeaponSlot:OnBeforeDrop()
     return s_DroppedAttachments
 end
 
+function BRInventoryWeaponSlot:ResolveSlot(p_Item)
+    if not BRInventorySlot.IsAccepted(self, p_Item) then
+
+        if p_Item.m_Definition.m_Type == ItemType.Attachment then
+            for _, l_Slot in pairs(self.m_AttachmentSlots) do
+                local l_ResolvedAttachmentSlot = l_Slot:ResolveSlot(p_Item)
+                if l_ResolvedAttachmentSlot ~= nil then
+                    return l_ResolvedAttachmentSlot
+                end
+            end
+        end
+
+        return nil
+    end
+
+    return self
+end
+
 function BRInventoryWeaponSlot:PutWithRelated(p_Items)
     for _, l_Item in ipairs(p_Items) do
         local s_Def = l_Item.m_Definition

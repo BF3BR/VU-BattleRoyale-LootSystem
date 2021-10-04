@@ -224,7 +224,9 @@ function BRInventory:SwapItems(p_ItemId, p_SlotId)
     end
 
     -- check if item can be put into the new slot
-    if not s_NewSlot:IsAccepted(s_OldSlot.m_Item) then
+    s_NewSlot = s_NewSlot:ResolveSlot(s_OldSlot.m_Item)
+
+    if s_NewSlot == nil then
         return
     end
 
