@@ -17,6 +17,7 @@ function BRItemGadgetDefinition:__init(p_UId, p_Name, p_Options)
     -- set gadget only options
     self.m_SoldierWeaponBlueprint = p_Options.SoldierWeaponBlueprint
     self.m_EbxName = p_Options.EbxName
+    self.m_IsMinusAmmo = p_Options.IsMinusAmmo
 end
 
 return {
@@ -26,7 +27,7 @@ return {
         {
             Description = "The M320 Smoke is a variant of the M320 grenade launcher that fires smoke grenades.",
             MaxStack = 3,
-            RandomWeight = 25,
+            RandomWeight = 35,
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/m320",
             EbxName = "Weapons/Gadgets/M320/M320",
             Mesh = DC(Guid("C1C59CFB-D2DD-5C43-CF76-4A465CB9007A"), Guid("579D4CB4-1937-D2CA-C7EA-23193B0B0B7B")),
@@ -45,7 +46,7 @@ return {
         {
             Description = "A widely-produced, anti-tank rocket propelled grenade weapon, the RPG-7 has been used in almost all conflicts across all continents since the mid-1960s. Modernized into the RPG-7v2, which is lighter, and more accurate than the original RPG-7 and firing GP-7VL rocket propelled grenades the RPG-7v2 is effective against both fortifications and armor.",
             MaxStack = 3,
-            RandomWeight = 25,
+            RandomWeight = 15,
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/rpg7",
             EbxName = "Weapons/RPG7/RPG7",
             Mesh = DC(Guid("58C89ADC-1A6A-5110-34C6-4CCE674F3F74"), Guid("6B9C428D-0E7F-EB04-8691-686085200903")),
@@ -58,4 +59,23 @@ return {
             )
         }
     ),
+    --[[["gadget-m67-grenade"] = BRItemGadgetDefinition(
+        "gadget-m67-grenade",
+        "M67 GRENADE",
+        {
+            Description = "A common defensive hand grenade, the M67 has a 3.5 second fuse and can be thrown approximately 30 meters by the average soldier. The lethal effect of this grenade is limited against targets with modern body armor.",
+            MaxStack = 4,
+            RandomWeight = 50,
+            UIIcon = "UI/Art/Persistence/Weapons/Fancy/m67 grenade",
+            EbxName = "Weapons/M67/M67",
+            Mesh = DC(Guid("30BB276A-38BC-5354-ABF3-59CA85EB9339"), Guid("388539AF-C6EA-C4B3-5577-3CC232B89519")),
+            SoldierWeaponBlueprint = DC(Guid("31EBAC8C-F32E-11DF-8153-F8368A2EF9E0"), Guid("9F789F05-CE7B-DADC-87D7-16E847DBDD09")),
+            Transform = LinearTransform(
+                Vec3(1.25, 0, 0),
+                Vec3(0, 1.25, 0),
+                Vec3(0, 0, 1.25),
+                Vec3(0, 0.04, 0)
+            )
+        }
+    ),]]
 }
