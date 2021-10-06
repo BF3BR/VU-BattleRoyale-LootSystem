@@ -8,7 +8,6 @@ function BRItemConsumableDefinition:__init(p_UId, p_Name, p_Options)
 
     -- set fixed shared option values for consumables
     p_Options.Type = ItemType.Consumable
-    p_Options.Mesh = nil--DC(Guid("6519E1BF-BB39-8B7F-47D9-1B4C365318D9"), Guid("BC6154A0-CDFC-D402-ECCA-444811062765")),
     p_Options.Price = 0
 
     -- call super's constructor and set shared options
@@ -32,7 +31,14 @@ return {
             Stackable = true,
             MaxStack = 5,
             HealthToRegen = 25,
-            TimeToApply = 3
+            TimeToApply = 3,
+            Mesh = DC(Guid("077FFC1D-1079-0D3E-B3AF-610E461217C6"), Guid("EFC1128E-7DDB-7283-B936-FF1CD422DE53")),
+            Transform = LinearTransform(
+                Vec3(0.5, 0, 0),
+                Vec3(0, 0.5, 0),
+                Vec3(0, 0, 0.5),
+                Vec3(0, 0, 0)
+            ),
         }
     ),
     ["consumable-large-medkit"] = BRItemConsumableDefinition(
@@ -45,7 +51,14 @@ return {
             Stackable = true,
             MaxStack = 3,
             HealthToRegen = 50,
-            TimeToApply = 5
+            TimeToApply = 5,
+            Mesh = DC(Guid("077FFC1D-1079-0D3E-B3AF-610E461217C6"), Guid("EFC1128E-7DDB-7283-B936-FF1CD422DE53")),
+            Transform = LinearTransform(
+                Vec3(1, 0, 0),
+                Vec3(0, 1, 0),
+                Vec3(0, 0, 1),
+                Vec3(0, 0, 0)
+            ),
         }
     ),
 }

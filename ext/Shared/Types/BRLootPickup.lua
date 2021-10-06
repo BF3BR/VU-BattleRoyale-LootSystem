@@ -191,7 +191,7 @@ function BRLootPickup:Spawn()
                     self.m_Transform.forward,
                     Vec3(
                         self.m_Transform.trans.x,
-                        self.m_Transform.trans.y + 1.6,
+                        self.m_Transform.trans.y + 1.35,
                         self.m_Transform.trans.z
                     )
                 )

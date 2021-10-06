@@ -71,9 +71,9 @@ return {
             Mesh = DC(Guid("30BB276A-38BC-5354-ABF3-59CA85EB9339"), Guid("388539AF-C6EA-C4B3-5577-3CC232B89519")),
             SoldierWeaponBlueprint = DC(Guid("31EBAC8C-F32E-11DF-8153-F8368A2EF9E0"), Guid("9F789F05-CE7B-DADC-87D7-16E847DBDD09")),
             Transform = LinearTransform(
-                Vec3(1.25, 0, 0),
-                Vec3(0, 1.25, 0),
-                Vec3(0, 0, 1.25),
+                Vec3(1.35, 0, 0),
+                Vec3(0, 1.35, 0),
+                Vec3(0, 0, 1.35),
                 Vec3(0, 0.04, 0)
             )
         }

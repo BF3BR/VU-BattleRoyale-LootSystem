@@ -23,7 +23,7 @@ end
 return {
     ["armor-tier-1"] = BRItemArmorDefinition(
         "armor-tier-1",
-        "Armor - Tier 1",
+        "Armor",
         {
             Description = "Adds +50 body armor.",
             UIIcon = "__armor",
@@ -34,7 +34,7 @@ return {
     ),
     ["armor-tier-2"] = BRItemArmorDefinition(
         "armor-tier-2",
-        "Armor - Tier 2",
+        "Armor",
         {
             Description = "Adds +75 body armor.",
             UIIcon = "__armor",
@@ -45,7 +45,7 @@ return {
     ),
     ["armor-tier-3"] = BRItemArmorDefinition(
         "armor-tier-3",
-        "Armor - Tier 3",
+        "Armor",
         {
             Description = "Adds +100 body armor.",
             UIIcon = "__armor",

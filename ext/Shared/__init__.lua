@@ -25,6 +25,7 @@ function VuBattleRoyaleLootSystemShared:__init()
                 bundles[1],
                 "levels/coop_003/coop_003",
                 "levels/coop_003/ab03_parent",
+				"Levels/XP1_004/XP1_004",
             }
             hook:Pass(bundles, compartment)
         end
@@ -38,6 +39,8 @@ end
 function VuBattleRoyaleLootSystemShared:OnLevelLoadResources(p_MapName, p_GameModeName, p_DedicatedServer)
     ResourceManager:MountSuperBundle("spchunks")
     ResourceManager:MountSuperBundle("levels/coop_003/coop_003")
+	ResourceManager:MountSuperBundle("XP1Chunks")
+	ResourceManager:MountSuperBundle("Levels/XP1_004/XP1_004")
 end
 
 function VuBattleRoyaleLootSystemShared:CreateObjectBlueprint(p_ObjectBlueprint)

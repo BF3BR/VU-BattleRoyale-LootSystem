@@ -10,7 +10,7 @@ function BRLooting:__init()
 	self.m_LastDelta = 0
 	self.m_LastSelectedLootPickup = nil
 
-	-- m_Timers:Interval(0.25, self, self.OnSpatialRaycast)
+	m_Timers:Interval(0.25, self, self.OnSpatialRaycast)
 
 	self.m_TimeToUpdateLootUi = 0.15
 end

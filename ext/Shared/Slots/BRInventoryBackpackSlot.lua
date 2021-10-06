@@ -10,7 +10,6 @@ function BRInventoryBackpackSlot:__init(p_Inventory)
         ItemType.Attachment,
         ItemType.Ammo,
         ItemType.Consumable,
-        ItemType.Gadget
     })
 end
 

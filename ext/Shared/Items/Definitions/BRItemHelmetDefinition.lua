@@ -24,7 +24,7 @@ end
 return {
     ["helmet-tier-1"] = BRItemHelmetDefinition(
         "helmet-tier-1",
-        "Helmet - Tier 1",
+        "Helmet",
         {
             Description = "Adds +50 headshot protection.",
             UIIcon = "__helmet",
@@ -35,7 +35,7 @@ return {
     ),
     ["helmet-tier-2"] = BRItemHelmetDefinition(
         "helmet-tier-2",
-        "Helmet - Tier 2",
+        "Helmet",
         {
             Description = "Adds +75 headshot protection.",
             UIIcon = "__helmet",
@@ -46,7 +46,7 @@ return {
     ),
     ["helmet-tier-3"] = BRItemHelmetDefinition(
         "helmet-tier-3",
-        "Helmet - Tier 3",
+        "Helmet",
         {
             Description = "Adds +100 headshot protection.",
             UIIcon = "__helmet",
