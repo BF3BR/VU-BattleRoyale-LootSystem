@@ -9,7 +9,7 @@ function BRItemHelmetDefinition:__init(p_UId, p_Name, p_Options)
 
     -- set fixed shared option values for helmets
     p_Options.Type = ItemType.Helmet
-    p_Options.Mesh = DC(Guid("0202751D-1ACE-3542-43E4-9BFFA6EF7F98"), Guid("9558CB54-0238-B2BD-643B-403FEE4A613D"))
+    p_Options.Mesh = SkeletonMeshModel(DC(Guid("0202751D-1ACE-3542-43E4-9BFFA6EF7F98"), Guid("9558CB54-0238-B2BD-643B-403FEE4A613D")), 0, 213)
     p_Options.Transform = LinearTransform(
         Vec3(1.2, 0, 0),
         Vec3(0, 1.2, 0),

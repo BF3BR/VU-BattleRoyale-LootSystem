@@ -22,7 +22,9 @@ return {
         {
             Description = "The 5.56mm ammo is used for ARs.",
             RandomWeight = 25,
-            Mesh = DC(Guid("C946156E-C8D8-B16F-B16A-F6A138F20FF1"), Guid("AF8138C2-A6FF-9D8E-162A-00247243D4E4")),
+            Mesh = MeshModel(
+                DC(Guid("C946156E-C8D8-B16F-B16A-F6A138F20FF1"), Guid("AF8138C2-A6FF-9D8E-162A-00247243D4E4"))
+            ),
             UIIcon = "__ammo_556mm",
             MaxStack = 60,
             Transform = LinearTransform(
@@ -39,7 +41,9 @@ return {
         {
             Description = "The 9mm ammo is used for SMGs and Pistols.",
             RandomWeight = 25,
-            Mesh = DC(Guid("9670A55C-9EAC-2CEB-85B0-74A6CE759BC8"), Guid("1A70719C-0364-11DE-B228-D0C98D09F591")),
+            Mesh = MeshModel(
+                DC(Guid("9670A55C-9EAC-2CEB-85B0-74A6CE759BC8"), Guid("1A70719C-0364-11DE-B228-D0C98D09F591"))
+            ),
             UIIcon = "__ammo_9mm",
             MaxStack = 90,
             Transform = LinearTransform(
@@ -56,7 +60,9 @@ return {
         {
             Description = "The 7.62mm ammo is used for Snipers.",
             RandomWeight = 25,
-            Mesh = DC(Guid("C946156E-C8D8-B16F-B16A-F6A138F20FF1"), Guid("AF8138C2-A6FF-9D8E-162A-00247243D4E4")),
+            Mesh = MeshModel(
+                DC(Guid("C946156E-C8D8-B16F-B16A-F6A138F20FF1"), Guid("AF8138C2-A6FF-9D8E-162A-00247243D4E4"))
+            ),
             UIIcon = "__ammo_762mm",
             MaxStack = 15,
             Transform = LinearTransform(
@@ -73,7 +79,9 @@ return {
         {
             Description = "The 7.62mm ammo is used for Snipers.",
             RandomWeight = 25,
-            Mesh = DC(Guid("9670A55C-9EAC-2CEB-85B0-74A6CE759BC8"), Guid("1A70719C-0364-11DE-B228-D0C98D09F591")),
+            Mesh = MeshModel(
+                DC(Guid("9670A55C-9EAC-2CEB-85B0-74A6CE759BC8"), Guid("1A70719C-0364-11DE-B228-D0C98D09F591"))
+            ),
             UIIcon = "__ammo_12-gauge",
             MaxStack = 30,
             Transform = LinearTransform(

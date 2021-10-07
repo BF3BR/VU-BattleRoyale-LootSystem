@@ -33,7 +33,7 @@ return {
         {
             Description = "The AK-74M is the latest modernized version of the classic AK-47.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/ak74m",
-            Mesh = DC(Guid("F365F081-D11B-B278-F6E3-062116758181"), Guid("8940BC20-0F27-1C19-58E6-CB07E1ADA643")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("F365F081-D11B-B278-F6E3-062116758181"), Guid("8940BC20-0F27-1C19-58E6-CB07E1ADA643"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -73,7 +73,7 @@ return {
         {
             Description = "The SCAR-H (SOF Combat Assault Rifle-Heavy), also designated Mk 17 Mod 0, is a modular Battle Rifle made by FN Herstal.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/scarh",
-            Mesh = DC(Guid("219E7419-DAC8-57FA-1B75-4735722EA738"), Guid("8B9C95BC-03E6-DCF9-398F-193D543F1C55")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("219E7419-DAC8-57FA-1B75-4735722EA738"), Guid("8B9C95BC-03E6-DCF9-398F-193D543F1C55"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -115,7 +115,7 @@ return {
         {
             Description = "The SG553 is a slightly improved version of the SG552, the compact version of the SIG SG550, the standard rifle of the Swiss Army.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/sg553lb",
-            Mesh = DC(Guid("C088B8E6-995D-A055-1600-2C04FF6EC76C"), Guid("BA91ABD1-6A01-102F-9416-0B941BE124F2")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("C088B8E6-995D-A055-1600-2C04FF6EC76C"), Guid("BA91ABD1-6A01-102F-9416-0B941BE124F2"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -157,7 +157,7 @@ return {
         {
             Description = "In service with elite Russian forces, the AN-94 offers a unique, highly accurate, 2 round burst feature. Compared to the standard AK series, the AN-94 requires a significantly higher degree of training. A skilled shooter can effectively engage targets at a longer range than typical Assault Rifles.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/an94",
-            Mesh = DC(Guid("9CF3317A-3039-6BA0-0137-07A39C5DD153"), Guid("9B0A088E-364B-2A7D-B7DA-F06E2B43623E")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("9CF3317A-3039-6BA0-0137-07A39C5DD153"), Guid("9B0A088E-364B-2A7D-B7DA-F06E2B43623E"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -198,7 +198,7 @@ return {
         {
             Description = "Standard service rifle of the French military.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/XP1_FAMAS",
-            Mesh = DC(Guid("A735154E-0510-ADA6-6F2E-83B5E6D830D2"), Guid("8F24FDE8-1C50-32A0-F6AB-BAE6C337D102")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("A735154E-0510-ADA6-6F2E-83B5E6D830D2"), Guid("8F24FDE8-1C50-32A0-F6AB-BAE6C337D102"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -239,7 +239,7 @@ return {
         {
             Description = "The SCAR rifle system's modularity allows for many different configurations. The Mk. 16 “SCAR-L” features a 14 inch barrel as well as a full 30 round magazine. Compared to its 20 round carbine counterpart, the heavier Mk. 17, the SCAR-L provides greater target acquisition at longer ranges due to the extended barrel length as well as more controlled fire due to manageable recoil.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/XP2_SCARL",
-            Mesh = DC(Guid("0CEE29A7-978A-0A3D-534D-244DD297C742"), Guid("3589BBEB-0664-A01B-9E2A-30ECD4193AFD")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("0CEE29A7-978A-0A3D-534D-244DD297C742"), Guid("3589BBEB-0664-A01B-9E2A-30ECD4193AFD"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -281,7 +281,7 @@ return {
         {
             Description = "The PP-2000 is a Russian machine pistol designed by the KBP Instrument Design Bureau and is classified as a Personal Defense Weapon (PDW).",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/pp2000",
-            Mesh = DC(Guid("BCAF822E-48AA-055F-E617-ECDD89799E22"), Guid("BE6743C4-8558-52DA-3AFE-5D5EAA7E188F")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("BCAF822E-48AA-055F-E617-ECDD89799E22"), Guid("BE6743C4-8558-52DA-3AFE-5D5EAA7E188F"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -317,7 +317,7 @@ return {
         {
             Description = "The PP-19 \"Bizon\" is a 9mm submachine gun developed in the early 1990s by a team headed by Victor Kalashnikov in the Izhevsk Machinebuilding Plant (now known as Kalashnikov Concern).",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/XP1_PP19",
-            Mesh = DC(Guid("DAA8CB46-270B-44C3-87E3-9C0C34E036B6"), Guid("693A6341-B736-63D4-B531-0D6F79178F2D")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("DAA8CB46-270B-44C3-87E3-9C0C34E036B6"), Guid("693A6341-B736-63D4-B531-0D6F79178F2D"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -352,7 +352,7 @@ return {
         {
             Description = "A tactical machine pistol based on one of the world's most successful submachine gun designs. With the shoulder stock completely removed and the shortened receiver, this ultra compact personal defense weapon is capable of very high rates of fire, as well as great stopping power at close range.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/XP2_MP5K",
-            Mesh = DC(Guid("A9787E3D-E1C6-4FF9-BABF-7936AAC3C468"), Guid("D0D089BC-0006-0FB0-07E9-E125472D001F")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("A9787E3D-E1C6-4FF9-BABF-7936AAC3C468"), Guid("D0D089BC-0006-0FB0-07E9-E125472D001F"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -388,7 +388,7 @@ return {
         {
             Description = "German built, the UMP-45 is a fully automatic Personal Defense Weapon noted for its versatility and optimal mobility. The UMP-45 is well-rounded and capable as a Personal Defense Weapon.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/ump",
-            Mesh = DC(Guid("A0E8D6A4-8A21-1BC0-F5CD-80C62366D4E8"), Guid("211B7657-1297-F025-C975-FD201BF3C7C6")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("A0E8D6A4-8A21-1BC0-F5CD-80C62366D4E8"), Guid("211B7657-1297-F025-C975-FD201BF3C7C6"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -424,7 +424,7 @@ return {
         {
             Description = "The Remington Model 870 is an American 12-gauge pump-action shotgun designed by Remington in 1951.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/remington870",
-            Mesh = DC(Guid("244BD656-B62A-715A-FC6E-BCE517D4CE95"), Guid("B72B2A83-8B14-F5B3-3A31-844B2EC15EB6")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("244BD656-B62A-715A-FC6E-BCE517D4CE95"), Guid("B72B2A83-8B14-F5B3-3A31-844B2EC15EB6"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -468,7 +468,7 @@ return {
         {
             Description = "This Italian made iconic shotgun has seen great success since its introduction on the market during the 1980s. It's become popular world wide thanks to its capacity to handle a great variety of shell types. Its unique magazine design further simplifies the use of varied ammunition, allowing the SPAS-12 to remain in high regard with police and military units worldwide.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/XP2_SPAS12",
-            Mesh = DC(Guid("F1361463-6309-9721-99E9-058808584C69"), Guid("571A2311-98FC-4ACF-9B0D-2CEB511F4BD1")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("F1361463-6309-9721-99E9-058808584C69"), Guid("571A2311-98FC-4ACF-9B0D-2CEB511F4BD1"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -512,7 +512,7 @@ return {
         {
             Description = "The M98B is a bolt-action sniper rifle produced by Barrett Firearms Manufacturing.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/m98b",
-            Mesh = DC(Guid("4167372B-8261-610E-464F-E3666AF6DFF7"), Guid("7FC60BE5-28DC-F4A4-4176-508F73727830")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("4167372B-8261-610E-464F-E3666AF6DFF7"), Guid("7FC60BE5-28DC-F4A4-4176-508F73727830"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),
@@ -551,7 +551,7 @@ return {
         {
             Description = "This bigger brother of M416 features a heavier 16 inch barrel as well as an enlarged receiver capable of handling the heavy 7.62 round. The high precision and stopping power of this rifle makes it ideal as a DMR, and it sees service in many armed forces worldwide.",
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/XP2_HK417",
-            Mesh = DC(Guid("E0C98D6F-02A2-E31B-6A02-639EB19C7F0C"), Guid("C72F7F84-92B7-6EB8-EE25-7286AEC365C1")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("E0C98D6F-02A2-E31B-6A02-639EB19C7F0C"), Guid("C72F7F84-92B7-6EB8-EE25-7286AEC365C1"))),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
                 Vec3(1, 0, 0),

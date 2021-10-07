@@ -18,7 +18,7 @@ Tier = {
 LootPickupType = {
     Basic = {
         Name = "Basic",
-        Mesh = DC(Guid("6519E1BF-BB39-8B7F-47D9-1B4C365318D9"), Guid("BC6154A0-CDFC-D402-ECCA-444811062765")),
+        Mesh = MeshModel(DC(Guid("6519E1BF-BB39-8B7F-47D9-1B4C365318D9"), Guid("BC6154A0-CDFC-D402-ECCA-444811062765"))),
         CheckPrice = false,
         Transform = LinearTransform(
             Vec3(1, 0, 0),
@@ -30,7 +30,7 @@ LootPickupType = {
     },
     Chest = {
         Name = "Chest",
-        Mesh = DC(Guid("6D61C008-905F-602A-FC16-FF44B8F563F9"), Guid("2E9A903C-48BA-094B-6FB9-2EF6D89271F0")),
+        Mesh = MeshModel(DC(Guid("6D61C008-905F-602A-FC16-FF44B8F563F9"), Guid("2E9A903C-48BA-094B-6FB9-2EF6D89271F0"))),
         CheckPrice = false,
         Transform = LinearTransform(
             Vec3(1, 0, 0),
@@ -42,7 +42,7 @@ LootPickupType = {
     },
     Airdrop = {
         Name = "Airdrop",
-        Mesh = DC(Guid("DA504C92-911F-87DD-0D84-944BD542E835"), Guid("B5CE760E-5220-29BA-3316-23EA12244E88")),
+        Mesh = MeshModel(DC(Guid("DA504C92-911F-87DD-0D84-944BD542E835"), Guid("B5CE760E-5220-29BA-3316-23EA12244E88"))),
         CheckPrice = false,
         Transform = LinearTransform(
             Vec3(1, 0, 0),

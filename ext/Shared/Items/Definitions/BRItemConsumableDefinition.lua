@@ -32,7 +32,9 @@ return {
             MaxStack = 5,
             HealthToRegen = 25,
             TimeToApply = 3,
-            Mesh = DC(Guid("077FFC1D-1079-0D3E-B3AF-610E461217C6"), Guid("EFC1128E-7DDB-7283-B936-FF1CD422DE53")),
+            Mesh = MeshModel(
+                DC(Guid("077FFC1D-1079-0D3E-B3AF-610E461217C6"), Guid("EFC1128E-7DDB-7283-B936-FF1CD422DE53"))
+            ),
             Transform = LinearTransform(
                 Vec3(0.5, 0, 0),
                 Vec3(0, 0.5, 0),
@@ -52,7 +54,9 @@ return {
             MaxStack = 3,
             HealthToRegen = 50,
             TimeToApply = 5,
-            Mesh = DC(Guid("077FFC1D-1079-0D3E-B3AF-610E461217C6"), Guid("EFC1128E-7DDB-7283-B936-FF1CD422DE53")),
+            Mesh = MeshModel(
+                DC(Guid("077FFC1D-1079-0D3E-B3AF-610E461217C6"), Guid("EFC1128E-7DDB-7283-B936-FF1CD422DE53"))
+            ),
             Transform = LinearTransform(
                 Vec3(1, 0, 0),
                 Vec3(0, 1, 0),

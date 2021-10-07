@@ -30,7 +30,7 @@ return {
             RandomWeight = 35,
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/m320",
             EbxName = "Weapons/Gadgets/M320/M320",
-            Mesh = DC(Guid("C1C59CFB-D2DD-5C43-CF76-4A465CB9007A"), Guid("579D4CB4-1937-D2CA-C7EA-23193B0B0B7B")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("C1C59CFB-D2DD-5C43-CF76-4A465CB9007A"), Guid("579D4CB4-1937-D2CA-C7EA-23193B0B0B7B"))),
             SoldierWeaponBlueprint = DC(Guid("5407475F-7E82-44A8-99D2-8009B925A528"), Guid("2F200B5C-4958-467C-9E12-B99DDADE2332")),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
@@ -49,7 +49,7 @@ return {
             RandomWeight = 15,
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/rpg7",
             EbxName = "Weapons/RPG7/RPG7",
-            Mesh = DC(Guid("58C89ADC-1A6A-5110-34C6-4CCE674F3F74"), Guid("6B9C428D-0E7F-EB04-8691-686085200903")),
+            Mesh = WeaponSkeletonMeshModel(DC(Guid("58C89ADC-1A6A-5110-34C6-4CCE674F3F74"), Guid("6B9C428D-0E7F-EB04-8691-686085200903"))),
             SoldierWeaponBlueprint = DC(Guid("8B6957EA-8AF3-4827-9DA7-F411F74E1076"), Guid("08F58ECD-BC99-48AA-A9B3-47D412E99A4E")),
             Transform = LinearTransform(
                 Vec3(0, -1, 0),
@@ -68,7 +68,9 @@ return {
             RandomWeight = 50,
             UIIcon = "UI/Art/Persistence/Weapons/Fancy/m67 grenade",
             EbxName = "Weapons/M67/M67",
-            Mesh = DC(Guid("30BB276A-38BC-5354-ABF3-59CA85EB9339"), Guid("388539AF-C6EA-C4B3-5577-3CC232B89519")),
+            Mesh = MeshModel(
+                DC(Guid("30BB276A-38BC-5354-ABF3-59CA85EB9339"), Guid("388539AF-C6EA-C4B3-5577-3CC232B89519"))
+            ),
             SoldierWeaponBlueprint = DC(Guid("31EBAC8C-F32E-11DF-8153-F8368A2EF9E0"), Guid("9F789F05-CE7B-DADC-87D7-16E847DBDD09")),
             Transform = LinearTransform(
                 Vec3(1.35, 0, 0),
